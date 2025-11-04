@@ -1,6 +1,13 @@
 from ParncuttRules import allParncutt, generateRandomFingerings, getParncuttRuleScore, plotParncuttData
 from FileConversion import file2Stream
 from music21 import *
+from flask import Flask, render_template_string, request
+from jupyterlab.handlers.error_handler import TEMPLATE
+from werkzeug.utils import secure_filename
+import os
+import numpy as np
+
+#Required librarys: Music21, Flask, jupyterlab, 
 
 """Run Parncutt on all PIG Files"""
 #beethoven-fur-elise-bagatelle-no-25-woo-59.musicxml
@@ -12,6 +19,80 @@ print(getParncuttRuleScore(score))
 
 #allParncuttScore, allParncuttScoresNormalized = allParncutt()
 #plotParncuttData(allParncuttScoresNormalized)
+
+app = Flask(__name__)
+
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+TEMPLATE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music File Upload</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        input[type=file], input[type=submit] { margin-top: 1em; }
+        table { border-collapse: collapse; margin-top: 2em; }
+        td, th { border: 1px solid #aaa; padding: 0.5em; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Upload Music File for Parncutt Scoring</h1>
+    {% if filename %}
+    <p><strong>Uploaded file:</strong> {{ filename }}</p>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <input type="submit" value="Upload & Analyze">
+    </form>
+
+    {% if scores %}
+        <h2>Scores</h2>
+        <table>
+            <tr>
+                <th>Rule #</th>
+                <th>Score</th>
+            </tr>
+            {% for val in scores %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ val }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p><strong>Total Notes:</strong> {{ total_notes }}</p>
+    {% endif %}
+</body>
+</html>
+"""
+
+@app.route("/", methods = ["GET", "POST"])
+def upload_file():
+    scores = None
+    total_notes = None
+
+    if request.method == "POST":
+        file = request.files["file"]
+        if file:
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+
+            try:
+                ######THIS IS WHERE WE NEED THE ALGORITHM, CURRENTLY RANDOM
+                score = generateRandomFingerings(file2Stream(filepath))
+                score_counts, total_notes  = getParncuttRuleScore(score)
+                scores = [int(x) for x in score_counts]
+
+
+            except Exception as e:
+                return f"<h3>Error processing file {e}</h3>"
+    return render_template_string(TEMPLATE, scores = scores, total_notes = total_notes)
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 #RunTime 10/24/25: ~3:30
 
