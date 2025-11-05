@@ -1,6 +1,16 @@
+import os
+from copy import deepcopy
+
+import music21
 from music21 import *
 import numpy as np
 from pathlib import Path
+import pandas as pd
+from music21.audioSearch import quarterLengthEstimation
+from music21.duration import quarterLengthToClosestType
+from music21.musicxml.testPrimitive import articulations01
+
+environment.UserSettings()['musescoreDirectPNGPath'] = "C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe"
 
 def file2Stream(fname):
 	path_obj = Path(fname)
@@ -17,6 +27,38 @@ def convertPIGtoMusic21(filePath):
 	with open(filePath, 'r') as file:
 		fileContent = file.read()
 
+	pig = pd.read_csv(filePath,
+					  sep="\t",
+					  skiprows=1,
+					  index_col=0,
+					  names=["onTime", "offTime", "pitch", "onVel", "offVel", "hand", "fingering"])
+	pig = pig.astype({'fingering': 'string'})
+	pigRight = pig[pig['hand'] == 0].reset_index()
+	pigLeft = pig[pig['hand'] == 1].reset_index()
+	durations = []
+	averageBPM = 7 #log2(128)
+	for i in range(len(pigRight)-1):
+		current = pigRight.iloc[i]
+		next = pigRight.iloc[i+1]
+		if (next.onTime - current.offTime) < 0.1 and current.offTime < next.onTime:
+			num = next.onTime - current.onTime
+			num = 60/num
+			durations.append(num)
+
+	beatLengths = np.exp2(np.round(np.log2(np.array(durations)) - averageBPM))
+	tempo = np.median(np.round(np.array(durations)/beatLengths))/60
+	if len(durations) == 0:
+		durations = []
+		for i in range(len(pigRight) - 1):
+			current = pigRight.iloc[i]
+			num = current.offTime - current.onTime
+			num = 60 / num
+			durations.append(num)
+
+		beatLengths = np.exp2(np.round(np.log2(np.array(durations)) - averageBPM))
+		tempo = np.median(np.round(np.array(durations) / beatLengths)) / 60
+		print(filePath)
+
 	#create the score object with left and right hand parts
 	score = stream.Score()
 
@@ -30,70 +72,192 @@ def convertPIGtoMusic21(filePath):
 	left_hand.append(instrument.Piano())
 	left_hand.append(clef.BassClef())
 
-	#split the file into the line components, removing first and last lines
-	contentSplitByLine = fileContent.split('\n')
-	contentSplitByLine.pop(0)
-	contentSplitByLine.pop(len(contentSplitByLine) - 1)
-
 	#keep track of the time stamp of the end of the last note to check for rests
-	RHLastOffset = 0
-	RHLastOnset = 0
-	LHLastOffset = 0
-	LHLastOnset = 0
+	#RHLastOffset = 0
+	#RHLastOnset = 0
+	#LHLastOffset = 0
+	#LHLastOnset = 0
+
+	lastOffset = [0, 0] # [Right Hand, Left Hand]
+	lastOffsetQN = [0, 0] # [Right Hand, Left Hand]
+	lastOnsetQN = [0, 0]
 
 	#convert each line into a note object and insert in correct location
 	chordNotes = []
-	for line in contentSplitByLine:
-		lineSplitByTab = line.split('\t')
+
+	right_hand = createStream(right_hand, pigRight, tempo)
+	left_hand = createStream(left_hand, pigLeft, tempo)
+
+	"""
+	for index, row in pig.iterrows():
+		#lineSplitByTab = line.split('\t')
+
+		margin = ((1/tempo)/8)*0.75
+		tempOnsetQN = deepcopy(lastOffsetQN)
+
+		# Check for rest
+		while row['onTime'] - lastOffset[row['hand']] >= margin:
+			rest = note.Rest()
+			duration = (row['onTime'] - lastOffset[row['hand']]) * tempo
+			duration = np.exp2(round(np.log2(duration)))
+
+			if (lastOffset[row['hand']] + (duration / tempo) - row['onTime']) > margin:
+				duration /= 2
+
+			rest.quarterLength = duration
+			lastOffset[row['hand']] = lastOffset[row['hand']] + (duration / tempo)
+			lastOffsetQN[row['hand']] = lastOffsetQN[row['hand']] + duration
+
+			if row['hand'] == 0:
+				right_hand.append(rest)
+			else:
+				left_hand.append(rest)
 
 		#create new note object and assign pitch value
-		nextNote = note.Note(lineSplitByTab[3])
+		nextNote = note.Note(row['pitch'])
 
-		#Problem: PIG denotes notes in terms of physical seconds between play events
-		#no clue how to convert
+		#Set duration of note
+		quarterLength = 0
+		lastOffset[row['hand']] = row['onTime']
+		while row['offTime'] - lastOffset[row['hand']] >= margin:
+			duration = (row['offTime'] - lastOffset[row['hand']]) * tempo
+			duration = np.exp2(round(np.log2(duration)))
+
+			if (lastOffset[row['hand']] + (duration / tempo) - row['offTime']) > margin:
+				duration /= 2
+
+			quarterLength = quarterLength + duration
+			lastOffset[row['hand']] = lastOffset[row['hand']] + (duration/tempo)
+		nextNote.quarterLength = quarterLength
+		lastOffsetQN[row['hand']] = lastOffsetQN[row['hand']] + quarterLength
 
 		#extract the currentFingering
-		currentFingering = lineSplitByTab[7]
+		currentFingering = row['fingering']
 		if '_' in currentFingering:
 			#these are the currentFingerings that are notated for a finger switch
 			substitutedFingering = currentFingering.split('_')
 			try:
 				substitutedFingering = [abs(int(item)) for item in substitutedFingering]
 				substitutedFingeringConcat = int(str(substitutedFingering[0]) + str(substitutedFingering[1]))
-				nextNote.articulations.append(articulations.Fingering(substitutedFingeringConcat))
+				currentFingering = articulations.Fingering(substitutedFingeringConcat)
 			except Exception as e:
-				nextNote.articulations.append(articulations.Fingering(abs(int(substitutedFingering[0]))))
+				currentFingering = articulations.Fingering(abs(int(substitutedFingering[0])))
 		else:
 			currentFingering = articulations.Fingering(abs(int(currentFingering)))
 		nextNote.articulations.append(currentFingering)
 
+		print(lastOnsetQN, lastOffsetQN)
+
 		#add to correct hand part at the offset
-		if(lineSplitByTab[6] == '0'):
-			#print(chordNotes, nextNote, RHLastOnset, lineSplitByTab[1])
-			#if(float(lineSplitByTab[1]) - RHLastOnset < .0001):
-				#chordNotes.append(nextNote)
-			#else:
-				#if len(chordNotes) > 1:
-					#right_hand.append(chord.Chord(chordNotes))
-				#elif len(chordNotes) == 1:
-					#right_hand.append(chordNotes[0])
-			#chordNotes = [nextNote]
-			right_hand.append(nextNote)
-			RHLastOffset = float(lineSplitByTab[2])
-			RHLastOnset = float(lineSplitByTab[1])
-
+		if index > 0 and (row['onTime'] - pig.loc[index-1]['onTime'] < margin and pig.loc[index-1]['offTime'] > row['onTime'] and pig.loc[index-1]['hand'] == row['hand']):
+			if row['hand'] == 0:
+				right_hand.insertIntoNoteOrChord(lastOnsetQN[0], nextNote)
+				lastOffsetQN = deepcopy(tempOnsetQN)
+				lastOffset[0] = row['offTime']
+			else:
+				left_hand.insertIntoNoteOrChord(lastOnsetQN[1], nextNote)
+				lastOffsetQN = deepcopy(tempOnsetQN)
+				lastOffset[1] = row['offTime']
 		else:
-			#if(float(lineSplitByTab[1]) - LHLastOffset > .1):
-				#left_hand.append(note.Rest())
-			#left_hand.insert(offset, nextNote)
-			left_hand.append(nextNote)
-			LHLastOffset = float(lineSplitByTab[2])
+			if(row['hand'] == 0):
+				#print(chordNotes, nextNote, RHLastOnset, lineSplitByTab[1])
+				#if(float(lineSplitByTab[1]) - RHLastOnset < .0001):
+					#chordNotes.append(nextNote)
+				#else:
+					#if len(chordNotes) > 1:
+						#right_hand.append(chord.Chord(chordNotes))
+					#elif len(chordNotes) == 1:
+						#right_hand.append(chordNotes[0])
+				#chordNotes = [nextNote]
+				right_hand.append(nextNote)
+				#RHLastOffset = float(lineSplitByTab[2])
+				#RHLastOnset = float(lineSplitByTab[1])
+				lastOffset[0] = row['offTime']
+				lastOnsetQN = deepcopy(tempOnsetQN)
 
+			else:
+				#if(float(lineSplitByTab[1]) - LHLastOffset > .1):
+					#left_hand.append(note.Rest())
+				#left_hand.insert(offset, nextNote)
+				left_hand.append(nextNote)
+				#LHLastOffset = float(lineSplitByTab[2])
+				lastOffset[1] = row['offTime']
+				lastOnsetQN = deepcopy(tempOnsetQN)
+	"""
 	score.insert(0, right_hand)
 	score.insert(0, left_hand)
 
 	#create file for visual check of system
 	return score
+
+def createStream(part, pigData, tempo):
+	lastOffset = 0
+	lastOffsetQN = 0
+	lastOnsetQN = 0
+	margin = ((1 / tempo) / 8) * 0.75
+
+	# convert each line into a note object and insert in correct location
+	for index, row in pigData.iterrows():
+		tempOnsetQN = deepcopy(lastOffsetQN)
+
+		# Check for rest
+		while row['onTime'] - lastOffset >= margin:
+			rest = note.Rest()
+			duration = (row['onTime'] - lastOffset) * tempo
+			duration = np.exp2(round(np.log2(duration)))
+
+			if (lastOffset + (duration / tempo) - row['onTime']) > margin:
+				duration /= 2
+
+			rest.quarterLength = duration
+			lastOffset = lastOffset + (duration / tempo)
+			lastOffsetQN = lastOffsetQN + duration
+
+			part.append(rest)
+
+		# create new note object and assign pitch value
+		nextNote = note.Note(row['pitch'])
+
+		# Set duration of note
+		quarterLength = 0
+		lastOffset = row['onTime']
+		ties = []
+		while row['offTime'] - lastOffset >= margin:
+			duration = (row['offTime'] - lastOffset) * tempo
+			duration = np.exp2(round(np.log2(duration)))
+
+			if (lastOffset + (duration / tempo) - row['offTime']) > margin:
+				duration /= 2
+
+			quarterLength = quarterLength + duration
+			lastOffset = lastOffset + (duration / tempo)
+		nextNote.quarterLength = quarterLength
+		lastOffsetQN = lastOffsetQN + quarterLength
+
+		# extract the currentFingering
+		currentFingering = row['fingering']
+		if '_' in currentFingering:
+			# these are the currentFingerings that are notated for a finger switch
+			substitutedFingering = currentFingering.split('_')
+			substitutedFingering = [abs(int(item)) for item in substitutedFingering]
+			currentFingering = articulations.Fingering(int(str(substitutedFingering[0]) + str(substitutedFingering[1])))
+		else:
+			currentFingering = articulations.Fingering(abs(int(currentFingering)))
+		nextNote.articulations.append(currentFingering)
+
+		# add to correct hand part at the offset
+		if index > 0 and (
+                row['onTime'] - pigData.loc[index - 1]['onTime'] < margin < pigData.loc[index - 1]['offTime'] - row[
+                    'onTime'] and pigData.loc[index - 1]['hand'] == row['hand']):
+
+			part.insertIntoNoteOrChord(lastOnsetQN, nextNote)
+			part.getElementAtOrBefore(lastOnsetQN).articulations.append(currentFingering)
+		else:
+			part.append(nextNote)
+			lastOffset = row['offTime']
+			lastOnsetQN = deepcopy(tempOnsetQN)
+
+	return part
 
 """Parncutt Functions:"""
 
@@ -198,10 +362,10 @@ def Parn34(noteBFingering, noteCFingering):
 	return 0
 
 def Parn4OnBlack(noteB, noteBFingering, noteC, noteCFingering):
-	if(noteBFingering[-1] == 3 and noteB.pitch.accidental is None and \
-		noteCFingering[0] == 4 and noteC.pitch.accidental is not None) or \
-		(noteBFingering[-1] == 4 and noteB.pitch.accidental is not None and \
-		noteCFingering[0] == 3 and noteC.pitch.accidental is None):
+	if(noteBFingering[-1] == 3 and noteB.pitch.accidental is None and
+       noteCFingering[0] == 4 and noteC.pitch.accidental is not None) or \
+		(noteBFingering[-1] == 4 and noteB.pitch.accidental is not None and
+         noteCFingering[0] == 3 and noteC.pitch.accidental is None):
 		return 1
 
 	return 0
@@ -375,17 +539,21 @@ def getParncuttGivenNotes(isLeftHand, noteA, noteAFingering, noteB, noteBFingeri
 
 allParncuttScores = []
 allParncuttScoresNormalized = []
-for n in range(1, 151):
-	for i in range(1, 8):
-		inputString = f"PianoFingeringDataset_v1.2/FingeringFiles/{n:03}-{i}_fingering.txt"
-		try:
-			parncuttScore, totalNotes = getParncuttRuleScore(file2Stream(inputString))
-			print(f"{n:03}-{i}", parncuttScore, totalNotes)
-			allParncuttScores.append([f"{n:03}-{i}", parncuttScore])
-			parncuttScoreNormalized = [item / totalNotes for item in parncuttScore]
-			allParncuttScoresNormalized.append([f"{n:03}-{i}", parncuttScoreNormalized])
-		except FileNotFoundError:
-			pass
+
+directory = "./PianoFingeringDataset_v1.2/FingeringFiles"
+
+for filename in os.scandir(directory):
+	#inputString = f"PianoFingeringDataset_v1.2/FingeringFiles/{n:03}-{i}_fingering.txt"
+	try:
+		inputStream = file2Stream(filename.path)
+		inputStream.write("musicxml.png", f"./output/{filename.name}")
+		#parncuttScore, totalNotes = getParncuttRuleScore(inputStream)
+		#print(filename.name, parncuttScore, totalNotes)
+		#allParncuttScores.append([filename.name, parncuttScore])
+		#parncuttScoreNormalized = [item / totalNotes for item in parncuttScore]
+		#allParncuttScoresNormalized.append([filename.name, parncuttScoreNormalized])
+	except FileNotFoundError:
+		pass
 
 
 #RunTime 10/24/25: ~3:30
