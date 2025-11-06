@@ -39,57 +39,71 @@ TEMPLATE = """
     </style>
 </head>
 <body>
-    <h1>Upload Music File for Parncutt Scoring</h1>
-    {% if filename %}
-    <p><strong>Uploaded file:</strong> {{ filename }}</p>
-    {% endif %}
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <input type="submit" value="Upload & Analyze">
-    </form>
-
-    {% if scores %}
-        <h2>Scores</h2>
+    <h1>Upload Musicxml, xml, or txt File(s) for Parncutt Scoring</h1>
+    
+    {% if filenames %}
+        <h2>Uploaded Files</h2>
         <table>
             <tr>
-                <th>Rule #</th>
-                <th>Score</th>
+                <th>#</th>
+                <th>Filename</th>
+                <th>Total Notes</th>
+                <th>Scores</th>
             </tr>
-            {% for val in scores %}
+            {% for name, total, score_list in zip(filenames, total_notes, scores) %}
             <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ val }}</td>
+                <td>{{ name }}</td>
+                <td>{{ total }}</td>
+                <td>{{ score_list }}</td>
             </tr>
             {% endfor %}
         </table>
-        <p><strong>Total Notes:</strong> {{ total_notes }}</p>
     {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" multiple required>
+        <input type="submit" value="Upload & Analyze">
+    </form>
 </body>
 </html>
 """
 
 @app.route("/", methods = ["GET", "POST"])
 def upload_file():
-    scores = None
-    total_notes = None
+    all_scores = [] # list of scores
+    all_totals = []
+    filenames = []
 
     if request.method == "POST":
-        file = request.files["file"]
-        if file:
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+        files = request.files.getlist("file")
 
-            try:
-                ######THIS IS WHERE WE NEED THE ALGORITHM, CURRENTLY RANDOM
-                score = generateRandomFingerings(file2Stream(filepath))
-                score_counts, total_notes  = getParncuttRuleScore(score)
-                scores = [int(x) for x in score_counts]
+        for file in files:
+            if file:
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(filepath)
+
+                try:
+                    ######THIS IS WHERE WE NEED THE ALGORITHM, CURRENTLY RANDOM
+                    score = generateRandomFingerings(file2Stream(filepath))
+                    score_counts, total_notes  = getParncuttRuleScore(score)
+
+                    all_scores.append([int(x) for x in score_counts])
+                    all_totals.append(total_notes)
+                    filenames.append(filename)
 
 
-            except Exception as e:
-                return f"<h3>Error processing file {e}</h3>"
-    return render_template_string(TEMPLATE, scores = scores, total_notes = total_notes)
+                except Exception as e:
+                    return f"<h3>Error processing file {e}</h3>"
+
+    return render_template_string(
+        TEMPLATE,
+        scores = all_scores,
+        total_notes = all_totals,
+        filenames = filenames,
+        zip = zip
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
