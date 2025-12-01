@@ -32,10 +32,9 @@ def getParncuttDistances(fingeringA, fingeringB):
 
 def ParnStretch(noteInterval, minComf, maxComf):
 	if noteInterval < minComf:
-		return 2 * abs(minComf - noteInterval)
+		return min(2 * abs(minComf - noteInterval), 5)
 	elif noteInterval > maxComf:
-		return 2 * abs(maxComf - noteInterval)
-	
+		return min(2 * abs(maxComf - noteInterval), 5)
 	return 0
 
 
@@ -54,6 +53,8 @@ def ParnSpan(noteInterval, minRel, maxRel, noteBFingering, noteCFingering):
 			output[1] += abs(noteInterval) - abs(maxRel)
 		else:
 			output[1] += 2 * (abs(noteInterval) - abs(maxRel))
+
+	output[1] = min(output[1], 5)
 	return output
 
 

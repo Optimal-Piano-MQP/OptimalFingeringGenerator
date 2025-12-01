@@ -9,6 +9,10 @@ import numpy as np
 
 #Required librarys: Music21, Flask, jupyterlab, 
 
+#CMD to convert scorepdfs to mxml using audiveris
+#Run from inside the dir with the pdf files
+#FOR %i IN (*) DO "C:\Program Files\Audiveris\audiveris.exe" -batch -export -output "PATH/TO/OUTPUT" %i
+
 """Run Parncutt on all PIG Files"""
 #beethoven-fur-elise-bagatelle-no-25-woo-59.musicxml
 #musicxml file with no fingerings
@@ -73,6 +77,7 @@ TEMPLATE = """
 def upload_file():
     all_scores = [] # list of scores
     all_totals = []
+    all_scores_normalized = []
     filenames = []
 
     if request.method == "POST":
@@ -91,6 +96,7 @@ def upload_file():
 
                     all_scores.append([int(x) for x in score_counts])
                     all_totals.append(total_notes)
+                    all_scores_normalized.append([float(item / total_notes) for item in score_counts])
                     filenames.append(filename)
 
 
