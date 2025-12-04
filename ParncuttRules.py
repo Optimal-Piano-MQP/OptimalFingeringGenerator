@@ -32,9 +32,9 @@ def getParncuttDistances(fingeringA, fingeringB):
 
 def ParnStretch(noteInterval, minComf, maxComf):
 	if noteInterval < minComf:
-		return min(2 * abs(minComf - noteInterval), 5)
+		return min(2 * abs(minComf - noteInterval), 10)
 	elif noteInterval > maxComf:
-		return min(2 * abs(maxComf - noteInterval), 5)
+		return min(2 * abs(maxComf - noteInterval), 10)
 	return 0
 
 
@@ -50,11 +50,10 @@ def ParnSpan(noteInterval, minRel, maxRel, noteBFingering, noteCFingering):
 	# Large-span rule: per semitone greater than maxrel, 1 for includes thumb, 2 for not including thumb
 	if abs(noteInterval) > abs(maxRel):
 		if noteCFingering[0] == 1 or noteBFingering[-1] == 1:
-			output[1] += abs(noteInterval) - abs(maxRel)
+			output[1] += min(abs(noteInterval) - abs(maxRel), 5)
 		else:
-			output[1] += 2 * (abs(noteInterval) - abs(maxRel))
+			output[1] += min(2 * (abs(noteInterval) - abs(maxRel)), 10)
 
-	output[1] = min(output[1], 5)
 	return output
 
 
