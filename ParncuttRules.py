@@ -41,18 +41,18 @@ def ParnStretch(noteInterval, minComf, maxComf):
 def ParnSpan(noteInterval, minRel, maxRel, noteBFingering, noteCFingering):
 	# Small-span rule: per semitone less than minrel, 1 for includes thumb, 2 for not including thumb
 	output = [0, 0]
-	if abs(noteInterval) < abs(minRel):
+	if noteInterval < minRel:
 		if noteCFingering[0] == 1 or noteBFingering[-1] == 1:
-			output[0] += abs(minRel) - abs(noteInterval)
+			output[0] += min(abs(minRel - noteInterval), 5)
 		else:
-			output[0] += 2 * (abs(minRel) - abs(noteInterval))
+			output[0] += min(2 * (abs(minRel - noteInterval)), 10)
 
 	# Large-span rule: per semitone greater than maxrel, 1 for includes thumb, 2 for not including thumb
-	if abs(noteInterval) > abs(maxRel):
+	if noteInterval > maxRel:
 		if noteCFingering[0] == 1 or noteBFingering[-1] == 1:
-			output[1] += min(abs(noteInterval) - abs(maxRel), 5)
+			output[1] += min(abs(noteInterval - maxRel), 5)
 		else:
-			output[1] += min(2 * (abs(noteInterval) - abs(maxRel)), 10)
+			output[1] += min(2 * (abs(noteInterval - maxRel)), 10)
 
 	return output
 
@@ -71,13 +71,13 @@ def ParnPosChange(isLeftHand, noteInterval, noteA, noteAFingering, noteB, noteBF
 	output = [0, 0]
 
 	#PosChangeSize rule
-	if abs(firstThirdInterval) < abs(firstThirdMinComf):
+	if firstThirdInterval < firstThirdMinComf:
 		posChange = True
-		output[1] += abs(firstThirdMinComf) - abs(firstThirdInterval)
+		output[1] += abs(firstThirdMinComf - firstThirdInterval)
 
-	if abs(firstThirdInterval) > abs(firstThirdMaxComf):
+	if firstThirdInterval > firstThirdMaxComf:
 		posChange = True
-		output[1] += abs(firstThirdInterval) - abs(firstThirdMaxComf)
+		output[1] += abs(firstThirdInterval - firstThirdMaxComf)
 
 	#PosChangeCount
 	if posChange:
@@ -112,10 +112,22 @@ def Parn34(noteBFingering, noteCFingering):
 
 
 def Parn4OnBlack(noteB, noteBFingering, noteC, noteCFingering):
-	if(noteBFingering[-1] == 3 and noteB.pitch.accidental is None and \
-		noteCFingering[0] == 4 and noteC.pitch.accidental is not None) or \
-		(noteBFingering[-1] == 4 and noteB.pitch.accidental is not None and \
-		noteCFingering[0] == 3 and noteC.pitch.accidental is None):
+	noteBOnBlack = False
+	noteCOnBlack = False
+	try:
+		noteBOnBlack = noteB.pitch.accidental is not None and noteB.pitch.accidental.name != 'natural'
+	except:
+		noteBOnBlack = False
+
+	try:
+		noteCOnBlack = noteC.pitch.accidental is not None and noteC.pitch.accidental.name != 'natural'
+	except:
+		noteCOnBlack = False
+
+	if(noteBFingering[-1] == 3 and not noteBOnBlack and \
+		noteCFingering[0] == 4 and noteCOnBlack) or \
+		(noteBFingering[-1] == 4 and noteBOnBlack and \
+		noteCFingering[0] == 3 and not noteCOnBlack):
 		return 1
 
 	return 0
@@ -123,12 +135,32 @@ def Parn4OnBlack(noteB, noteBFingering, noteC, noteCFingering):
 
 def Parn1OnBlack(noteA, noteB, noteBFingering, noteC):
 	output = 0
-	if 1 in noteBFingering and noteB.pitch.accidental is not None:
+	noteBOnBlack = False
+	noteCOnBlack = False
+	noteAOnBlack = False
+	try:
+		noteBOnBlack = noteB.pitch.accidental is not None and noteB.pitch.accidental.name != 'natural'
+	except:
+		noteBOnBlack = False
+
+	try:
+		noteCOnBlack = noteC.pitch.accidental is not None and noteC.pitch.accidental.name != 'natural'
+	except:
+		noteCOnBlack = False
+
+	try:
+		noteAOnBlack = noteA.pitch.accidental is not None and noteA.pitch.accidental.name != 'natural'
+	except:
+		noteAOnBlack = False
+
+	if 1 in noteBFingering and noteBOnBlack:
 		output += 1
-	if noteC.pitch.accidental is None and noteBFingering[-1] == 1:
+
+	if not noteCOnBlack and noteBFingering[-1] == 1:
 		output += 2
+
 	if noteA is not None:
-		if noteA.pitch.accidental is None and noteBFingering[0] == 1:
+		if not noteAOnBlack and noteBFingering[0] == 1:
 			output += 2
 
 	return output
@@ -137,11 +169,18 @@ def Parn1OnBlack(noteA, noteB, noteBFingering, noteC):
 def Parn5OnBlack(noteA, noteB, noteBFingering, noteC):
 	output = 0
 	if 5 in noteBFingering and noteB.pitch.accidental is not None:
+		if(noteB.pitch.accidental.name == 'natural'):
+			return output
+
 		if noteA is not None:
-			if noteA.pitch.accidental is None and noteBFingering[-1] == 5:
+			if noteA.pitch.accidental is None and noteBFingering[0] == 5:
+				output += 2
+			elif noteA.pitch.accidental.name == 'natural' and noteBFingering[0] == 5:
 				output += 2
 
-		if noteC.pitch.accidental is None and noteBFingering[0] == 5:
+		if noteC.pitch.accidental is None and noteBFingering[-1] == 5:
+			output += 2
+		elif noteC.pitch.accidental.name == 'natural' and noteBFingering[-1] == 5:
 			output += 2
 
 	return output
@@ -149,18 +188,29 @@ def Parn5OnBlack(noteA, noteB, noteBFingering, noteC):
 
 def ParnThumbPassing(isLeftHand, noteInterval, noteB, noteBFingering, noteC, noteCFingering):
 	output = 0
+	noteBOnBlack = False
+	noteCOnBlack = False
+	try:
+		noteBOnBlack = noteB.pitch.accidental is not None and noteB.pitch.accidental.name != 'natural'
+	except:
+		noteBOnBlack = False
+
+	try:
+		noteCOnBlack = noteC.pitch.accidental is not None and noteC.pitch.accidental.name != 'natural'
+	except:
+		noteCOnBlack = False
+
+
 	if (1 in noteBFingering and isLeftHand and noteInterval > 0) or (1 in noteBFingering and not isLeftHand and noteInterval < 0):
-		if (noteB.pitch.accidental is None and noteC.pitch.accidental is None) or \
-			(noteB.pitch.accidental is not None and noteC.pitch.accidental is not None):
+		if noteBOnBlack == noteCOnBlack:
 			output += 1
-		elif noteB.pitch.accidental is not None and noteC.pitch.accidental is None:
+		elif noteBOnBlack and not noteCOnBlack:
 			output += 3
 
 	if (1 in noteCFingering and isLeftHand and noteInterval < 0) or (1 in noteCFingering and not isLeftHand and noteInterval > 0):
-		if (noteB.pitch.accidental is None and noteC.pitch.accidental is None) or \
-			(noteB.pitch.accidental is not None and noteC.pitch.accidental is not None):
+		if noteBOnBlack == noteCOnBlack:
 			output += 1
-		elif noteB.pitch.accidental is None and noteC.pitch.accidental is not None:
+		elif not noteBOnBlack and noteCOnBlack:
 			output += 3
 
 	return output
@@ -209,6 +259,7 @@ def getParncuttRuleScore(score):
 			else:
 				eventC = [eventC]
 
+			#calculate internal scores for the chord
 			internalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			for pair in combinations(eventC, 2):
 				fingering1 = getFingering(pair[0])
@@ -260,11 +311,10 @@ def getParncuttRuleScore(score):
 
 def getParncuttGivenNotes(isLeftHand, noteA, noteAFingering, noteB, noteBFingering, noteC, noteCFingering):
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	if noteB is None or (noteBFingering[-1] == noteCFingering[0]):
+	if noteB is None:
 		return scoreCount
 
 	FingeringPairTableLine = getParncuttDistances(noteBFingering[-1], noteCFingering[0])
-
 
 	#convert the parncutt distances for lefthand and descending steps
 	descending = noteBFingering[-1] > noteCFingering[0]
@@ -274,6 +324,7 @@ def getParncuttGivenNotes(isLeftHand, noteA, noteAFingering, noteB, noteBFingeri
 
 
 	noteInterval = interval.Interval(noteB.pitch, noteC.pitch).semitones
+	#if descending: noteInterval = -noteInterval
 	minPrac = FingeringPairTableLine[0]
 	minComf = FingeringPairTableLine[1]
 	minRel = FingeringPairTableLine[2]
