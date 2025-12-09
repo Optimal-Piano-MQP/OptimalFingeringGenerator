@@ -156,11 +156,12 @@ def Parn1OnBlack(noteA, noteB, noteBFingering, noteC):
 	if 1 in noteBFingering and noteBOnBlack:
 		output += 1
 
-	if not noteCOnBlack and noteBFingering[-1] == 1:
-		output += 2
+	if noteC is not None:
+		if not noteCOnBlack and noteBFingering[-1] == 1 and noteBOnBlack:
+			output += 2
 
 	if noteA is not None:
-		if not noteAOnBlack and noteBFingering[0] == 1:
+		if not noteAOnBlack and noteBFingering[0] == 1 and noteBOnBlack:
 			output += 2
 
 	return output
@@ -178,10 +179,11 @@ def Parn5OnBlack(noteA, noteB, noteBFingering, noteC):
 			elif noteA.pitch.accidental.name == 'natural' and noteBFingering[0] == 5:
 				output += 2
 
-		if noteC.pitch.accidental is None and noteBFingering[-1] == 5:
-			output += 2
-		elif noteC.pitch.accidental.name == 'natural' and noteBFingering[-1] == 5:
-			output += 2
+		if noteC is not None:
+			if noteC.pitch.accidental is None and noteBFingering[-1] == 5:
+				output += 2
+			elif noteC.pitch.accidental.name == 'natural' and noteBFingering[-1] == 5:
+				output += 2
 
 	return output
 
@@ -228,6 +230,45 @@ def getFingering(note):
 				fingering = [fingering]
 	return fingering
 
+def getFingeringChord(chord):
+	fingerings = []
+	for a in chord.articulations:
+		if isinstance(a, articulations.Fingering):
+			fingering = a.fingerNumber
+			#if greater than 5 then this is a substitution fingering and needs to be split
+			#this substitute format is custom and part of the PIGconversion script
+			if fingering > 5:
+				fingering = [int(digit) for digit in str(fingering)]
+			else:
+				fingering = [fingering]
+			fingerings.append(fingering)
+	return fingerings
+
+def getInternalScore(eventC, noteCFingering, isLeftHand):
+	internalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	for pair in combinations(range(len(eventC)), 2):
+		fingering1 = noteCFingering[pair[0]]
+		fingering2 = noteCFingering[pair[1]]
+				
+		FingeringPairTableLine = getParncuttDistances(fingering1[-1], fingering2[0])
+
+		#convert the parncutt distances for lefthand and descending steps
+		descending = fingering1[-1] > fingering2[0]
+		if (isLeftHand and not descending) or (not isLeftHand and descending):
+			FingeringPairTableLine = [-item for item in FingeringPairTableLine]
+			FingeringPairTableLine.reverse()
+
+		noteInterval = interval.Interval(eventC[pair[0]].pitch, eventC[pair[1]].pitch).semitones
+		minComf = FingeringPairTableLine[1]
+		minRel = FingeringPairTableLine[2]
+		maxRel = FingeringPairTableLine[3]
+		maxComf = FingeringPairTableLine[4]
+
+		span =  ParnSpan(noteInterval, minRel, maxRel, fingering1, fingering2)
+		internalScore = np.array(internalScore) + np.array([ParnStretch(noteInterval, minComf, maxComf), span[0], span[1], 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+	return internalScore
+
 
 def getParncuttRuleScore(score):
 	#TODO:
@@ -255,32 +296,13 @@ def getParncuttRuleScore(score):
 
 		for eventC in part.recurse().notes:
 			if eventC.isChord:
+				noteCFingering = getFingeringChord(eventC)
 				eventC = eventC.notes
 			else:
 				eventC = [eventC]
 
 			#calculate internal scores for the chord
-			internalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-			for pair in combinations(eventC, 2):
-				fingering1 = getFingering(pair[0])
-				fingering2 = getFingering(pair[1])
-				
-				FingeringPairTableLine = getParncuttDistances(fingering1[-1], fingering2[0])
-
-				#convert the parncutt distances for lefthand and descending steps
-				descending = fingering1[-1] > fingering2[0]
-				if (isLeftHand and not descending) or (not isLeftHand and descending):
-					FingeringPairTableLine = [-item for item in FingeringPairTableLine]
-					FingeringPairTableLine.reverse()
-
-				noteInterval = interval.Interval(pair[0].pitch, pair[1].pitch).semitones
-				minComf = FingeringPairTableLine[1]
-				minRel = FingeringPairTableLine[2]
-				maxRel = FingeringPairTableLine[3]
-				maxComf = FingeringPairTableLine[4]
-
-				span =  ParnSpan(noteInterval, minRel, maxRel, fingering1, fingering2)
-				internalScore = np.array(internalScore) + np.array([ParnStretch(noteInterval, minComf, maxComf), span[0], span[1], 0, 0, 0, 0, 0, 0, 0, 0, 0])
+			internalScore = getInternalScore(eventC, noteCFingering, isLeftHand)
 
 			scoreCount = np.array(scoreCount) + np.array(internalScore)
 
@@ -296,15 +318,33 @@ def getParncuttRuleScore(score):
 								unnaggregatedScore.append(getParncuttGivenNotes(isLeftHand, noteA, noteAFingering, noteB, noteBFingering, noteC, noteCFingering))
 						else:
 							unnaggregatedScore.append(getParncuttGivenNotes(isLeftHand, None, None, noteB, noteBFingering, noteC, noteCFingering))
+				else:
+					unnaggregatedScore.append([0, 0, 0, 0, 0, ParnWeakFinger(noteCFingering), 0, 0, 0, 0, 0, 0])
 			
-			#print(unnaggregatedScore)
 			aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
-			#print(aggregatedScore, "\n")
 
 			scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
 			eventA = eventB
 			eventB = eventC
+
+		#at the end of the piece, extra steps are needed to do the last two sets. IE last two notes and then last note
+		eventC = None
+		unnaggregatedScore = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+		if eventB is not None:
+			for noteB in eventB:
+				noteBFingering = getFingering(noteB)
+				if eventA is not None:
+					for noteA in eventA:
+						noteAFingering = getFingering(noteA)
+						unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(noteA, noteB, noteBFingering, None), Parn5OnBlack(noteA, noteB, noteBFingering, None), 0])
+				else:
+					unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(None, noteB, noteBFingering, None), Parn5OnBlack(noteA, noteB, noteBFingering, None), 0])
+			
+		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
+
+		scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
+
 
 	return scoreCount, totalNotes
 
