@@ -339,7 +339,7 @@ def getParncuttRuleScore(score):
 						noteAFingering = getFingering(noteA)
 						unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(noteA, noteB, noteBFingering, None), Parn5OnBlack(noteA, noteB, noteBFingering, None), 0])
 				else:
-					unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(None, noteB, noteBFingering, None), Parn5OnBlack(noteA, noteB, noteBFingering, None), 0])
+					unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(None, noteB, noteBFingering, None), Parn5OnBlack(None, noteB, noteBFingering, None), 0])
 			
 		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
 
