@@ -1,4 +1,5 @@
 from music21 import *
+import music21
 import numpy as np
 from itertools import combinations
 from FileConversion import file2Stream
@@ -8,8 +9,9 @@ from FileConversion import file2Stream
 def getParncuttDistances(fingeringA, fingeringB):
 	sortedFingerings = sorted([fingeringA, fingeringB])
 	fingeringIndex = sortedFingerings[0] * 2 + sortedFingerings[1] * 3
+	print(fingeringIndex, fingeringA, fingeringB)
 
-	if(fingeringA == 6 or fingeringB == 6 or fingeringA == fingeringB):
+	if(fingeringA not in range(1, 6) or fingeringB not in range (1,6) or fingeringA == fingeringB):
 		return[0, 0, 0, 0, 0, 0]
 
 	#for righthand ascending
@@ -135,6 +137,11 @@ def Parn4OnBlack(noteB, noteBFingering, noteC, noteCFingering):
 
 def Parn1OnBlack(noteA, noteB, noteBFingering, noteC):
 	output = 0
+
+	if len(noteBFingering) == 0 and noteB is not None:
+		return output
+
+
 	noteBOnBlack = False
 	noteCOnBlack = False
 	noteAOnBlack = False
@@ -169,6 +176,10 @@ def Parn1OnBlack(noteA, noteB, noteBFingering, noteC):
 
 def Parn5OnBlack(noteA, noteB, noteBFingering, noteC):
 	output = 0
+
+	if len(noteBFingering) == 0 and noteB is not None:
+		return output
+
 	if 5 in noteBFingering and noteB.pitch.accidental is not None:
 		if(noteB.pitch.accidental.name == 'natural'):
 			return output
@@ -218,7 +229,7 @@ def ParnThumbPassing(isLeftHand, noteInterval, noteB, noteBFingering, noteC, not
 	return output
 
 def getFingering(note):
-	fingering = [6]
+	fingering = []
 	for a in note.articulations:
 		if isinstance(a, articulations.Fingering):
 			fingering = a.fingerNumber
@@ -247,8 +258,11 @@ def getFingeringChord(chord):
 def getInternalScore(eventC, noteCFingering, isLeftHand):
 	internalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	for pair in combinations(range(len(eventC)), 2):
-		fingering1 = noteCFingering[pair[0]]
-		fingering2 = noteCFingering[pair[1]]
+		try:
+			fingering1 = noteCFingering[pair[0]]
+			fingering2 = noteCFingering[pair[1]]
+		except:
+			continue
 				
 		FingeringPairTableLine = getParncuttDistances(fingering1[-1], fingering2[0])
 
@@ -295,7 +309,9 @@ def getParncuttRuleScore(score):
 		noteCFingering = [0]
 
 		for eventC in part.recurse().notes:
-			if eventC.isChord:
+			if isinstance(eventC, music21.harmony.Harmony):
+				continue
+			elif eventC.isChord:
 				noteCFingering = getFingeringChord(eventC)
 				eventC = eventC.notes
 			else:
@@ -353,6 +369,18 @@ def getParncuttGivenNotes(isLeftHand, noteA, noteAFingering, noteB, noteBFingeri
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	if noteB is None:
 		return scoreCount
+
+	if noteC is not None:
+		if len(noteCFingering) == 0:
+			return scoreCount
+
+	if noteB is not None:
+		if len(noteBFingering) == 0:
+			return scoreCount
+
+	if noteA is not None:
+		if len(noteAFingering) == 0:
+			return scoreCount
 
 	FingeringPairTableLine = getParncuttDistances(noteBFingering[-1], noteCFingering[0])
 
@@ -441,9 +469,11 @@ def generateRandomFingerings(score):
 				if isinstance(a, articulations.Fingering):
 					fingeringCount += 1
 
-			if item.isNote and fingeringCount == 0:
-					item.articulations.append(articulations.Fingering(random.randint(1, 5)))
-			if item.isChord and fingeringCount < len(item.notes):
+			if isinstance(item, music21.harmony.Harmony):
+				print(item)
+			elif item.isNote and fingeringCount == 0:
+				item.articulations.append(articulations.Fingering(random.randint(1, 5)))
+			elif item.isChord and fingeringCount < len(item.notes):
 				for i in range(fingeringCount, len(item.notes)):
 					item.articulations.append(articulations.Fingering(random.randint(1, 5)))
 	return score

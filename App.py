@@ -23,6 +23,7 @@ import numpy as np
 
 #allParncuttScore, allParncuttScoresNormalized = allParncutt()
 #plotParncuttData(allParncuttScoresNormalized)
+print(getParncuttRuleScore(file2Stream("C:/Users/Kanix/source/repos/BatchFingeringGenerator2/Output_VNS/QmZCY5wU3xxsqLFCsTyp6Amy9bvXgqTXZvqR7M9hqApPPz_output.xml")))
 
 app = Flask(__name__)
 
@@ -90,8 +91,8 @@ def upload_file():
                 file.save(filepath)
 
                 try:
-                    ######THIS IS WHERE WE NEED THE ALGORITHM, CURRENTLY RANDOM
-                    score = generateRandomFingerings(file2Stream(filepath))
+                    ######THIS IS WHERE WE NEED THE ALGORITHM, CURRENTLY RNDOM
+                    score = file2Stream(filepath)
                     score_counts, total_notes  = getParncuttRuleScore(score)
 
                     all_scores.append([int(x) for x in score_counts])
@@ -101,7 +102,7 @@ def upload_file():
 
 
                 except Exception as e:
-                    return f"<h3>Error processing file {e}</h3>"
+                    return f"<h3>Error processing file {e}, {filepath}</h3>"
 
     return render_template_string(
         TEMPLATE,
