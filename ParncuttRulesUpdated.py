@@ -365,10 +365,10 @@ def getParncuttRuleScore(inputStream):
 				isLeftHand = not isLeftHand
 
 
-	testOutputStream = stream.Score()
-	testOutputStream.insert(0, parts[0])
-	testOutputStream.insert(0, parts[1])
-	testOutputStream.write("musicxml", "FingeringTestingOutput.xml")
+	#testOutputStream = stream.Score()
+	#testOutputStream.insert(0, parts[0])
+	#testOutputStream.insert(0, parts[1])
+	#testOutputStream.write("musicxml", "FingeringTestingOutput.xml")
 
 
 	isLeftHand = True
