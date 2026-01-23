@@ -1,50 +1,88 @@
-import math
-from copy import deepcopy
-from ParncuttRules import getParncuttRuleScore
+from ParncuttRules import getParncuttGivenNotes
 import music21
+import numpy as np
 
 music21.environment.UserSettings()['musescoreDirectPNGPath'] = "C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe"
 
 results = []
 scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
 
-def GenerateFingerings(fingerings, num):
-    for i in range(1,6):
-        fingerings[num-1] = i
-        if num < len(scale):
-            GenerateFingerings(fingerings, num+1)
-        else:
-            print(fingerings)
-            piece = music21.stream.Score()
-            part = music21.stream.Part()
-            part.insert(0, music21.instrument.Piano())
-            for n in range(len(scale)):
-                note = music21.note.Note(scale[n], duration=music21.duration.Duration(1))
-                note.articulations.append(music21.articulations.Fingering(fingerings[n]))
-                part.append(note)
-            piece.append(part)
+class Entry:
+    fingerings = []
+    notes = []
+    score = 0
 
-            results.append((deepcopy(fingerings), getParncuttRuleScore(piece)[0]))
+    def __init__(self, fingerings, notes, score):
+        self.fingerings = fingerings
+        self.notes = notes
+        self.score = score
 
-    return
+    def __lt__(self, other):
+        if not isinstance(other, Entry):
+            return NotImplemented
+        return self.score < other.score
 
-GenerateFingerings([0,0,0,0,0,0,0,0], 1)
+    def __str__(self):
+        return str(f"{self.fingerings}\n{self.notes}\n{self.score}")
 
-best = math.inf
+def dp(part, is_left_hand):
+    notes = part.flatten().notes
+    trivial_notes = [notes[-2], notes[-1]]
+    entry_list = np.ndarray([5,5], dtype=Entry)
 
-for r in results:
-    s = sum(r[1])
-    if s < best:
-        best = s
+    # Setup trivial case: [[1,1],[1,2],[1,3]...],[[2,1],[2,2]...]...
+    for i in range(5):
+        for j in range(5):
+            entry_list[i,j] = Entry([i+1,j+1],
+                                    trivial_notes,
+                                    sum(getParncuttGivenNotes(is_left_hand, None, None,
+                                                              trivial_notes[0], [i+1],
+                                                              trivial_notes[1], [j+1])))
+    # Find optimal fingering
+    for n in range(len(notes)-3, -1, -1):
+        note_to_add = notes[n]
+        new_entry_list = np.ndarray([5,5], dtype=Entry)
+        # Iterate through all possible fingerings for the note
+        for k in range(5):
+            fingering_to_eval = k+1
+            # Iterate through all previous optimal fingerings
+            for i in range(5):
+                e = []
+                for j in range(5):
+                    # Calculate new entry with new note and fingering added
+                    e.append(Entry([fingering_to_eval] + entry_list[i,j].fingerings,
+                                   [note_to_add] + entry_list[i,j].notes,
+                                   calculateScore(is_left_hand, fingering_to_eval, note_to_add, entry_list[i,j])))
+                # Take the minimum of calculated scores for new optimal entry
+                new_entry_list[k, i] = min(e)
 
-best_fingerings = []
+        entry_list = new_entry_list
 
-for r in results:
-    if sum(r[1]) == best:
-        best_fingerings.append(r)
+    # Iterate through resulting array of entries to find optimal fingering
+    best = entry_list[0,0]
+    for entry in entry_list.flat:
+        if entry.score < best.score:
+            best = entry
 
-print(best_fingerings)
+    if is_left_hand:
+        best.fingerings = [fingering * -1 for fingering in best.fingerings]
+    return best
 
 
+def calculateScore(is_left_hand, new_finger, new_note, entry):
+    return (sum(getParncuttGivenNotes(is_left_hand,new_note,[new_finger],
+                              entry.notes[0],[entry.fingerings[0]],
+                              entry.notes[1],[entry.fingerings[1]]))
+     + entry.score)
 
 
+piece = music21.stream.Score()
+part = music21.stream.Part()
+part.insert(0, music21.instrument.Piano())
+
+for n in range(len(scale)):
+    part.append(music21.note.Note(scale[n], duration=music21.duration.Duration(1)))
+piece.append(part)
+
+optimal = dp(part, 1)
+print(optimal)
