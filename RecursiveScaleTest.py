@@ -1,10 +1,10 @@
-from ParncuttRules import getParncuttGivenNotes
+from ParncuttRulesUpdated import getParncuttGivenNotes, getParncuttRuleScore
 import music21
 import numpy as np
+import FileConversion
 
 music21.environment.UserSettings()['musescoreDirectPNGPath'] = "C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe"
 
-results = []
 scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
 
 class Entry:
@@ -23,7 +23,8 @@ class Entry:
         return self.score < other.score
 
     def __str__(self):
-        return str(f"{self.fingerings}\n{self.notes}\n{self.score}")
+        note_strings = [n.nameWithOctave for n in self.notes]
+        return str(f"{self.fingerings}\n{note_strings}\n{self.score}")
 
 def dp(part, is_left_hand):
     notes = part.flatten().notes
@@ -41,6 +42,8 @@ def dp(part, is_left_hand):
     # Find optimal fingering
     for n in range(len(notes)-3, -1, -1):
         note_to_add = notes[n]
+        if note_to_add.isChord:
+            continue
         new_entry_list = np.ndarray([5,5], dtype=Entry)
         # Iterate through all possible fingerings for the note
         for k in range(5):
@@ -82,7 +85,6 @@ part.insert(0, music21.instrument.Piano())
 
 for n in range(len(scale)):
     part.append(music21.note.Note(scale[n], duration=music21.duration.Duration(1)))
-piece.append(part)
 
 optimal = dp(part, 1)
 print(optimal)
