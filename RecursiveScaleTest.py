@@ -1,11 +1,12 @@
-from ParncuttRulesUpdated import getParncuttGivenNotes, getParncuttRuleScore
+from ParncuttRulesUpdated import getParncuttGivenNotesDP, getParncuttRuleScore
 import music21
 import numpy as np
 import FileConversion
 
 music21.environment.UserSettings()['musescoreDirectPNGPath'] = "C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe"
 
-scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
+scale = ['C4', 'E4', 'D4', 'F4', 'E4', 'G4', 'F4', 'A4'] #step test (expected 1212345 or 1312345, for left 53423131 or 53423121)
+#scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
 
 class Entry:
     fingerings = []
@@ -36,9 +37,12 @@ def dp(part, is_left_hand):
         for j in range(5):
             entry_list[i,j] = Entry([i+1,j+1],
                                     trivial_notes,
-                                    sum(getParncuttGivenNotes(is_left_hand, None, None,
-                                                              trivial_notes[0], [i+1],
-                                                              trivial_notes[1], [j+1])))
+                                    sum(getParncuttGivenNotesDP(is_left_hand, trivial_notes[0], [i+1],
+                                                              trivial_notes[1], [j+1],
+                                                              None, None)) + 
+                                    sum(getParncuttGivenNotesDP(is_left_hand, trivial_notes[1], [j+1],
+                                                              None, None,
+                                                              None, None)))
     # Find optimal fingering
     for n in range(len(notes)-3, -1, -1):
         note_to_add = notes[n]
@@ -64,6 +68,7 @@ def dp(part, is_left_hand):
     # Iterate through resulting array of entries to find optimal fingering
     best = entry_list[0,0]
     for entry in entry_list.flat:
+        print(entry)
         if entry.score < best.score:
             best = entry
 
@@ -73,7 +78,7 @@ def dp(part, is_left_hand):
 
 
 def calculateScore(is_left_hand, new_finger, new_note, entry):
-    return (sum(getParncuttGivenNotes(is_left_hand,new_note,[new_finger],
+    return (sum(getParncuttGivenNotesDP(is_left_hand,new_note,[new_finger],
                               entry.notes[0],[entry.fingerings[0]],
                               entry.notes[1],[entry.fingerings[1]]))
      + entry.score)
@@ -86,5 +91,7 @@ part.insert(0, music21.instrument.Piano())
 for n in range(len(scale)):
     part.append(music21.note.Note(scale[n], duration=music21.duration.Duration(1)))
 
-optimal = dp(part, 1)
+optimal = dp(part, 0)
 print(optimal)
+#optimal = dp(part, 1)
+#print(optimal)
