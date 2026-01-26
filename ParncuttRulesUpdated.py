@@ -1,16 +1,17 @@
-from curses.ascii import TAB
 from music21 import *
 import music21
 import numpy as np
 from itertools import combinations
 from FileConversion import file2Stream
+import copy
 
 """Parncutt Functions:"""
 
 def getParncuttDistances(fingeringA, fingeringB):
+	fingeringA = abs(fingeringA)
+	fingeringB = abs(fingeringB)
 	sortedFingerings = sorted([fingeringA, fingeringB])
 	fingeringIndex = sortedFingerings[0] * 2 + sortedFingerings[1] * 3
-	print(fingeringIndex, fingeringA, fingeringB)
 
 	if(fingeringA not in range(1, 6) or fingeringB not in range (1,6) or fingeringA == fingeringB):
 		return[0, 0, 0, 0, 0, 0]
@@ -35,7 +36,7 @@ def getParncuttDistances(fingeringA, fingeringB):
 
 def ParnStretch(noteInterval, minComf, maxComf):
 	if noteInterval < minComf:
-		return min(2 * abs(minComf - noteInterval), 10)
+		return min(2 * abs(minComf - noteInterval), 10)		
 	elif noteInterval > maxComf:
 		return min(2 * abs(maxComf - noteInterval), 10)
 	return 0
@@ -233,31 +234,40 @@ def ParnThumbPassing(isLeftHand, noteInterval, noteB, noteBFingering, noteC, not
 
 	return output
 
-def getFingering(note):
+def getFingering(note, keepSign = False):
 	fingering = []
 	for a in note.articulations:
 		if isinstance(a, articulations.Fingering):
 			fingering = a.fingerNumber
+			if not keepSign:
+				fingering = abs(fingering)
 			#if greater than 5 then this is a substitution fingering and needs to be split
 			#this substitute format is custom and part of the PIGconversion script
-			if fingering > 5:
+			if int(fingering) > 5:
 				fingering = [int(digit) for digit in str(fingering)]
 			else:
-				fingering = [fingering]
+				fingering = [int(fingering)]
 	return fingering
 
-def getFingeringChord(chord):
+def getFingeringChord(chord, keepSign = False):
 	fingerings = []
 	for a in chord.articulations:
 		if isinstance(a, articulations.Fingering):
-			fingering = a.fingerNumber
-			#if greater than 5 then this is a substitution fingering and needs to be split
-			#this substitute format is custom and part of the PIGconversion script
-			if fingering > 5:
-				fingering = [int(digit) for digit in str(fingering)]
-			else:
-				fingering = [fingering]
-			fingerings.append(fingering)
+			allFingerings = str(a.fingerNumber)
+			allFingerings = allFingerings.split('\n')
+			for fingering in allFingerings:
+				fingering = int(fingering)
+				if not keepSign:
+					fingering = abs(fingering)
+				#if greater than 5 then this is a substitution fingering and needs to be split
+				#this substitute format is custom and part of the PIGconversion script
+				if int(fingering) > 5:
+					fingering = [int(digit) for digit in str(fingering)]
+				else:
+					fingering = [fingering]
+				print(fingering)
+				fingerings.append(fingering)
+				print(fingerings)
 	return fingerings
 
 def getInternalScore(eventC, noteCFingering, isLeftHand):
@@ -290,15 +300,77 @@ def getInternalScore(eventC, noteCFingering, isLeftHand):
 	return internalScore
 
 
-def getParncuttRuleScore(score):
+def getParncuttRuleScore(inputStream):
 	#TODO:
 	#Fix rests
 	#Fix chords
 	#look for extentions to these rules in other papers
 
+	score = copy.deepcopy(inputStream)
+
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	totalNotes = 0
 	parts = score.recurse().parts
+	isLeftHand = False
+
+	for part in parts:
+		measureCounter = 1
+		iterating = True
+		while(iterating):
+			nextMeasure = part.measure(measureCounter)
+			if(nextMeasure is not None):
+				for element in nextMeasure:
+					if isinstance(element, music21.note.Note):
+						fingering = getFingering(element, True)
+						if(not isLeftHand and fingering[0] < 0 or isLeftHand and fingering[0] > 0):
+							parent_stream = element.activeSite
+							offset = element.offset
+							parent_stream.remove(element)
+							measureToAddTo = None
+							if(isLeftHand):
+								measureToAddTo = parts[0].measure(measureCounter)
+							else:
+								measureToAddTo = parts[1].measure(measureCounter)
+							existingItems = measureToAddTo.getElementsByOffset(offset)
+							for item in existingItems:
+								itemToReplaceFound = False
+								if isinstance(item, note.Rest):
+									measureToAddTo.remove(item)
+									measureToAddTo.insert(offset, element)
+									itemToReplaceFound = True
+								elif isinstance(item, note.Note):
+									measureToAddTo.remove(item)
+									existingNoteFingering = getFingering(item)
+									elementFingering = getFingering(element)
+									newChord = chord.Chord([item.pitch, element.pitch])
+									newChord.articulations.append(articulations.Fingering(existingNoteFingering[0]))
+									newChord.articulations.append(articulations.Fingering(elementFingering[0]))
+									measureToAddTo.insert(offset, newChord)
+									itemToReplaceFound = True
+								elif isinstance(item, chord.Chord):
+									measureToAddTo.remove(item)
+									elementFingering = getFingering(element)
+									item.add(element.pitch)
+									item.articulations.append(articulations.Fingering(elementFingering[0]))
+									print(getFingeringChord(item))
+									measureToAddTo.insert(offset, item)
+									itemToReplaceFound = True
+							
+							if itemToReplaceFound == False:
+								measureToAddTo.insert(offset, element)
+
+				measureCounter += 1
+			else:
+				iterating = False
+				isLeftHand = not isLeftHand
+
+
+	#testOutputStream = stream.Score()
+	#testOutputStream.insert(0, parts[0])
+	#testOutputStream.insert(0, parts[1])
+	#testOutputStream.write("musicxml", "FingeringTestingOutput.xml")
+
+
 	isLeftHand = True
 
 	for part in parts:
@@ -322,7 +394,6 @@ def getParncuttRuleScore(score):
 				eventC = eventC.notes
 			else:
 				eventC = [eventC]
-
 
 			#calculate internal scores for the chord
 			internalScore = getInternalScore(eventC, noteCFingering, isLeftHand)
@@ -392,6 +463,7 @@ def getParncuttGivenNotes(isLeftHand, noteA, noteAFingering, noteB, noteBFingeri
 	FingeringPairTableLine = getParncuttDistances(noteBFingering[-1], noteCFingering[0])
 
 	#convert the parncutt distances for lefthand and descending steps
+	#descending steps are any where the first fingering is a higher numerical value than the second
 	descending = noteBFingering[-1] > noteCFingering[0]
 	tableFlipped = (isLeftHand and not descending) or (not isLeftHand and descending)
 	if tableFlipped:
@@ -400,7 +472,6 @@ def getParncuttGivenNotes(isLeftHand, noteA, noteAFingering, noteB, noteBFingeri
 
 
 	noteInterval = interval.Interval(noteB.pitch, noteC.pitch).semitones
-	#if descending: noteInterval = -noteInterval
 	minPrac = FingeringPairTableLine[0]
 	minComf = FingeringPairTableLine[1]
 	minRel = FingeringPairTableLine[2]
@@ -478,7 +549,8 @@ def generateRandomFingerings(score):
 					fingeringCount += 1
 
 			if isinstance(item, music21.harmony.Harmony):
-				print(item)
+				continue
+				#print(item)
 			elif item.isNote and fingeringCount == 0:
 				item.articulations.append(articulations.Fingering(random.randint(1, 5)))
 			elif item.isChord and fingeringCount < len(item.notes):

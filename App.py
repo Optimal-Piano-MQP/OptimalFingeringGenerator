@@ -1,4 +1,4 @@
-from ParncuttRules import allParncutt, generateRandomFingerings, getParncuttRuleScore, plotParncuttData
+from ParncuttRulesUpdated import allParncutt, generateRandomFingerings, getParncuttRuleScore, plotParncuttData
 from FileConversion import file2Stream
 from music21 import *
 from flask import Flask, render_template_string, request
@@ -23,7 +23,6 @@ import numpy as np
 
 #allParncuttScore, allParncuttScoresNormalized = allParncutt()
 #plotParncuttData(allParncuttScoresNormalized)
-print(getParncuttRuleScore(file2Stream("C:/Users/Kanix/source/repos/BatchFingeringGenerator2/Output_VNS/QmZCY5wU3xxsqLFCsTyp6Amy9bvXgqTXZvqR7M9hqApPPz_output.xml")))
 
 app = Flask(__name__)
 
