@@ -1,7 +1,8 @@
+import math
+from copy import deepcopy
 from ParncuttRulesUpdated import getParncuttGivenNotes, getParncuttRuleScore
 import music21
 import numpy as np
-import FileConversion
 
 music21.environment.UserSettings()['musescoreDirectPNGPath'] = "C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe"
 
@@ -25,6 +26,46 @@ class Entry:
     def __str__(self):
         note_strings = [n.nameWithOctave for n in self.notes]
         return str(f"{self.fingerings}\n{note_strings}\n{self.score}")
+
+# notes: List of note pitches    Example: ['C4', 'D4', 'E4']
+def bruteForce(notes):
+    results = GenerateFingerings([0] * len(notes), 1, notes)
+
+    best = math.inf
+
+    for r in results:
+        s = sum(r[1])
+        if s < best:
+            best = s
+
+    best_fingerings = []
+
+    for r in results:
+        if sum(r[1]) == best:
+            best_fingerings.append(r)
+
+    return best_fingerings
+
+def GenerateFingerings(fingerings, num, notes):
+    results = []
+    for i in range(1,6):
+        fingerings[num-1] = i
+        if num < len(scale):
+            GenerateFingerings(fingerings, num+1)
+        else:
+            print(fingerings)
+            piece = music21.stream.Score()
+            part = music21.stream.Part()
+            part.insert(0, music21.instrument.Piano())
+            for n in range(len(scale)):
+                note = music21.note.Note(scale[n], duration=music21.duration.Duration(1))
+                note.articulations.append(music21.articulations.Fingering(fingerings[n]))
+                part.append(note)
+            piece.append(part)
+
+            results.append((deepcopy(fingerings), getParncuttRuleScore(piece)[0]))
+
+    return results
 
 def dp(part, is_left_hand):
     notes = part.flatten().notes
