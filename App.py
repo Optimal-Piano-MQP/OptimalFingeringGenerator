@@ -16,7 +16,7 @@ import numpy as np
 """Run Parncutt on all PIG Files"""
 #beethoven-fur-elise-bagatelle-no-25-woo-59.musicxml
 #musicxml file with no fingerings
-#score = generateRandomFingerings(file2Stream("beethoven-fur-elise-bagatelle-no-25-woo-59.musicxml"))
+print(getParncuttRuleScore(file2Stream("scaleTest (2).musicxml")))
 #score.write("musicxml", "musicXMLTestingOutput.xml")
 #print(getParncuttRuleScore(file2Stream("musicXMLTestingOutput.xml")))
 #print(getParncuttRuleScore(score))
