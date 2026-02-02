@@ -55,14 +55,14 @@ def GenerateFingerings(fingerings, num, notes):
     for i in range(1,6):
         fingerings[num-1] = i
         if num < len(scale):
-            GenerateFingerings(fingerings, num+1)
+            GenerateFingerings(fingerings, num+1, notes)
         else:
             print(fingerings)
             piece = music21.stream.Score()
             part = music21.stream.Part()
             part.insert(0, music21.instrument.Piano())
-            for n in range(len(scale)):
-                note = music21.note.Note(scale[n], duration=music21.duration.Duration(1))
+            for n in range(len(notes)):
+                note = music21.note.Note(notes[n], duration=music21.duration.Duration(1))
                 note.articulations.append(music21.articulations.Fingering(fingerings[n]))
                 part.append(note)
             piece.append(part)
