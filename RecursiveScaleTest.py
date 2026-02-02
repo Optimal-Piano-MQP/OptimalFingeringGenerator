@@ -7,8 +7,9 @@ music21.environment.UserSettings()['musescoreDirectPNGPath'] = "C:\\Program File
 
 #scale = ['C4', 'E4', 'D4', 'F4', 'E4', 'G4', 'F4', 'A4'] #step test (expected 12132435 or 13132435, for left 53423131 or 53423121)
 #scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'] #c scale test
-#scale = ['F4', 'G4', 'A4', 'Bb4', 'C5', 'D5', 'E5', 'F5'] #f scale test
-scale = ['C4', 'C4', 'G4', 'G4', 'A4', 'A4', 'G4', 'F4', 'F4', 'E4', 'E4', 'D4', 'D4', 'C4'] #twinkle twinkle test
+scale = ['F4', 'G4', 'A4', 'Bb4', 'C5', 'D5', 'E5', 'F5'] #f scale test
+#scale = ['C4', 'C4', 'G4', 'G4', 'A4', 'A4', 'G4', 'F4', 'F4', 'E4', 'E4', 'D4', 'D4', 'C4'] #twinkle twinkle test
+#scale = ['C4', 'E4', 'G4']
 
 class Entry:
     fingerings = []
@@ -45,8 +46,8 @@ def dp(part, is_left_hand):
                                     sum(getParncuttGivenNotesDP(is_left_hand, trivial_notes[1], [j+1],
                                                               None, None,
                                                               None, None)))
-            if i == j:
-                entry_list[i, j].score += 2 #if you change this value, also change same_finger_penalty in calculateScore()
+            #if i == j:
+             #   entry_list[i, j].score += 2 #if you change this value, also change same_finger_penalty in calculateScore()
     # Find optimal fingering
     for n in range(len(notes)-3, -1, -1):
         note_to_add = notes[n]
@@ -72,6 +73,7 @@ def dp(part, is_left_hand):
     # Iterate through resulting array of entries to find optimal fingering
     best = entry_list[0,0]
     for entry in entry_list.flat:
+        print(entry)
         if entry.score < best.score:
             best = entry
 
@@ -82,8 +84,8 @@ def dp(part, is_left_hand):
 
 def calculateScore(is_left_hand, new_finger, new_note, entry):
     same_fingering_penalty = 0
-    if entry.fingerings[0] == new_finger:
-        same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
+    #if entry.fingerings[0] == new_finger:
+     #   same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
         
     return (sum(getParncuttGivenNotesDP(is_left_hand,new_note,[new_finger],
                               entry.notes[0],[entry.fingerings[0]],
@@ -100,5 +102,5 @@ for n in range(len(scale)):
 
 optimal = dp(part, 0)
 print(optimal)
-optimal = dp(part, 1)
-print(optimal)
+#optimal = dp(part, 1)
+#print(optimal)
