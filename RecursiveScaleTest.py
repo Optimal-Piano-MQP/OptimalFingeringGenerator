@@ -53,7 +53,7 @@ def GenerateFingerings(fingerings, num, notes):
     results = []
     for i in range(1,6):
         fingerings[num-1] = i
-        if num < len(scale):
+        if num < len(notes):
             GenerateFingerings(fingerings, num+1, notes)
         else:
             print(fingerings)
