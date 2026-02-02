@@ -558,7 +558,7 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering)
 
-	print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
+	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
   
 	return scoreCount
 
