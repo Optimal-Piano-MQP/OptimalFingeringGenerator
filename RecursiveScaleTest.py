@@ -55,7 +55,7 @@ def GenerateFingerings(fingerings, num, notes):
     for i in range(1,6):
         fingerings[num-1] = i
         if num < len(notes):
-            GenerateFingerings(fingerings, num+1, notes)
+            results.extend(GenerateFingerings(fingerings, num+1, notes))
         else:
             print(fingerings)
             piece = music21.stream.Score()
@@ -112,14 +112,16 @@ def dp(part, is_left_hand):
         entry_list = new_entry_list
 
     # Iterate through resulting array of entries to find optimal fingering
-    best = entry_list[0,0]
+    best = [entry_list[0,0]]
     for entry in entry_list.flat:
-        print(entry)
-        if entry.score < best.score:
-            best = entry
+        if entry.score < best[0].score:
+            best = [entry]
+        elif entry.score == best[0].score:
+            best.append(entry)
 
     if is_left_hand:
-        best.fingerings = [fingering * -1 for fingering in best.fingerings]
+        for entry in best:
+            entry.fingerings = [fingering * -1 for fingering in entry.fingerings]
     return best
 
 
@@ -141,7 +143,12 @@ part.insert(0, music21.instrument.Piano())
 for n in range(len(scale)):
     part.append(music21.note.Note(scale[n], duration=music21.duration.Duration(1)))
 
+#bruteforced = bruteForce(scale)
+#print(bruteforced)
+
 optimal = dp(part, 0)
-print(optimal)
-#optimal = dp(part, 1)
-#print(optimal)
+for entry in optimal:
+    print(entry.fingerings, entry.score)
+optimal = dp(part, 1)
+for entry in optimal:
+    print(entry.fingerings, entry.score)

@@ -38,7 +38,7 @@ def ParnStretch(noteInterval, minComf, maxComf):
 	if noteInterval < minComf:
 		return min(2 * abs(minComf - noteInterval), 10)		
 	elif noteInterval > maxComf:
-		return min(2 * abs(maxComf - noteInterval), 10)
+		return 2 * abs(maxComf - noteInterval)
 	return 0
 
 
@@ -48,19 +48,19 @@ def ParnSpan(noteInterval, minRel, maxRel, secondNoteFingering, thirdNoteFingeri
 
 	if noteInterval < minRel:
 		if thirdNoteFingering[0] == 1 or secondNoteFingering[-1] == 1:
-			output[0] += min(abs(minRel - noteInterval), 5)
+			output[0] += abs(minRel - noteInterval)
 		else:
-			output[0] += min(2 * (abs(minRel - noteInterval)), 10)
+			output[0] += 2 * (abs(minRel - noteInterval))
 
 	# Large-span rule: per semitone greater than maxrel, 1 for includes thumb, 2 for not including thumb
 	if noteInterval > maxRel:
 		if thirdNoteFingering[0] == 1 or secondNoteFingering[-1] == 1:
-			output[1] += min(abs(noteInterval - maxRel), 5)
+			output[1] += abs(noteInterval - maxRel)
 		else:
-			output[1] += min(2 * (abs(noteInterval - maxRel)), 10)
+			output[1] += 2 * (abs(noteInterval - maxRel))
 
-	if tableFlipped:
-		output.reverse()
+	#if tableFlipped:
+	#	output.reverse()
 
 	return output
 
@@ -101,7 +101,7 @@ def ParnPosChange(isLeftHand, noteInterval, firstNote, firstNoteFingering, secon
 
 
 def ParnWeakFinger(thirdNoteFingering):
-	if 4 == thirdNoteFingering or 5 == thirdNoteFingering:
+	if [4] == thirdNoteFingering or [5] == thirdNoteFingering:
 		return 1
 
 	return 0
@@ -558,7 +558,7 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering)
 
-	print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
+	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
   
 	return scoreCount
 
@@ -567,6 +567,7 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)
+		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 		return scoreCount
 
 	if thirdNote is not None:
@@ -659,7 +660,7 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, firstNote, firstNoteFingering, secondNote, secondNoteFingering)
   
-	print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
+	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 
 	return scoreCount
 
