@@ -12,9 +12,10 @@ scale = ['F4', 'G4', 'A4', 'Bb4', 'C5', 'D5', 'E5', 'F5'] #f scale test
 #scale = ['C4', 'C4', 'G4', 'G4', 'A4', 'A4', 'G4', 'F4', 'F4', 'E4', 'E4', 'D4', 'D4', 'C4'] #twinkle twinkle test
 
 class Entry:
-    fingerings = []
-    notes = []
-    score = 0
+    # Not necessary I don't think
+    # fingerings = []
+    # notes = []
+    # score = 0
 
     def __init__(self, fingerings, notes, score):
         self.fingerings = fingerings
@@ -54,7 +55,7 @@ def GenerateFingerings(fingerings, num, notes, isLeftHand, results):
         if num < len(notes):
             GenerateFingerings(fingerings, num+1, notes, isLeftHand, results)
         else:
-            print(fingerings)
+            # print(fingerings)
             piece = music21.stream.Score()
             part = music21.stream.Part()
             part.insert(0, music21.instrument.Piano())
@@ -77,15 +78,33 @@ def GenerateFingerings(fingerings, num, notes, isLeftHand, results):
 
     return
 
+def generateChordFingering(chord):
+    if not chord.isChord:
+        return [-9]
+       
+    if len(chord.pitches) == 5:
+        return [1, 2, 3, 4, 5]
+    
+    if len(chord.pitches) == 4:
+        return [1, 2, 3, 5]
+    
+    if len(chord.pitches) == 3:
+        return [1, 3, 5]
+    
+    if len(chord.pitches) == 2:
+        return [1, 3]
+    
+    return [1, 2, 3, 4, 5]
+
 def dp(part, is_left_hand):
     notes = part.flatten().notes
     trivial_notes = [notes[-2], notes[-1]]
-    entry_list = np.ndarray([5,5], dtype=Entry)
+    entry_list = np.empty((5,5), dtype=object)
 
     # Setup trivial case: [[1,1],[1,2],[1,3]...],[[2,1],[2,2]...]...
     for i in range(5):
         for j in range(5):
-            entry_list[i,j] = Entry([i+1,j+1],
+            entry_list[i,j] = Entry([[i+1] ,[j+1]],
                                     trivial_notes,
                                     sum(getParncuttGivenNotesDP(is_left_hand, trivial_notes[0], [i+1],
                                                               trivial_notes[1], [j+1],
@@ -93,27 +112,40 @@ def dp(part, is_left_hand):
                                     sum(getParncuttGivenNotesDP(is_left_hand, trivial_notes[1], [j+1],
                                                               None, None,
                                                               None, None)))
-            #if i == j:
-                #entry_list[i, j].score += 2 #if you change this value, also change same_finger_penalty in calculateScore()
+            # if i == j:
+            #     entry_list[i, j].score += 2 #if you change this value, also change same_finger_penalty in calculateScore()
     # Find optimal fingering
     for n in range(len(notes)-3, -1, -1):
         note_to_add = notes[n]
         if note_to_add.isChord:
-            continue
-        new_entry_list = np.ndarray([5,5], dtype=Entry)
-        # Iterate through all possible fingerings for the note
-        for k in range(5):
-            fingering_to_eval = k+1
-            # Iterate through all previous optimal fingerings
-            for i in range(5):
-                e = []
-                for j in range(5):
-                    # Calculate new entry with new note and fingering added
-                    e.append(Entry([fingering_to_eval] + entry_list[i,j].fingerings,
-                                   [note_to_add] + entry_list[i,j].notes,
-                                   calculateScore(is_left_hand, fingering_to_eval, note_to_add, entry_list[i,j])))
-                # Take the minimum of calculated scores for new optimal entry
-                new_entry_list[k, i] = min(e)
+            # print(note_to_add.pitches)
+            chordFingering = generateChordFingering(note_to_add)
+            new_entry_list = np.empty((5,5), dtype=object)
+            # Iterate through all possible fingerings for the note
+            for k in range(5):
+                # Iterate through all previous optimal fingerings
+                for i in range(5):
+                    new_entry = Entry([chordFingering] + entry_list[i,j].fingerings,
+                                [note_to_add] + entry_list[i,j].notes,
+                                calculateScore(is_left_hand, chordFingering, note_to_add, entry_list[i,j]))
+                    new_entry_list[k, i] = new_entry
+        else :
+            new_entry_list = np.empty((5,5), dtype=object)
+            # Iterate through all possible fingerings for the note
+            for k in range(5):
+                fingering_to_eval = [k+1]
+                # Iterate through all previous optimal fingerings
+                for i in range(5):
+                    e = []
+                    for j in range(5):
+                        # Calculate new entry with new note and fingering added
+                        e.append(Entry([fingering_to_eval] + entry_list[i,j].fingerings,
+                                    [note_to_add] + entry_list[i,j].notes,
+                                    calculateScore(is_left_hand, fingering_to_eval, note_to_add, entry_list[i,j])))
+                        # print(e[0].fingerings)
+                    # Take the minimum of calculated scores for new optimal entry
+                    new_entry_list[k, i] = min(e, key=lambda x: x.score)
+                    # print(new_entry_list[k, i].fingerings)
 
         entry_list = new_entry_list
 
@@ -127,18 +159,24 @@ def dp(part, is_left_hand):
 
     if is_left_hand:
         for entry in best:
-            entry.fingerings = [fingering * -1 for fingering in entry.fingerings]
+            entry.fingerings = [
+                [f * -1 for f in fingering]
+                for fingering in entry.fingerings
+            ]
     return best
 
 
 def calculateScore(is_left_hand, new_finger, new_note, entry):
     same_fingering_penalty = 0
-    #if entry.fingerings[0] == new_finger:
-     #   same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
+    # if entry.fingerings[0] == new_finger:
+    #    same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
+    # print(new_finger)
+    if len(new_finger) > 1:
+        return 0
         
-    return (sum(getParncuttGivenNotesDP(is_left_hand,new_note,[new_finger],
-                              entry.notes[0],[entry.fingerings[0]],
-                              entry.notes[1],[entry.fingerings[1]]))
+    return (sum(getParncuttGivenNotesDP(is_left_hand,new_note,new_finger,
+                              entry.notes[0],entry.fingerings[0],
+                              entry.notes[1],entry.fingerings[1]))
      + entry.score + same_fingering_penalty)
 
 
@@ -152,9 +190,9 @@ for n in range(len(scale)):
 #bruteforced = bruteForce(scale)
 #print(bruteforced)
 
-optimal = dp(part, 0)
-for entry in optimal:
-    print(entry.fingerings, entry.score)
-optimal = dp(part, 1)
-for entry in optimal:
-    print(entry.fingerings, entry.score)
+# optimal = dp(part, 0)
+# for entry in optimal:
+#     print(entry.fingerings, entry.score)
+# optimal = dp(part, 1)
+# for entry in optimal:
+#     print(entry.fingerings, entry.score)
