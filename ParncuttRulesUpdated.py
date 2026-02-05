@@ -286,15 +286,16 @@ def getFingeringChord(chord, keepSign = False):
 	# print("CHORD FINGERING: ", fingerings)
 	return fingerings
 
-def getInternalScore(thirdEvent, thirdNoteFingering, isLeftHand):
-
+# Expects event as a [note] object, fingerings as [1] or [1, 3]
+def getInternalScore(event, fingerings, isLeftHand):
 	internalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	for pair in combinations(range(len(thirdEvent)), 2):
-		try:
-			fingering1 = thirdNoteFingering[pair[0]][0]
-			fingering2 = thirdNoteFingering[pair[1]][0]
-		except:
-			continue
+
+	if len(event) < 2:
+		return internalScore
+
+	for pair in combinations(range(len(event)), 2):
+		fingering1 = fingerings[pair[0]]
+		fingering2 = fingerings[pair[1]]
 				
 		FingeringPairTableLine = getParncuttDistances(fingering1, fingering2)
 
@@ -305,7 +306,7 @@ def getInternalScore(thirdEvent, thirdNoteFingering, isLeftHand):
 			FingeringPairTableLine = [-item for item in FingeringPairTableLine]
 			FingeringPairTableLine.reverse()
 
-		noteInterval = interval.Interval(thirdEvent[pair[0]].pitch, thirdEvent[pair[1]].pitch).semitones
+		noteInterval = interval.Interval(event[pair[0]].pitch, event[pair[1]].pitch).semitones
 		minComf = FingeringPairTableLine[1]
 		minRel = FingeringPairTableLine[2]
 		maxRel = FingeringPairTableLine[3]
@@ -611,14 +612,20 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
   
 	return scoreCount
 
-
+# Notes should be the pure object, not in []. Fingerings should be in [] like [1], [1, 3, 5], etc
 def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+	# print(thirdNote)
 	# temporary chord fix
+	# print(firstNote)
 	firstNote = chord_to_first_note(firstNote)
 	secondNote = chord_to_first_note(secondNote)
 	thirdNote = chord_to_first_note(thirdNote)
+
+	# firstNoteFingering = normalize_fingering(firstNoteFingering)
+	# secondNoteFingering = normalize_fingering(secondNoteFingering)
+	# thirdNoteFingering = normalize_fingering(thirdNoteFingering)
 
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)
