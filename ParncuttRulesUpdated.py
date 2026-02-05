@@ -317,20 +317,7 @@ def getInternalScore(event, fingerings, isLeftHand):
 
 	return internalScore
 
-
-def getParncuttRuleScore(inputStream):
-	#TODO:
-	#Fix rests
-	#Fix chords
-	#look for extentions to these rules in other papers
-
-	score = copy.deepcopy(inputStream)
-
-	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	totalNotes = 0
-	parts = score.recurse().parts
-	isLeftHand = False
-
+def normalizeScore(parts, isLeftHand):
 	# Normalize piece by moving notes to the correct hand
 	for part in parts:
 		measureCounter = 1
@@ -383,12 +370,20 @@ def getParncuttRuleScore(inputStream):
 				iterating = False
 				isLeftHand = not isLeftHand
 
+def getParncuttRuleScore(inputStream):
+	#TODO:
+	#Fix rests
+	#Fix chords
+	#look for extentions to these rules in other papers
 
-	#testOutputStream = stream.Score()
-	#testOutputStream.insert(0, parts[0])
-	#testOutputStream.insert(0, parts[1])
-	#testOutputStream.write("musicxml", "FingeringTestingOutput.xml")
+	score = copy.deepcopy(inputStream)
 
+	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	totalNotes = 0
+	parts = score.recurse().parts
+	isLeftHand = False
+
+	normalizeScore(parts, isLeftHand)
 
 	isLeftHand = True
 
@@ -435,6 +430,7 @@ def getParncuttRuleScore(inputStream):
 							for k in range(len(firstEvent)):
 								firstNote = firstEvent[k]
 								firstNoteFingering = firstEventAllFingerings[k]
+								print(firstNoteFingering, secondNoteFingering, thirdNoteFingering)
 								unnaggregatedScore.append(getParncuttGivenNotes(isLeftHand, firstNote, 
 														firstNoteFingering, secondNote, secondNoteFingering, 
 														thirdNote, thirdNoteFingering))
@@ -486,35 +482,28 @@ def chord_to_first_note(n):
         new_note = note.Note(n.pitches[0])
         new_note.duration = n.duration
         return new_note
+	
     return n
 
-def normalize_fingering(f):
-    if f is None:
-        return []
+# def normalize_fingering(f):
+#     if f is None:
+#         return []
 
-    if isinstance(f, list):
-        if len(f) == 0:
-            return []
-        if all(isinstance(x, int) for x in f):
-            return f
-        if all(isinstance(x, list) and len(x) == 1 for x in f):
-            return [x[0] for x in f]
+#     if isinstance(f, list):
+#         if len(f) == 0:
+#             return []
+#         if all(isinstance(x, int) for x in f):
+#             return f
+#         if all(isinstance(x, list) and len(x) == 1 for x in f):
+#             return [x[0] for x in f]
 
-    if isinstance(f, int):
-        return [abs(f)]
+#     if isinstance(f, int):
+#         return [abs(f)]
 	
-    return []
+#     return []
 
 def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-	firstNote = chord_to_first_note(firstNote)
-	secondNote = chord_to_first_note(secondNote)
-	thirdNote = chord_to_first_note(thirdNote)
-
-	firstNoteFingering = normalize_fingering(firstNoteFingering)
-	secondNoteFingering = normalize_fingering(secondNoteFingering)
-	thirdNoteFingering = normalize_fingering(thirdNoteFingering)
 
 	if secondNote is None:
 		return scoreCount
@@ -615,17 +604,6 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 # Notes should be the pure object, not in []. Fingerings should be in [] like [1], [1, 3, 5], etc
 def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-	# print(thirdNote)
-	# temporary chord fix
-	# print(firstNote)
-	firstNote = chord_to_first_note(firstNote)
-	secondNote = chord_to_first_note(secondNote)
-	thirdNote = chord_to_first_note(thirdNote)
-
-	# firstNoteFingering = normalize_fingering(firstNoteFingering)
-	# secondNoteFingering = normalize_fingering(secondNoteFingering)
-	# thirdNoteFingering = normalize_fingering(thirdNoteFingering)
 
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)

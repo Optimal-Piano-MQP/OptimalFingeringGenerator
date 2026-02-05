@@ -200,6 +200,8 @@ def setupTrivialNotes(notes, is_left_hand):
 
 def dp(part, is_left_hand):
     notes = part.flatten().notes
+
+    # Setup trivial case: [[1,1],[1,2],[1,3]...],[[2,1],[2,2]...]...
     entry_list = setupTrivialNotes(notes, is_left_hand)
     
     for n in range(len(notes)-3, -1, -1):
@@ -231,7 +233,7 @@ def dp(part, is_left_hand):
                     # print(e[0].fingerings)
                 # Take the minimum of calculated scores for new optimal entry
                 # print("CURR CANDIDATE: ", candidate)
-                new_entry_list[candidate[0] - 1, i] = min(e, key=lambda x: x.score)
+                new_entry_list[candidate[-1], i] = min(e, key=lambda x: x.score)
                 # print(new_entry_list[candidate, i].fingerings)
                 # print(new_entry_list[k, i].fingerings)
 
