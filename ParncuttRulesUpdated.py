@@ -250,7 +250,7 @@ def ParnThumbPassing(isLeftHand, noteInterval, secondNote, secondNoteFingering, 
 	return output
 
 def RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering):
-	if noteInterval != 0 and firstNoteFingering == secondNoteFingering:
+	if noteInterval != 0 and firstNoteFingering[0] == secondNoteFingering[0]:
 		return 2
 	return 0
 
@@ -617,8 +617,9 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	return scoreCount
 
 
-def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
-	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, \
+	secondNoteFingering, thirdNote, thirdNoteFingering, doDP13 = False):
+	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 	# temporary chord fix
 	firstNote = chord_to_first_note(firstNote)
@@ -720,7 +721,8 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, firstNote, firstNoteFingering, secondNote, secondNoteFingering)
   
-	#scoreCount[12] += RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering)
+	if doDP13:
+		scoreCount[12] += RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering)
 
 	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 
