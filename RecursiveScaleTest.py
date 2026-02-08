@@ -155,6 +155,6 @@ for n in range(len(scale)):
 optimal = dp(part, 0)
 for entry in optimal:
     print(entry.fingerings, entry.score)
-optimal = dp(part, 1)
-for entry in optimal:
-    print(entry.fingerings, entry.score)
+#optimal = dp(part, 1)
+#for entry in optimal:
+ #   print(entry.fingerings, entry.score)

@@ -237,6 +237,11 @@ def ParnThumbPassing(isLeftHand, noteInterval, secondNote, secondNoteFingering, 
 
 	return output
 
+def RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering):
+	if noteInterval != 0 and firstNoteFingering == secondNoteFingering:
+		return 2
+	return 0
+
 def getFingering(note, keepSign = False):
 	fingering = []
 	for a in note.articulations:
@@ -564,7 +569,7 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 
 
 def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
-	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)
 		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
@@ -660,6 +665,8 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, firstNote, firstNoteFingering, secondNote, secondNoteFingering)
   
+	#scoreCount[12] += RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering)
+
 	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 
 	return scoreCount
