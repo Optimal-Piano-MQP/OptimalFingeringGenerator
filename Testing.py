@@ -1,7 +1,7 @@
 from RecursiveScaleTest import dp
 from FileConversion import file2Stream
 from AppendFingerings import addFingeringToPart
-from ParncuttRulesUpdated import getParncuttRuleScore
+from ParncuttRulesUpdated import getParncuttRuleScore, getInternalScore
 import music21
 
 step_test = ['C4', 'E4', 'D4', 'F4', 'E4', 'G4', 'F4', 'A4'] #step test (expected 12132435 or 13132435, for left 53423131 or 53423121)
@@ -11,7 +11,7 @@ twinkle = ['C4', 'C4', 'G4', 'G4', 'A4', 'A4', 'G4', 'F4', 'F4', 'E4', 'E4', 'D4
 
 # Chord testing
 def chord_testing():
-    score = file2Stream("chord_testing.musicxml")
+    score = file2Stream("music/chord_testing.musicxml")
     rh = score.parts[0]
 
     optimal = dp(rh, 0)[0]
@@ -25,7 +25,7 @@ def chord_testing():
 
 # Canon in d
 def canon_test():
-    score = file2Stream("canon-in-d.musicxml")
+    score = file2Stream("music/canon-in-d.musicxml")
     rh = score.parts[0]
     lh = score.parts[1]
 
@@ -86,10 +86,14 @@ def score_test(test, fingering):
     print(score_out)
     print("Total score: ", sum(score_out[0]))
 
-# chord_testing()
+chord_testing()
 # canon_test()
 # test_file("cscale_optimal.musicxml")
+# test_file("three_chord.musicxml_out.musicxml")
 # finger_file("cscale_optimal.musicxml")
-run_test(fscale)
+# finger_file("basic_chord.musicxml")
+# finger_file("music/chord_testing.musicxml")
+# finger_file("three_chord.musicxml")
+# run_test(fscale)
 # score_test(fscale, [[1], [2], [3], [3], [1], [2], [3], [4]])
 # score_test(fscale, [[1], [1], [2], [2], [3], [4], [5], [5]])

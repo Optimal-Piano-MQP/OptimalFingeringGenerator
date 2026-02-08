@@ -7,11 +7,6 @@ import numpy as np
 
 music21.environment.UserSettings()['musescoreDirectPNGPath'] = "C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe"
 
-#scale = ['C4', 'E4', 'D4', 'F4', 'E4', 'G4', 'F4', 'A4'] #step test (expected 12132435 or 13132435, for left 53423131 or 53423121)
-#scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'] #c scale test
-scale = ['F4', 'G4', 'A4', 'Bb4', 'C5', 'D5', 'E5', 'F5'] #f scale test
-#scale = ['C4', 'C4', 'G4', 'G4', 'A4', 'A4', 'G4', 'F4', 'F4', 'E4', 'E4', 'D4', 'D4', 'C4'] #twinkle twinkle test
-
 class Entry:
     # fingerings in format: [[1], [2], [1, 3, 5], [5], ...] where each element is a list
     # monophonic is a list of length 1, chords are a list of the length of the chord
@@ -54,7 +49,6 @@ def GenerateFingerings(fingerings, num, notes, isLeftHand, results):
         if num < len(notes):
             GenerateFingerings(fingerings, num+1, notes, isLeftHand, results)
         else:
-            # print(fingerings)
             piece = music21.stream.Score()
             part = music21.stream.Part()
             part.insert(0, music21.instrument.Piano())
@@ -98,12 +92,35 @@ def spacing_score(fingering):
 
     return score
 
+def outer_fingers_penalty(fingering):
+    if(len(fingering) < 2):
+        return 0
+    
+    score = 0
+
+    if fingering[0] != 1:
+        score += 1
+    if fingering[-1] != 5:
+        score += 1
+
+    return score
+
+def spacing_penalty(fingering):
+    if(len(fingering) < 2):
+        return 0
+    
+    score = 0
+    max = 4
+
+    for i in range(len(fingering) - 1):
+        score += abs(fingering[i+1] - fingering[i])
+
+    return max - score
+
 # Use 2 subjective rules to determine which shape is best (higher score is better)
 def breakTies(entries):
     # Single note
-    # print(entries[0].fingerings[0])
     if(len(entries[0].fingerings[0]) == 1):
-        # print("SINGLE!")
         return entries[0]
     
     # Chords
@@ -114,14 +131,6 @@ def breakTies(entries):
             spacing_score(e.fingerings[0])
         )
     )
-# def breakChordTies(fingerings):
-#     return max(
-#         fingerings,
-#         key=lambda f: (
-#             outer_fingers_score(f),
-#             spacing_score(f)
-#         )
-#     )
 
 # Generates the optimal chord shape for a standalone chord, not in context
 def generateChordFingering(chord):
@@ -134,7 +143,6 @@ def generateChordFingering(chord):
     if chordSize == 5:
         return [1, 2, 3, 4, 5]
 
-    # print("CHORD OF SIZE: ", chordSize)
     f_combinations = ascending_fingerings(chordSize)
 
     best_score = None
@@ -149,11 +157,9 @@ def generateChordFingering(chord):
             best_fingerings = [list(comb)]
         elif internalScore == best_score:
             best_fingerings.append(list(comb))
-        # print(comb, internalScore)
     
     if(len(best_fingerings) > 1):
         optimal = breakTies(best_fingerings)
-        # print("TIE WINNER: ", optimal)
         return optimal
     
     return best_fingerings[0]
@@ -212,40 +218,89 @@ def dp(part, is_left_hand):
         else: 
             curr_notes = [note_to_add] # [<note_obj>]
 
+        # print(curr_notes)
+
+        # Prev note length
+        if notes[n+1].isChord:
+            prev_note_length = len(notes[n+1].notes)
+        else:
+            prev_note_length = 1
+
+        # Prev prev note length
+        if notes[n+2].isChord:
+            prev_prev_note_length = len(notes[n+2].notes)
+        else:
+            prev_prev_note_length = 1
+
         # All possible fingerings for note / chord.
         candidates = generateCandidates(note_to_add)
-        print("CANDIDATES: ", candidates)
         new_entry_list = np.empty((5,5), dtype=object)
 
         # Iterate through all possible fingerings for the note
         for candidate in candidates: # candidate could be [1] or [1, 3, 5]
+            final_finger = candidate[-1] - 1
+
             # Iterate through all previous optimal fingerings
             for i in range(5):
                 e = []
+                
+                # Calculate new entry with new note and fingering added
                 for j in range(5):
-                    # Calculate new entry with new note and fingering added
-                    # print(curr_notes)
-                    e.append(Entry(
-                                [candidate] + entry_list[i,j].fingerings,
-                                [curr_notes] + entry_list[i,j].notes,
-                                calculateScore(is_left_hand, candidate, curr_notes, entry_list[i,j])
-                            ))
-                    # print(e[0].fingerings)
+                    base_entry = entry_list[i, j]
+                    if base_entry is None:
+                        continue
+
+                    # Chord
+                    if(len(curr_notes) > 1):
+                        internal = sum(getInternalScore(curr_notes, candidate, is_left_hand))
+                        # Extended rules beyond parncutt. Comment out for pure parncutt
+                        internal += outer_fingers_penalty(candidate)
+                        internal += spacing_penalty(candidate)
+
+                        temp_entry = Entry(
+                            base_entry.fingerings,
+                            base_entry.notes,
+                            base_entry.score + internal
+                        )
+
+                        for f, (finger, note) in enumerate(zip(candidate, curr_notes)):
+                            score = calculateScore(is_left_hand, [finger], [note], temp_entry, prev_note_length, prev_prev_note_length, f)
+
+                            temp_entry = Entry(
+                                [[finger]] + temp_entry.fingerings,
+                                [[note]] + temp_entry.notes,
+                                score
+                            )
+                        e.append(temp_entry)
+                            
+                    # Single note
+                    else:
+                        e.append(Entry(
+                            [candidate] + entry_list[i,j].fingerings,
+                            [curr_notes] + entry_list[i,j].notes,
+                            calculateScore(is_left_hand, candidate, curr_notes, entry_list[i,j], prev_note_length, prev_prev_note_length, 0)
+                        ))
+
+                if not e:
+                    continue
+
                 # Take the minimum of calculated scores for new optimal entry
-                # print("CURR CANDIDATE: ", candidate)
-                new_entry_list[candidate[-1], i] = min(e, key=lambda x: x.score)
-                # print(new_entry_list[candidate, i].fingerings)
-                # print(new_entry_list[k, i].fingerings)
+                best_candidate = min(e, key=lambda x: x.score)
+                existing = new_entry_list[final_finger, i]
+
+                if existing is None or best_candidate.score < existing.score:
+                    new_entry_list[final_finger, i] = best_candidate
 
         entry_list = new_entry_list
 
     # Iterate through resulting array of entries to find optimal fingering
-    best = [entry_list[0,0]]
+    best = None
     for entry in entry_list.flat:
-        if entry.score < best[0].score:
-            best = [entry]
-        elif entry.score == best[0].score:
-            best.append(entry)
+        if(entry != None):
+            if best == None or entry.score < best[0].score:
+                best = [entry]
+            elif entry.score == best[0].score:
+                best.append(entry)
 
     if is_left_hand:
         for entry in best:
@@ -255,52 +310,21 @@ def dp(part, is_left_hand):
             ]
     return best
 
-def calculateScore(is_left_hand, curr_fingerings, curr_notes, entry):
+# Expects curr_fingering to be [1]. curr_note should be [<note_obj>]
+def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_length, prev_prev_note_length, idx_in_chord):
     same_fingering_penalty = 0
     # if entry.fingerings[0] == new_finger:
     #    same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
-    total = entry.score
 
-    total += sum(getInternalScore(curr_notes, curr_fingerings, is_left_hand))
-    rule_vectors = []
+    total = entry.score + same_fingering_penalty
 
-    # print(entry.notes)
-    # print(entry.fingerings)
-
-    prev_notes = entry.notes[0]
-    prev_fingerings = entry.fingerings[0]
-
-    prevprev_notes = entry.notes[1]
-    prevprev_fingerings = entry.fingerings[1]
-
-    return (sum(getParncuttGivenNotesDP(is_left_hand, curr_notes[0], curr_fingerings,
-                              prev_notes[0], prev_fingerings,
-                              prevprev_notes[0], prevprev_fingerings))
-     + entry.score + same_fingering_penalty)
-
-    # for c_note, c_f in zip(curr_notes, curr_fingerings):
-    #     for p_note, p_f in zip(prev_notes, prev_fingerings):
-    #         if prevprev_notes:
-    #             for pp_note, pp_f in zip(prevprev_notes, prevprev_fingerings):
-    #                 rule_vectors.append(
-    #                     getParncuttGivenNotesDP(
-    #                         is_left_hand,
-    #                         pp_note, [pp_f],
-    #                         p_note,  [p_f],
-    #                         c_note,  [c_f]
-    #                     )
-    #                 )
-    #         else:
-    #             rule_vectors.append(
-    #                 getParncuttGivenNotesDP(
-    #                     is_left_hand,
-    #                     None, None,
-    #                     p_note, [p_f],
-    #                     c_note, [c_f]
-    #                 )
-    #             )
-
-    # aggregated = np.max(rule_vectors, axis=0)
-    # total += sum(aggregated)
-
-    # return total
+    # Get score from every note of prev note/chord and prev prev note/chord
+    for i in range(prev_prev_note_length):
+        for j in range(prev_note_length):
+            total += sum(getParncuttGivenNotesDP(
+                is_left_hand, curr_note[0], curr_fingering,
+                entry.notes[0 + j + idx_in_chord][0], entry.fingerings[0 + j + idx_in_chord],   # prev notes
+                entry.notes[prev_note_length + i + idx_in_chord][0], entry.fingerings[prev_note_length + i + idx_in_chord] # prev prev notes
+            ))
+    
+    return total

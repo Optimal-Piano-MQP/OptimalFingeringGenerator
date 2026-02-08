@@ -15,9 +15,7 @@ def addFingeringToPart(part, fingering):
             i -= 1
 
         elif cur_note.isChord:
-            if(len(cur_note.pitches) > len(fingering[i])):
-                print("ERROR, NOT ENOUGH FINGERINGS. CHORD: ", cur_note.pitches, " FINGERINGS: ", fingering[i])
             for k in range (0, len(cur_note.pitches)):
-                cur_note.articulations.append(articulations.Fingering(fingering[i][k]))
+                cur_note.articulations.append(articulations.Fingering(fingering[i][0]))
+                i -= 1
             j += 1
-            i -= 1
