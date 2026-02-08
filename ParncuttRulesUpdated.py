@@ -1,4 +1,5 @@
 from music21 import *
+from music21 import note
 import music21
 import numpy as np
 from itertools import combinations
@@ -193,17 +194,28 @@ def Parn5OnBlack(firstNote, secondNote, secondNoteFingering, thirdNote):
 		if(secondNote.pitch.accidental.name == 'natural'):
 			return output
 
+		# if firstNote is not None:
+		# 	if firstNote.pitch.accidental is None and secondNoteFingering[0] == 5:
+		# 		output += 2
+		# 	elif firstNote.pitch.accidental.name == 'natural' and secondNoteFingering[0] == 5:
+		# 		output += 2
+
+		# if thirdNote is not None:
+		# 	if thirdNote.pitch.accidental is None and secondNoteFingering[-1] == 5:
+		# 		output += 2
+		# 	elif thirdNote.pitch.accidental.name == 'natural' and secondNoteFingering[-1] == 5:
+		# 		output += 2
 		if firstNote is not None:
-			if firstNote.pitch.accidental is None and secondNoteFingering[0] == 5:
-				output += 2
-			elif firstNote.pitch.accidental.name == 'natural' and secondNoteFingering[0] == 5:
-				output += 2
+			if secondNoteFingering[0] == 5:
+				acc = firstNote.pitch.accidental
+				if acc is None or acc.name == 'natural':
+					output += 2
 
 		if thirdNote is not None:
-			if thirdNote.pitch.accidental is None and secondNoteFingering[-1] == 5:
-				output += 2
-			elif thirdNote.pitch.accidental.name == 'natural' and secondNoteFingering[-1] == 5:
-				output += 2
+			if secondNoteFingering[-1] == 5:
+				acc = thirdNote.pitch.accidental
+				if acc is None or acc.name == 'natural':
+					output += 2
 
 	return output
 
@@ -261,8 +273,8 @@ def getFingeringChord(chord, keepSign = False):
 	fingerings = []
 	for a in chord.articulations:
 		if isinstance(a, articulations.Fingering):
-			allFingerings = str(a.fingerNumber)
-			allFingerings = allFingerings.split('\n')
+			allFingerings = str(a.fingerNumber).split('\n')
+			# allFingerings = allFingerings.split('\n')
 			for fingering in allFingerings:
 				fingering = int(fingering)
 				if not keepSign:
@@ -273,24 +285,26 @@ def getFingeringChord(chord, keepSign = False):
 					fingering = [int(digit) for digit in str(fingering)]
 				else:
 					fingering = [fingering]
-				print(fingering)
+				# print(fingering)
 				fingerings.append(fingering)
-				print(fingerings)
+				# print(fingerings)
+	# print("CHORD FINGERING: ", fingerings)
 	return fingerings
 
 def getInternalScore(thirdEvent, thirdNoteFingering, isLeftHand):
+
 	internalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	for pair in combinations(range(len(thirdEvent)), 2):
 		try:
-			fingering1 = thirdNoteFingering[pair[0]]
-			fingering2 = thirdNoteFingering[pair[1]]
+			fingering1 = thirdNoteFingering[pair[0]][0]
+			fingering2 = thirdNoteFingering[pair[1]][0]
 		except:
 			continue
 				
-		FingeringPairTableLine = getParncuttDistances(fingering1[-1], fingering2[0])
+		FingeringPairTableLine = getParncuttDistances(fingering1, fingering2)
 
 		#convert the parncutt distances for lefthand and descending steps
-		descending = fingering1[-1] > fingering2[0]
+		descending = fingering1 > fingering2
 		tableFlipped = (isLeftHand and not descending) or (not isLeftHand and descending)
 		if tableFlipped:
 			FingeringPairTableLine = [-item for item in FingeringPairTableLine]
@@ -302,7 +316,7 @@ def getInternalScore(thirdEvent, thirdNoteFingering, isLeftHand):
 		maxRel = FingeringPairTableLine[3]
 		maxComf = FingeringPairTableLine[4]
 
-		span =  ParnSpan(noteInterval, minRel, maxRel, fingering1, fingering2, tableFlipped)
+		span =  ParnSpan(noteInterval, minRel, maxRel, [fingering1], [fingering2], tableFlipped)
 		internalScore = np.array(internalScore) + np.array([ParnStretch(noteInterval, minComf, maxComf), span[0], span[1], 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
 	return internalScore
@@ -321,6 +335,7 @@ def getParncuttRuleScore(inputStream):
 	parts = score.recurse().parts
 	isLeftHand = False
 
+	# Normalize piece by moving notes to the correct hand
 	for part in parts:
 		measureCounter = 1
 		iterating = True
@@ -360,7 +375,7 @@ def getParncuttRuleScore(inputStream):
 									elementFingering = getFingering(element)
 									item.add(element.pitch)
 									item.articulations.append(articulations.Fingering(elementFingering[0]))
-									print(getFingeringChord(item))
+									# print(getFingeringChord(item))
 									measureToAddTo.insert(offset, item)
 									itemToReplaceFound = True
 							
@@ -401,8 +416,9 @@ def getParncuttRuleScore(inputStream):
 			elif thirdEvent.isChord:
 				thirdEventAllFingerings = getFingeringChord(thirdEvent)
 				thirdEvent = thirdEvent.notes
+				# print("THIRD IS CHORD")
 			else:
-				thirdEventAllFingerings = getFingering(thirdEvent)
+				thirdEventAllFingerings = [getFingering(thirdEvent)]
 				thirdEvent = [thirdEvent]
 				
 
@@ -413,16 +429,16 @@ def getParncuttRuleScore(inputStream):
 
 			unnaggregatedScore = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 			for i in range(len(thirdEvent)):
-				thirdNoteFingering = [thirdEventAllFingerings[i]]
+				thirdNoteFingering = thirdEventAllFingerings[i]
 				thirdNote = thirdEvent[i]
 				if secondEvent is not None:
 					for j in range(len(secondEvent)):
-						secondNoteFingering = [secondEventAllFingerings[j]]
+						secondNoteFingering = secondEventAllFingerings[j]
 						secondNote = secondEvent[j]
 						if firstEvent is not None:
 							for k in range(len(firstEvent)):
 								firstNote = firstEvent[k]
-								firstNoteFingering = [firstEventAllFingerings[k]]
+								firstNoteFingering = firstEventAllFingerings[k]
 								unnaggregatedScore.append(getParncuttGivenNotes(isLeftHand, firstNote, 
 														firstNoteFingering, secondNote, secondNoteFingering, 
 														thirdNote, thirdNoteFingering))
@@ -450,10 +466,10 @@ def getParncuttRuleScore(inputStream):
 		if secondEvent is not None:
 			for i in range(len(secondEvent)):
 				secondNote = secondEvent[i]
-				secondNoteFingering = [secondEventAllFingerings[i]]
+				secondNoteFingering = secondEventAllFingerings[i]
 				if firstEvent is not None:
 					for j in range(len(firstEvent)):
-						firstNote = secondEvent[j]
+						firstNote = secondEvent[j] # Why second event here??
 						unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(firstNote, secondNote, secondNoteFingering, None), 
 								Parn5OnBlack(firstNote, secondNote, secondNoteFingering, None), 0])
 				else:
@@ -467,9 +483,43 @@ def getParncuttRuleScore(inputStream):
 
 	return scoreCount, totalNotes
 
+def chord_to_first_note(n):
+    if n is None:
+        return None
+    if n.isChord:
+        new_note = note.Note(n.pitches[0])
+        new_note.duration = n.duration
+        return new_note
+    return n
+
+def normalize_fingering(f):
+    if f is None:
+        return []
+
+    if isinstance(f, list):
+        if len(f) == 0:
+            return []
+        if all(isinstance(x, int) for x in f):
+            return f
+        if all(isinstance(x, list) and len(x) == 1 for x in f):
+            return [x[0] for x in f]
+
+    if isinstance(f, int):
+        return [abs(f)]
+	
+    return []
 
 def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+	firstNote = chord_to_first_note(firstNote)
+	secondNote = chord_to_first_note(secondNote)
+	thirdNote = chord_to_first_note(thirdNote)
+
+	firstNoteFingering = normalize_fingering(firstNoteFingering)
+	secondNoteFingering = normalize_fingering(secondNoteFingering)
+	thirdNoteFingering = normalize_fingering(thirdNoteFingering)
+
 	if secondNote is None:
 		return scoreCount
 
@@ -484,7 +534,6 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	if firstNote is not None:
 		if len(firstNoteFingering) == 0:
 			return scoreCount
-
 
 	FingeringPairTableLine = getParncuttDistances(secondNoteFingering[-1], thirdNoteFingering[0])
 
@@ -569,7 +618,13 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 
 
 def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
-	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+	# temporary chord fix
+	firstNote = chord_to_first_note(firstNote)
+	secondNote = chord_to_first_note(secondNote)
+	thirdNote = chord_to_first_note(thirdNote)
+
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)
 		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
