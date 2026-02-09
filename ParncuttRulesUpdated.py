@@ -60,9 +60,6 @@ def ParnSpan(noteInterval, minRel, maxRel, secondNoteFingering, thirdNoteFingeri
 		else:
 			output[1] += 2 * (abs(noteInterval - maxRel))
 
-	#if tableFlipped:
-	#	output.reverse()
-
 	return output
 
 
@@ -194,17 +191,6 @@ def Parn5OnBlack(firstNote, secondNote, secondNoteFingering, thirdNote):
 		if(secondNote.pitch.accidental.name == 'natural'):
 			return output
 
-		# if firstNote is not None:
-		# 	if firstNote.pitch.accidental is None and secondNoteFingering[0] == 5:
-		# 		output += 2
-		# 	elif firstNote.pitch.accidental.name == 'natural' and secondNoteFingering[0] == 5:
-		# 		output += 2
-
-		# if thirdNote is not None:
-		# 	if thirdNote.pitch.accidental is None and secondNoteFingering[-1] == 5:
-		# 		output += 2
-		# 	elif thirdNote.pitch.accidental.name == 'natural' and secondNoteFingering[-1] == 5:
-		# 		output += 2
 		if firstNote is not None:
 			if secondNoteFingering[0] == 5:
 				acc = firstNote.pitch.accidental

@@ -1,4 +1,4 @@
-from RecursiveScaleTest import dp
+from Algorithm import dp
 from FileConversion import file2Stream
 from AppendFingerings import addFingeringToPart
 from ParncuttRulesUpdated import getParncuttRuleScore, getInternalScore
@@ -49,11 +49,11 @@ def test_file(filename):
     print(score_out)
     print("Total score: ", sum(score_out[0]))
 
-def finger_file(filename):
+def finger_file(filename, is_left_hand=False):
     score = file2Stream(filename)
     rh = score.parts[0]
 
-    optimal = dp(rh, 0)[0]
+    optimal = dp(rh, is_left_hand)[0]
     print(optimal.fingerings, optimal.score)
     fingering = optimal.fingerings
     # print(optimal.fingerings)
@@ -61,14 +61,14 @@ def finger_file(filename):
 
     score.write("musicxml", f"{filename}_out.musicxml")
 
-def run_test(test):
+def run_test(test, is_left_hand=False):
     part = music21.stream.Part()
     part.insert(0, music21.instrument.Piano())
 
     for n in range(len(test)):
         part.append(music21.note.Note(test[n], duration=music21.duration.Duration(1)))
 
-    optimal = dp(part, 0)
+    optimal = dp(part, is_left_hand)
     for entry in optimal:
         print(entry.fingerings, entry.score)
 
@@ -86,14 +86,14 @@ def score_test(test, fingering):
     print(score_out)
     print("Total score: ", sum(score_out[0]))
 
-chord_testing()
+# chord_testing()
 # canon_test()
 # test_file("cscale_optimal.musicxml")
 # test_file("three_chord.musicxml_out.musicxml")
 # finger_file("cscale_optimal.musicxml")
-# finger_file("basic_chord.musicxml")
-# finger_file("music/chord_testing.musicxml")
+# finger_file(fscale, True)
+finger_file("music/chord_testing.musicxml", True)
 # finger_file("three_chord.musicxml")
-# run_test(fscale)
+# run_test(fscale, True)
 # score_test(fscale, [[1], [2], [3], [3], [1], [2], [3], [4]])
 # score_test(fscale, [[1], [1], [2], [2], [3], [4], [5], [5]])

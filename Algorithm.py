@@ -167,7 +167,7 @@ def generateChordFingering(chord):
 # Generates all possible combinations of fingerings with the given note(s)
 # Single note is [[1], [2], [3], [4], [5]]
 # Chord could be [[1, 3, 5], [1, 2, 4], etc]
-def generateCandidates(notes):
+def generateCandidates(notes, is_left_hand):
     if(notes.isNote):
         return [[f] for f in range(1, 6)]
     
@@ -177,12 +177,14 @@ def generateCandidates(notes):
         return [[f] for f in range(1, 6)]
 
     if chordSize == 5:
+        if(is_left_hand):
+            return [[5, 4, 3, 2, 1]]
         return [[1, 2, 3, 4, 5]]
 
-    return [
-        [f for f in comb]
-        for comb in combinations(range(1, 6), chordSize)
-    ]
+    if is_left_hand:
+        return [[f for f in comb][::-1] for comb in combinations(range(1, 6), chordSize)]
+    else:
+        return [[f for f in comb] for comb in combinations(range(1, 6), chordSize)]
 
 def setupTrivialNotes(notes, is_left_hand):
     trivial_notes = [notes[-2], notes[-1]]
@@ -233,7 +235,7 @@ def dp(part, is_left_hand):
             prev_prev_note_length = 1
 
         # All possible fingerings for note / chord.
-        candidates = generateCandidates(note_to_add)
+        candidates = generateCandidates(note_to_add, is_left_hand)
         new_entry_list = np.empty((5,5), dtype=object)
 
         # Iterate through all possible fingerings for the note
@@ -254,8 +256,8 @@ def dp(part, is_left_hand):
                     if(len(curr_notes) > 1):
                         internal = sum(getInternalScore(curr_notes, candidate, is_left_hand))
                         # Extended rules beyond parncutt. Comment out for pure parncutt
-                        internal += outer_fingers_penalty(candidate)
-                        internal += spacing_penalty(candidate)
+                        # internal += outer_fingers_penalty(candidate)
+                        # internal += spacing_penalty(candidate)
 
                         temp_entry = Entry(
                             base_entry.fingerings,
