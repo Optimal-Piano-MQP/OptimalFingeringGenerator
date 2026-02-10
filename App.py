@@ -3,9 +3,10 @@ import os
 import subprocess
 import music21
 from werkzeug.utils import secure_filename
-from RecursiveScaleTest import dp, apply_fingerings
+from RecursiveScaleTest import dp
 from flask import send_from_directory
 from FileConversion import file2Stream
+from AppendFingerings import addFingeringToPart
 
 UPLOAD_FOLDER = "uploads"
 ALLOWED_EXTENSIONS = {"xml", "musicxml", "mxl"}
@@ -100,6 +101,7 @@ def upload_file():
         "xml_path": filename
     })
 
+
 @app.route("/process", methods=["POST"])
 def process_file():
     """Process the uploaded file and apply fingerings"""
@@ -121,12 +123,12 @@ def process_file():
 
     if hands["right"]:
         right_best = dp(hands["right"], is_left_hand=False)[0]
-        apply_fingerings(hands["right"], right_best)
+        addFingeringToPart(hands["right"], right_best.fingerings)
         results["right"] = right_best
 
     if hands["left"]:
         left_best = dp(hands["left"], is_left_hand=True)[0]
-        apply_fingerings(hands["left"], left_best)
+        addFingeringToPart(hands["left"], left_best.fingerings)
         results["left"] = left_best
 
     annotated_xml = os.path.join(app.config["UPLOAD_FOLDER"], "annotated.xml")
@@ -157,6 +159,7 @@ def process_file():
         }
 
     return jsonify(result)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
