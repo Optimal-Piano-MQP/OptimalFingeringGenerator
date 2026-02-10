@@ -37,9 +37,12 @@ def canon_test():
     addFingeringToPart(rh, fingering_rh)
     addFingeringToPart(lh, fingering_lh)
 
-    score.write("musicxml", "canon-out.musicxml")
+    print("Right: ", optimal_rh[0].score, " Left: ", optimal_lh[0].score)
+    print("Total score from dp: ", optimal_rh[0].score + optimal_lh[0].score)
 
-    # print(getParncuttRuleScore(score))
+    score.write("musicxml", "music/canon-out.musicxml")
+
+    print("Total score from getParncuttRuleScore", sum(getParncuttRuleScore(file2Stream("music/canon-out.musicxml"))[0]))
 
 
 # Test file
@@ -87,12 +90,12 @@ def score_test(test, fingering):
     print("Total score: ", sum(score_out[0]))
 
 # chord_testing()
-# canon_test()
-# test_file("cscale_optimal.musicxml")
+canon_test()
+# test_file("canon-out.musicxml")
 # test_file("three_chord.musicxml_out.musicxml")
 # finger_file("music/cscale_optimal.musicxml")
 # finger_file("music/chord_testing.musicxml", True)
 # finger_file("music/notations_testing.musicxml")
-run_test(fscale, False)
+# run_test(fscale, False)
 # score_test(fscale, [[1], [2], [3], [3], [1], [2], [3], [4]])
 # score_test(fscale, [[1], [1], [2], [2], [3], [4], [5], [5]])
