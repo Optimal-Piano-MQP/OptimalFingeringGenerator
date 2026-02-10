@@ -206,33 +206,56 @@ def setupTrivialNotes(notes, is_left_hand):
 
     return entry_list
 
+def next_valid_note(notes, start):
+    i = start
+    while i < len(notes):
+        if not (notes[i].tie and notes[i].tie.type in ('continue', 'stop')):
+            return i
+        i += 1
+    return None
+
 def dp(part, is_left_hand):
     notes = part.flatten().notes
 
     # Setup trivial case: [[1,1],[1,2],[1,3]...],[[2,1],[2,2]...]...
-    entry_list = setupTrivialNotes(notes, is_left_hand)
+    # entry_list = setupTrivialNotes(notes, is_left_hand)
+    entry_list = np.empty((5,5), dtype=object)
+    entry_list[0,0] = Entry([], [], 0)
     
-    for n in range(len(notes)-3, -1, -1):
+    for n in range(len(notes)-1, -1, -1):
         note_to_add = notes[n]
+
+        if note_to_add.tie and note_to_add.tie.type in ('continue', 'stop'):
+            continue
 
         if note_to_add.isChord: 
             curr_notes = list(note_to_add.notes) # [<note1>, <note2>, etc]
         else: 
             curr_notes = [note_to_add] # [<note_obj>]
 
-        # print(curr_notes)
-
-        # Prev note length
-        if notes[n+1].isChord:
-            prev_note_length = len(notes[n+1].notes)
+        # prev note
+        prev_idx = next_valid_note(notes, n + 1)
+        if prev_idx is not None:
+            prev_note_length = (
+                len(notes[prev_idx].notes)
+                if notes[prev_idx].isChord
+                else 1
+            )
         else:
-            prev_note_length = 1
+            prev_note_length = 0
 
-        # Prev prev note length
-        if notes[n+2].isChord:
-            prev_prev_note_length = len(notes[n+2].notes)
+        # prev prev note
+        prev_prev_idx = next_valid_note(notes, prev_idx + 1) if prev_idx is not None else None
+        if prev_prev_idx is not None:
+            prev_prev_note_length = (
+                len(notes[prev_prev_idx].notes)
+                if notes[prev_prev_idx].isChord
+                else 1
+            )
         else:
-            prev_prev_note_length = 1
+            prev_prev_note_length = 0
+
+
 
         # All possible fingerings for note / chord.
         candidates = generateCandidates(note_to_add, is_left_hand)
@@ -289,6 +312,7 @@ def dp(part, is_left_hand):
                 # Take the minimum of calculated scores for new optimal entry
                 best_candidate = min(e, key=lambda x: x.score)
                 existing = new_entry_list[final_finger, i]
+                # print(best_candidate.score)
 
                 if existing is None or best_candidate.score < existing.score:
                     new_entry_list[final_finger, i] = best_candidate
@@ -319,6 +343,20 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
     #    same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
 
     total = entry.score + same_fingering_penalty
+
+    if(prev_prev_note_length == 0):
+        if(prev_note_length == 0):
+            total += sum(getParncuttGivenNotesDP(is_left_hand, curr_note[0], curr_fingering,
+                                                              None, None,    # prev notes
+                                                              None, None))   # prev prev notes
+        else:
+            for j in range(prev_note_length):
+                total += sum(getParncuttGivenNotesDP(
+                    is_left_hand, curr_note[0], curr_fingering,
+                    entry.notes[0 + j + idx_in_chord][0], entry.fingerings[0 + j + idx_in_chord],   # prev notes
+                    None, None # prev prev notes
+                ))
+                # print(j)
 
     # Get score from every note of prev note/chord and prev prev note/chord
     for i in range(prev_prev_note_length):

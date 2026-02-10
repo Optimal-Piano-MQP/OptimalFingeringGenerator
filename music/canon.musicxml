@@ -8,7 +8,7 @@
     <creator type="composer">Johann Pachelbel</creator>
     <encoding>
       <software>MuseScore Studio 4.6.4</software>
-      <encoding-date>2026-02-03</encoding-date>
+      <encoding-date>2026-02-10</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="yes" value="yes"/>
@@ -16,7 +16,7 @@
       <supports element="stem" type="yes"/>
       </encoding>
     <miscellaneous>
-      <miscellaneous-field name="creationDate">2026-01-29</miscellaneous-field>
+      <miscellaneous-field name="creationDate">2026-02-10</miscellaneous-field>
       <miscellaneous-field name="platform">Microsoft Windows</miscellaneous-field>
       </miscellaneous>
     </identification>
@@ -20295,7 +20295,7 @@
             <left-margin>0</left-margin>
             <right-margin>0</right-margin>
             </system-margins>
-          <system-distance>239.36</system-distance>
+          <system-distance>261.14</system-distance>
           </system-layout>
         <staff-layout number="2">
           <staff-distance>65</staff-distance>
@@ -20663,7 +20663,20 @@
         <stem>down</stem>
         <staff>1</staff>
         </note>
+      <note default-x="119.35" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot default-x="137.34" default-y="-35"/>
+        <stem>up</stem>
+        <staff>1</staff>
+        </note>
       <note default-x="119.35" default-y="-5">
+        <chord/>
         <pitch>
           <step>E</step>
           <octave>5</octave>
@@ -20675,7 +20688,23 @@
         <stem>up</stem>
         <staff>1</staff>
         </note>
+      <note default-x="199.48" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        <notations>
+          <tied type="start"/>
+          </notations>
+        </note>
       <note default-x="199.48" default-y="-15">
+        <chord/>
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -20797,7 +20826,24 @@
         </note>
       </measure>
     <measure number="101" width="134.5">
+      <note default-x="12.5" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>8</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        <notations>
+          <tied type="stop"/>
+          <fermata type="upright" relative-y="5"/>
+          </notations>
+        </note>
       <note default-x="12.5" default-y="-15">
+        <chord/>
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -20811,10 +20857,62 @@
         <staff>1</staff>
         <notations>
           <tied type="stop"/>
-          <fermata type="upright" relative-y="5"/>
+          </notations>
+        </note>
+      <note default-x="72.6" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>8</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <tied type="start"/>
+          <fermata type="upright" default-y="14" relative-y="5"/>
+          <arpeggiate number="1" default-x="-10.56" default-y="-4.66"/>
+          </notations>
+        </note>
+      <note default-x="72.6" default-y="-35">
+        <chord/>
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+          </pitch>
+        <duration>8</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <tied type="start"/>
+          <arpeggiate number="1" default-x="-10.56" default-y="-4.66"/>
+          </notations>
+        </note>
+      <note default-x="72.6" default-y="-25">
+        <chord/>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>8</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <tied type="start"/>
+          <arpeggiate number="1" default-x="-10.56" default-y="-4.66"/>
           </notations>
         </note>
       <note default-x="72.6" default-y="-10">
+        <chord/>
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -20827,7 +20925,7 @@
         <staff>1</staff>
         <notations>
           <tied type="start"/>
-          <fermata type="upright" default-y="14" relative-y="5"/>
+          <arpeggiate number="1" default-x="-10.56" default-y="-4.66"/>
           </notations>
         </note>
       <backup>
@@ -20849,7 +20947,39 @@
           <tied type="stop"/>
           </notations>
         </note>
+      <note default-x="72.6" default-y="-160">
+        <pitch>
+          <step>D</step>
+          <octave>2</octave>
+          </pitch>
+        <duration>8</duration>
+        <tie type="start"/>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>2</staff>
+        <notations>
+          <tied type="start"/>
+          </notations>
+        </note>
+      <note default-x="72.6" default-y="-140">
+        <chord/>
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+          </pitch>
+        <duration>8</duration>
+        <tie type="start"/>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>2</staff>
+        <notations>
+          <tied type="start"/>
+          </notations>
+        </note>
       <note default-x="72.6" default-y="-115">
+        <chord/>
         <pitch>
           <step>F</step>
           <alter>1</alter>
@@ -20867,7 +20997,53 @@
         </note>
       </measure>
     <measure number="102" width="114.61">
+      <note default-x="12.5" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>16</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>1</staff>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
+      <note default-x="12.5" default-y="-35">
+        <chord/>
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>4</octave>
+          </pitch>
+        <duration>16</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>1</staff>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
+      <note default-x="12.5" default-y="-25">
+        <chord/>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>16</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>whole</type>
+        <staff>1</staff>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
       <note default-x="12.5" default-y="-10">
+        <chord/>
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -20884,7 +21060,37 @@
       <backup>
         <duration>16</duration>
         </backup>
+      <note default-x="12.5" default-y="-160">
+        <pitch>
+          <step>D</step>
+          <octave>2</octave>
+          </pitch>
+        <duration>16</duration>
+        <tie type="stop"/>
+        <voice>5</voice>
+        <type>whole</type>
+        <staff>2</staff>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
+      <note default-x="12.5" default-y="-140">
+        <chord/>
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+          </pitch>
+        <duration>16</duration>
+        <tie type="stop"/>
+        <voice>5</voice>
+        <type>whole</type>
+        <staff>2</staff>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
       <note default-x="12.5" default-y="-115">
+        <chord/>
         <pitch>
           <step>F</step>
           <alter>1</alter>

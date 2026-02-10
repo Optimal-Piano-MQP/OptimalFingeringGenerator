@@ -9,6 +9,10 @@ def addFingeringToPart(part, fingering):
     while i >= 0:
         cur_note = notes[num_notes-j]
 
+        if cur_note.tie and cur_note.tie.type in ('continue', 'stop'):
+            j += 1
+            continue
+
         if cur_note.isNote:
             cur_note.articulations.append(articulations.Fingering(fingering[i][0]))
             j += 1

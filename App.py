@@ -3,7 +3,7 @@ import os
 import subprocess
 import music21
 from werkzeug.utils import secure_filename
-from RecursiveScaleTest import dp
+from Algorithm import dp
 from flask import send_from_directory
 from FileConversion import file2Stream
 from AppendFingerings import addFingeringToPart
@@ -71,6 +71,10 @@ def render_pdf(xml_path, pdf_path):
         check=True
     )
 
+def to_python_ints(x):
+    if isinstance(x, list):
+        return [to_python_ints(v) for v in x]
+    return int(x)
 
 @app.route("/", methods=["GET"])
 def index():
@@ -146,16 +150,16 @@ def process_file():
 
     if "right" in results:
         result["hands"]["right"] = {
-            "fingers": results["right"].fingerings,
-            "notes": [n.nameWithOctave for n in results["right"].notes],
-            "score": results["right"].score
+            "fingers": to_python_ints(results["right"].fingerings),
+            "notes": [n.nameWithOctave for n in results["right"].notes[0]],
+            "score": int(results["right"].score)
         }
 
     if "left" in results:
         result["hands"]["left"] = {
-            "fingers": results["left"].fingerings,
-            "notes": [n.nameWithOctave for n in results["left"].notes],
-            "score": results["left"].score
+            "fingers": to_python_ints(results["left"].fingerings),
+            "notes": [n.nameWithOctave for n in results["left"].notes[0]],
+            "score": int(results["left"].score)
         }
 
     return jsonify(result)
