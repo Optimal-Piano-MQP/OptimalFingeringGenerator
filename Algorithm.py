@@ -173,18 +173,10 @@ def generateCandidates(notes, is_left_hand):
     
     chordSize = len(notes)
 
-    if chordSize == 1:
-        return [[f] for f in range(1, 6)]
-
-    if chordSize == 5:
-        if(is_left_hand):
-            return [[5, 4, 3, 2, 1]]
-        return [[1, 2, 3, 4, 5]]
-
     if is_left_hand:
-        return [[f for f in comb][::-1] for comb in combinations(range(1, 6), chordSize)]
+        return [[f for f in comb] for comb in combinations([5,4,3,2,1], chordSize)]
     else:
-        return [[f for f in comb] for comb in combinations(range(1, 6), chordSize)]
+        return [[f for f in comb] for comb in combinations([1,2,3,4,5], chordSize)]
 
 def setupTrivialNotes(notes, is_left_hand):
     trivial_notes = [notes[-2], notes[-1]]
