@@ -101,7 +101,6 @@ def ParnPosChange(isLeftHand, noteInterval, firstNote, firstNoteFingering, secon
 def ParnWeakFinger(thirdNoteFingering):
 	if [4] == thirdNoteFingering or [5] == thirdNoteFingering:
 		return 1
-
 	return 0
 
 
@@ -406,6 +405,7 @@ def getParncuttRuleScore(inputStream):
 
 			#calculate internal scores for the chord
 			internalScore = getInternalScore(thirdEvent, thirdEventAllFingerings, isLeftHand)
+			#print(internalScore, thirdEvent)
 			scoreCount = np.array(scoreCount)
 			scoreCount += internalScore
 
@@ -438,7 +438,7 @@ def getParncuttRuleScore(inputStream):
 			#	scoreCount += score
 
 			aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
-			#print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
+			print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
 			scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
 			firstEvent = secondEvent
@@ -455,8 +455,8 @@ def getParncuttRuleScore(inputStream):
 				secondNoteFingering = secondEventAllFingerings[i]
 				if firstEvent is not None:
 					for j in range(len(firstEvent)):
-						firstNote = secondEvent[j] # Why second event here??
-						# firstNote = firstEvent[j]
+						#firstNote = secondEvent[j] # Why second event here??
+						firstNote = firstEvent[j]
 						unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(firstNote, secondNote, [secondNoteFingering], None), 
 								Parn5OnBlack(firstNote, secondNote, [secondNoteFingering], None), 0])
 				else:
@@ -466,6 +466,7 @@ def getParncuttRuleScore(inputStream):
 		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
 		#for score in unnaggregatedScore:
 		#	scoreCount += score
+		print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
 
 		scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
@@ -507,6 +508,8 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	thirdNoteFingering = normalize_fingering(thirdNoteFingering)
 
 	if secondNote is None:
+		scoreCount[5] += ParnWeakFinger(thirdNoteFingering)
+		print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 		return scoreCount
 
 	if thirdNote is not None:
@@ -597,8 +600,8 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	# Rule 12: 1 passing rule: when the thumb passes over or under, 1 point if same level,
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering)
-
-	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
+		
+	print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
   
 	return scoreCount
 
@@ -610,11 +613,9 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	secondNoteFingering = normalize_fingering(secondNoteFingering)
 	thirdNoteFingering = normalize_fingering(thirdNoteFingering)
 
-	print(firstNote, secondNote, thirdNote)
-
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)
-		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
+		print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 		return scoreCount
 
 	if thirdNote is not None:
@@ -707,7 +708,7 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, firstNote, firstNoteFingering, secondNote, secondNoteFingering)
   
-	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
+	print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 
 	return scoreCount
 

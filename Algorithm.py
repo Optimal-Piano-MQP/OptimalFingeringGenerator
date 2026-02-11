@@ -315,9 +315,13 @@ def dp(part, is_left_hand):
                     continue
 
                 # Take the minimum of calculated scores for new optimal entry
+                
+                #for entry in e:
+                 #   print(entry.score, entry.notes, entry.fingerings)
+
                 best_candidate = min(e, key=lambda x: x.score)
                 existing = new_entry_list[final_finger, i]
-                # print(best_candidate.score)
+                #print(best_candidate.score, best_candidate.fingerings)
 
                 if existing is None or best_candidate.score < existing.score:
                     new_entry_list[final_finger, i] = best_candidate
@@ -352,16 +356,18 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
 
     if(prev_prev_note_length == 0):
         if(prev_note_length == 0):
-            total += sum(getParncuttGivenNotesDP(is_left_hand, curr_note[0], curr_fingering,
+            output = getParncuttGivenNotesDP(is_left_hand, curr_note[0], curr_fingering,
                                                               None, None,    # prev notes
-                                                              None, None))   # prev prev notes
+                                                              None, None)  # prev prev notes
+            tempScore.append(output)
         else:
             for j in range(prev_note_length):
-                total += sum(getParncuttGivenNotesDP(
+                output = getParncuttGivenNotesDP(
                     is_left_hand, curr_note[0], curr_fingering,
                     entry.notes[0 + j + idx_in_chord][0], entry.fingerings[0 + j + idx_in_chord],   # prev notes
                     None, None # prev prev notes
-                ))
+                )
+                tempScore.append(output)
                 # print(j)
 
     # Get score from every note of prev note/chord and prev prev note/chord
@@ -376,6 +382,10 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
             tempScore.append(output)
             #total += sum(output)
     #print()
-    maxScores = np.max(np.array(tempScore), axis=0)
-    total += sum(maxScores)
+    #print(tempScore)
+    if len(tempScore) >= 1:
+        maxScores = np.max(np.array(tempScore), axis=0)
+        print(maxScores, curr_note, entry.notes,"\n")
+        total += np.sum(maxScores)
+
     return total
