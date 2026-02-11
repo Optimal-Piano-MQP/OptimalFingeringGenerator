@@ -37,17 +37,58 @@ def canon_test():
     addFingeringToPart(rh, fingering_rh)
     addFingeringToPart(lh, fingering_lh)
 
+    score.write("musicxml", "music/canon_out2.musicxml")
+
     print("Right: ", optimal_rh[0].score, " Left: ", optimal_lh[0].score)
     print("Total score from dp: ", optimal_rh[0].score + optimal_lh[0].score)
 
-    print("Total score from getParncuttRuleScore", sum(getParncuttRuleScore(file2Stream("music/canon-out.musicxml"))[0]))
+    print("Total score from getParncuttRuleScore", sum(getParncuttRuleScore(file2Stream("music/canon_out2.musicxml"))[0]))
 
+
+def canon_halves_test():
+    score = file2Stream("music/canon_firstHalf.musicxml")
+    rh = score.parts[0]
+    lh = score.parts[1]
+
+    optimal_rh = dp(rh, 0)
+    optimal_lh = dp(lh, 1)
+    fingering_rh = optimal_rh[0].fingerings
+    fingering_lh = optimal_lh[0].fingerings
+
+    addFingeringToPart(rh, fingering_rh)
+    addFingeringToPart(lh, fingering_lh)
+
+    score.write("musicxml", "music/canon_firstHalf_out.musicxml")
+
+    print("Right: ", optimal_rh[0].score, " Left: ", optimal_lh[0].score)
+    print("Total score from dp: ", optimal_rh[0].score + optimal_lh[0].score)
+
+    print("Total score from getParncuttRuleScore", sum(getParncuttRuleScore(file2Stream("music/canon_firstHalf_out.musicxml"))[0]))
+
+    score = file2Stream("music/canon_secondHalf.musicxml")
+    rh = score.parts[0]
+    lh = score.parts[1]
+
+    optimal_rh = dp(rh, 0)
+    optimal_lh = dp(lh, 1)
+    fingering_rh = optimal_rh[0].fingerings
+    fingering_lh = optimal_lh[0].fingerings
+
+    addFingeringToPart(rh, fingering_rh)
+    addFingeringToPart(lh, fingering_lh)
+
+    score.write("musicxml", "music/canon_secondHalf_out.musicxml")
+
+    print("Right: ", optimal_rh[0].score, " Left: ", optimal_lh[0].score)
+    print("Total score from dp: ", optimal_rh[0].score + optimal_lh[0].score)
+
+    print("Total score from getParncuttRuleScore", sum(getParncuttRuleScore(file2Stream("music/canon_secondHalf_out.musicxml"))[0]))
 
 # Test file
 def test_file(filename):
     score = file2Stream(filename)
     score_out = getParncuttRuleScore(score)
-    print(score_out)
+    print(score_out[0])
     print("Total score: ", sum(score_out[0]))
 
 def finger_file(filename, is_left_hand=False):
@@ -55,9 +96,9 @@ def finger_file(filename, is_left_hand=False):
     rh = score.parts[0]
 
     optimal = dp(rh, is_left_hand)[0]
-    print(optimal.fingerings, optimal.score)
+    #print(optimal.fingerings)
+    print(optimal.score)
     fingering = optimal.fingerings
-    # print(optimal.fingerings)
     addFingeringToPart(rh, fingering)
 
     score.write("musicxml", f"{filename}_out.musicxml")
@@ -89,14 +130,16 @@ def score_test(test, fingering):
 
 # chord_testing()
 #print("canon")
-#canon_test()
+canon_test()
+#canon_halves_test()
+
 
 #print("c scale")
 #finger_file("music/cscale_optimal.musicxml")
 #test_file("music/cscale_optimal.musicxml")
 
 #print("basic chord")
-finger_file("music/basic_chord.musicxml")
+#finger_file("music/basic_chord.musicxml")
 #test_file("music/basic_chord.musicxml_out.musicxml")
 
 #print("three chord")

@@ -471,7 +471,7 @@ def getParncuttRuleScore(inputStream):
 		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
 		#for score in unnaggregatedScore:
 		#	scoreCount += score
-		print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
+		#print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
 
 		scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
@@ -514,7 +514,7 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(thirdNoteFingering)
-		print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
+		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 		return scoreCount
 
 	if thirdNote is not None:

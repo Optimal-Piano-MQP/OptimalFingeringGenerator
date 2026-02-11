@@ -178,7 +178,7 @@ def generateCandidates(notes, is_left_hand):
     else:
         return [[f for f in comb] for comb in combinations([1,2,3,4,5], chordSize)]
 
-def setupTrivialNotes(notes, is_left_hand):
+def setupTrivialNotes(notes, is_left_hand, doDP13):
     trivial_notes = [notes[-2], notes[-1]]
     entry_list = np.empty((5,5), dtype=object)
 
@@ -189,10 +189,10 @@ def setupTrivialNotes(notes, is_left_hand):
                                     [[trivial_notes[0]], [trivial_notes[1]]],
                                     sum(getParncuttGivenNotesDP(is_left_hand, trivial_notes[0], [i+1],
                                                               trivial_notes[1], [j+1],
-                                                              None, None)) +
+                                                              None, None, doDP13)) +
                                     sum(getParncuttGivenNotesDP(is_left_hand, trivial_notes[1], [j+1],
                                                               None, None,
-                                                              None, None)))
+                                                              None, None, doDP13)))
             # if i == j:
             #     entry_list[i, j].score += 2 #if you change this value, also change same_finger_penalty in calculateScore()
 
@@ -206,11 +206,11 @@ def next_valid_note(notes, start):
         i += 1
     return None
 
-def dp(part, is_left_hand):
+def dp(part, is_left_hand, doDP13 = False):
     notes = part.flatten().notes
 
     # Setup trivial case: [[1,1],[1,2],[1,3]...],[[2,1],[2,2]...]...
-    # entry_list = setupTrivialNotes(notes, is_left_hand)
+    # entry_list = setupTrivialNotes(notes, is_left_hand, doDP13)
     entry_list = np.empty((5,5), dtype=object)
     entry_list[0,0] = Entry([], [], 0)
     
@@ -283,9 +283,11 @@ def dp(part, is_left_hand):
                             base_entry.score + internal
                         )
 
+                        scoreMaximumsPerStep = []
+                        scoreFromLastStep = temp_entry.score
                         for f, (finger, note) in enumerate(zip(candidate, curr_notes)):
-                            score = calculateScore(is_left_hand, [finger], [note], temp_entry, prev_note_length, prev_prev_note_length, f)
-
+                            score, maxScores = calculateScore(is_left_hand, [finger], [note], temp_entry, prev_note_length, prev_prev_note_length, f, doDP13)
+                            scoreMaximumsPerStep.append(maxScores)
                             #print(score, candidate, curr_notes)
 
                             temp_entry = Entry(
@@ -293,14 +295,17 @@ def dp(part, is_left_hand):
                                 [[note]] + temp_entry.notes,
                                 score
                             )
+                        scoreMaximums = np.max(np.array(scoreMaximumsPerStep), axis=0)
+                        temp_entry.score = scoreFromLastStep + sum(scoreMaximums)
                         e.append(temp_entry)
                             
                     # Single note
                     else:
+                        score, maxScores = calculateScore(is_left_hand, candidate, curr_notes, entry_list[i,j], prev_note_length, prev_prev_note_length, 0, doDP13)
                         e.append(Entry(
                             [candidate] + entry_list[i,j].fingerings,
                             [curr_notes] + entry_list[i,j].notes,
-                            calculateScore(is_left_hand, candidate, curr_notes, entry_list[i,j], prev_note_length, prev_prev_note_length, 0)
+                            score
                         ))
 
                 if not e:
@@ -338,26 +343,28 @@ def dp(part, is_left_hand):
     return best
 
 # Expects curr_fingering to be [1]. curr_note should be [<note_obj>]
-def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_length, prev_prev_note_length, idx_in_chord):
+def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_length, prev_prev_note_length, idx_in_chord, doDP13):
     same_fingering_penalty = 0
     # if entry.fingerings[0] == new_finger:
     #    same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
 
     total = entry.score + same_fingering_penalty
     tempScore = []
+    maxScores = []
 
     if(prev_prev_note_length == 0):
         if(prev_note_length == 0):
             output = getParncuttGivenNotesDP(is_left_hand, curr_note[0], curr_fingering,
                                                               None, None,    # prev notes
-                                                              None, None)  # prev prev notes
+                                                              None, None, doDP13)  # prev prev notes
             tempScore.append(output)
         else:
             for j in range(prev_note_length):
                 output = getParncuttGivenNotesDP(
                     is_left_hand, curr_note[0], curr_fingering,
                     entry.notes[0 + j + idx_in_chord][0], entry.fingerings[0 + j + idx_in_chord],   # prev notes
-                    None, None # prev prev notes
+                    None, None,
+                    doDP13# prev prev notes
                 )
                 tempScore.append(output)
                 # print(j)
@@ -369,6 +376,7 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
                 is_left_hand, curr_note[0], curr_fingering,
                 entry.notes[0 + j + idx_in_chord][0], entry.fingerings[0 + j + idx_in_chord],   # prev notes
                 entry.notes[prev_note_length + i + idx_in_chord][0], entry.fingerings[prev_note_length + i + idx_in_chord] # prev prev notes
+                , doDP13
             )
             #print(f"{output} \t {curr_note[0].pitch}\t {entry.notes[0 + j + idx_in_chord][0].pitch} \t {entry.notes[prev_note_length + i + idx_in_chord][0].pitch} \t {curr_fingering} \t {entry.fingerings}")
             tempScore.append(output)
@@ -377,7 +385,7 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
     #print(tempScore)
     if len(tempScore) >= 1:
         maxScores = np.max(np.array(tempScore), axis=0)
-        print(maxScores, curr_note, entry.notes,"\n")
+        #print(maxScores, curr_note, entry.notes,"\n")
         total += np.sum(maxScores)
 
-    return total
+    return total, maxScores
