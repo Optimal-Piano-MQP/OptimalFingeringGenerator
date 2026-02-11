@@ -1,4 +1,4 @@
-from RecursiveScaleTest import dp
+from Algorithm import dp
 from FileConversion import file2Stream
 from AppendFingerings import addFingeringToPart
 from ParncuttRulesUpdated import getParncuttRuleScore, getInternalScore
@@ -25,8 +25,7 @@ def chord_testing():
 
 # Canon in d
 def canon_test():
-    score = file2Stream("music/canon-in-d.musicxml")
-    
+    score = file2Stream("music/canon.musicxml")
     rh = score.parts[0]
     lh = score.parts[1]
 
@@ -38,11 +37,14 @@ def canon_test():
     addFingeringToPart(rh, fingering_rh)
     addFingeringToPart(lh, fingering_lh)
 
-    score.write("musicxml", "canon-in-d-out.musicxml")
+    print("Right: ", optimal_rh[0].score, " Left: ", optimal_lh[0].score)
+    print("Total score from dp: ", optimal_rh[0].score + optimal_lh[0].score)
 
     parnScore = getParncuttRuleScore(score)
     print(parnScore[0], sum(parnScore[0]))
     print(optimal_rh[0].score, optimal_lh[0].score, optimal_rh[0].score + optimal_lh[0].score)
+
+    print("Total score from getParncuttRuleScore", sum(getParncuttRuleScore(file2Stream("music/canon-out.musicxml"))[0]))
 
 
 # Test file
@@ -52,11 +54,11 @@ def test_file(filename):
     print(score_out)
     print("Total score: ", sum(score_out[0]))
 
-def finger_file(filename):
+def finger_file(filename, is_left_hand=False):
     score = file2Stream(filename)
     rh = score.parts[0]
 
-    optimal = dp(rh, 0)[0]
+    optimal = dp(rh, is_left_hand)[0]
     print(optimal.fingerings, optimal.score)
     fingering = optimal.fingerings
     # print(optimal.fingerings)
@@ -64,14 +66,14 @@ def finger_file(filename):
 
     score.write("musicxml", f"{filename}_out.musicxml")
 
-def run_test(test):
+def run_test(test, is_left_hand=False):
     part = music21.stream.Part()
     part.insert(0, music21.instrument.Piano())
 
     for n in range(len(test)):
         part.append(music21.note.Note(test[n], duration=music21.duration.Duration(1)))
 
-    optimal = dp(part, 0)
+    optimal = dp(part, is_left_hand)
     for entry in optimal:
         print(entry.fingerings, entry.score)
 

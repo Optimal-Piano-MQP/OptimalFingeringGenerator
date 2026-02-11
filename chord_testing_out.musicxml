@@ -8,8 +8,8 @@
   <identification>
     <creator type="composer">Composer / arranger</creator>
     <encoding>
-      <encoding-date>2026-02-10</encoding-date>
-      <software>music21 v.9.9.1</software>
+      <encoding-date>2026-02-09</encoding-date>
+      <software>music21 v.9.7.1</software>
       <software>MuseScore Studio 4.6.4</software>
       <supports attribute="new-system" element="print" type="yes" value="yes" />
       <supports attribute="new-page" element="print" type="yes" value="yes" />
@@ -70,11 +70,11 @@
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
-      <score-instrument id="Ie2abcfdb8dfd2d7fc339314af19b6b9d">
+      <score-instrument id="Ica51444d31f9bd4325ad83ac2619221e">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Ie2abcfdb8dfd2d7fc339314af19b6b9d">
+      <midi-instrument id="Ica51444d31f9bd4325ad83ac2619221e">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
@@ -1379,7 +1379,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">2</fingering>
           </technical>
         </notations>
       </note>
@@ -2832,7 +2832,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">3</fingering>
           </technical>
         </notations>
       </note>
@@ -2959,7 +2959,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">3</fingering>
           </technical>
         </notations>
       </note>
@@ -3015,7 +3015,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>

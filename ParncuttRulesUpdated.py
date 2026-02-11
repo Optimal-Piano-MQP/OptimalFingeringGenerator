@@ -60,9 +60,6 @@ def ParnSpan(noteInterval, minRel, maxRel, secondNoteFingering, thirdNoteFingeri
 		else:
 			output[1] += 2 * (abs(noteInterval - maxRel))
 
-	#if tableFlipped:
-	#	output.reverse()
-
 	return output
 
 
@@ -194,17 +191,6 @@ def Parn5OnBlack(firstNote, secondNote, secondNoteFingering, thirdNote):
 		if(secondNote.pitch.accidental.name == 'natural'):
 			return output
 
-		# if firstNote is not None:
-		# 	if firstNote.pitch.accidental is None and secondNoteFingering[0] == 5:
-		# 		output += 2
-		# 	elif firstNote.pitch.accidental.name == 'natural' and secondNoteFingering[0] == 5:
-		# 		output += 2
-
-		# if thirdNote is not None:
-		# 	if thirdNote.pitch.accidental is None and secondNoteFingering[-1] == 5:
-		# 		output += 2
-		# 	elif thirdNote.pitch.accidental.name == 'natural' and secondNoteFingering[-1] == 5:
-		# 		output += 2
 		if firstNote is not None:
 			if secondNoteFingering[0] == 5:
 				acc = firstNote.pitch.accidental
@@ -326,7 +312,11 @@ def normalizeScore(parts, isLeftHand):
 			if(nextMeasure is not None):
 				for element in nextMeasure:
 					if isinstance(element, music21.note.Note):
+						if element.tie and element.tie.type in ('continue', 'stop'):
+							continue
 						fingering = getFingering(element, True)
+						if not fingering:
+							continue
 						if(not isLeftHand and fingering[0] < 0 or isLeftHand and fingering[0] > 0):
 							parent_stream = element.activeSite
 							offset = element.offset
@@ -395,10 +385,18 @@ def getParncuttRuleScore(inputStream):
 		thirdEvent = None
 		thirdEventAllFingerings = [0]
 
-		for thirdEvent in part.recurse().notes:
-			if isinstance(thirdEvent, music21.harmony.Harmony):
+		events = []
+
+		# remove non-scored notes like ends of ties
+		for n in part.recurse().notes:
+			if isinstance(n, music21.harmony.Harmony):
 				continue
-			elif thirdEvent.isChord:
+			if n.tie and n.tie.type in ('continue', 'stop'):
+				continue
+			events.append(n)
+
+		for thirdEvent in events:
+			if thirdEvent.isChord:
 				thirdEventAllFingerings = getFingeringChord(thirdEvent)
 				thirdEvent = thirdEvent.notes
 			else:
@@ -458,11 +456,12 @@ def getParncuttRuleScore(inputStream):
 				if firstEvent is not None:
 					for j in range(len(firstEvent)):
 						firstNote = secondEvent[j] # Why second event here??
-						unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(firstNote, secondNote, secondNoteFingering, None), 
-								Parn5OnBlack(firstNote, secondNote, secondNoteFingering, None), 0])
+						# firstNote = firstEvent[j]
+						unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(firstNote, secondNote, [secondNoteFingering], None), 
+								Parn5OnBlack(firstNote, secondNote, [secondNoteFingering], None), 0])
 				else:
-					unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(None, secondNote, secondNoteFingering, None), 
-								Parn5OnBlack(None, secondNote, secondNoteFingering, None), 0])
+					unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(None, secondNote, [secondNoteFingering], None), 
+								Parn5OnBlack(None, secondNote, [secondNoteFingering], None), 0])
 			
 		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
 		#for score in unnaggregatedScore:

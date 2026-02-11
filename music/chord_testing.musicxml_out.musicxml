@@ -8,7 +8,7 @@
   <identification>
     <creator type="composer">Composer / arranger</creator>
     <encoding>
-      <encoding-date>2026-02-08</encoding-date>
+      <encoding-date>2026-02-10</encoding-date>
       <software>music21 v.9.7.1</software>
       <software>MuseScore Studio 4.6.4</software>
       <supports attribute="new-system" element="print" type="yes" value="yes" />
@@ -70,11 +70,11 @@
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
-      <score-instrument id="I5288f1e66240f48f9509b4d969b560df">
+      <score-instrument id="I56d13e10875bfb3fdef47eea48179ded">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I5288f1e66240f48f9509b4d969b560df">
+      <midi-instrument id="I56d13e10875bfb3fdef47eea48179ded">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
@@ -124,7 +124,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -166,7 +166,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -183,7 +183,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -225,7 +225,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -242,7 +242,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -259,7 +259,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -301,7 +301,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -318,7 +318,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -335,7 +335,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -352,7 +352,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -394,7 +394,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -411,7 +411,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -428,7 +428,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -445,7 +445,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -462,7 +462,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -504,7 +504,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -521,7 +521,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -537,7 +537,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -554,7 +554,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -570,7 +570,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -587,7 +587,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -603,7 +603,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -620,7 +620,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -657,7 +657,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -674,7 +674,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -690,7 +690,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -707,7 +707,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -723,7 +723,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -740,7 +740,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -756,7 +756,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -773,7 +773,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -804,7 +804,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -823,7 +823,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -839,7 +839,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -858,7 +858,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -874,7 +874,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -893,7 +893,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -909,7 +909,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -928,7 +928,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -956,7 +956,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -975,7 +975,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -991,7 +991,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1010,7 +1010,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1026,7 +1026,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1043,7 +1043,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1059,7 +1059,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1078,7 +1078,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -1106,7 +1106,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1123,7 +1123,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1139,7 +1139,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1158,7 +1158,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1174,7 +1174,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1193,7 +1193,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1209,7 +1209,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1226,7 +1226,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1256,7 +1256,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1273,7 +1273,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -1290,7 +1290,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1309,7 +1309,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -1326,7 +1326,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1343,7 +1343,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -1360,7 +1360,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1379,7 +1379,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -1409,7 +1409,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1426,7 +1426,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1443,7 +1443,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1460,7 +1460,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1477,7 +1477,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1496,7 +1496,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1513,7 +1513,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1530,7 +1530,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1569,7 +1569,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1588,7 +1588,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1605,7 +1605,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1622,7 +1622,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1639,7 +1639,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1656,7 +1656,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1673,7 +1673,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1692,7 +1692,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1723,7 +1723,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -1742,7 +1742,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1761,7 +1761,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -1777,7 +1777,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -1794,7 +1794,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -1811,7 +1811,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1827,7 +1827,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -1844,7 +1844,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -1861,7 +1861,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1877,7 +1877,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -1894,7 +1894,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -1911,7 +1911,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1939,7 +1939,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -1956,7 +1956,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -1973,7 +1973,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -1989,7 +1989,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2006,7 +2006,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -2023,7 +2023,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2039,7 +2039,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2056,7 +2056,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -2073,7 +2073,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2089,7 +2089,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2106,7 +2106,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2123,7 +2123,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2151,7 +2151,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2168,7 +2168,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -2185,7 +2185,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2201,7 +2201,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2218,7 +2218,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2235,7 +2235,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2251,7 +2251,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2268,7 +2268,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2285,7 +2285,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2301,7 +2301,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2318,7 +2318,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -2335,7 +2335,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2363,7 +2363,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -2382,7 +2382,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2401,7 +2401,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2417,7 +2417,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -2435,7 +2435,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2454,7 +2454,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2470,7 +2470,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2487,7 +2487,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -2504,7 +2504,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2522,7 +2522,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2538,7 +2538,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2555,7 +2555,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -2572,7 +2572,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -2589,7 +2589,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2606,7 +2606,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2634,7 +2634,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2651,7 +2651,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -2668,7 +2668,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2686,7 +2686,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2705,7 +2705,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2724,7 +2724,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2742,7 +2742,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -2760,7 +2760,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2777,7 +2777,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -2795,7 +2795,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2813,7 +2813,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -2832,7 +2832,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2869,7 +2869,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2886,7 +2886,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -2903,7 +2903,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2921,7 +2921,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2940,7 +2940,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -2959,7 +2959,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -2977,7 +2977,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -2996,7 +2996,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -3015,7 +3015,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -3033,7 +3033,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -3052,7 +3052,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -3071,7 +3071,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -3102,7 +3102,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-4</fingering>
           </technical>
         </notations>
       </note>
@@ -3119,7 +3119,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -3136,7 +3136,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -3153,7 +3153,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">-1</fingering>
           </technical>
         </notations>
       </note>
@@ -3195,7 +3195,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -3211,7 +3211,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -3227,7 +3227,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>
@@ -3243,7 +3243,7 @@
         <staff>1</staff>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">-5</fingering>
           </technical>
         </notations>
       </note>

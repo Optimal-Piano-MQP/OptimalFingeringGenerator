@@ -4,7 +4,7 @@
   <work>
     <work-title>Canon in D</work-title>
   </work>
-  <movement-title>canon-in-d.musicxml</movement-title>
+  <movement-title>canon.musicxml</movement-title>
   <identification>
     <creator type="composer">Johann Pachelbel</creator>
     <encoding>
@@ -74,11 +74,11 @@ Arr. by lemontart</credit-words>
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
-      <score-instrument id="I564df5150d4458c9ca94d34ae2863ede">
+      <score-instrument id="I3f2263b9358f8c6d501d01fdc919ab6b">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I564df5150d4458c9ca94d34ae2863ede">
+      <midi-instrument id="I3f2263b9358f8c6d501d01fdc919ab6b">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
@@ -28516,7 +28516,7 @@ Arr. by lemontart</credit-words>
         <notations>
           <tied type="start" />
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">2</fingering>
           </technical>
         </notations>
       </note>
@@ -28536,7 +28536,7 @@ Arr. by lemontart</credit-words>
         <notations>
           <tied type="start" />
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -28641,7 +28641,7 @@ Arr. by lemontart</credit-words>
         <beam number="1">continue</beam>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">-2</fingering>
+            <fingering alternate="no" substitution="no">-3</fingering>
           </technical>
         </notations>
       </note>
@@ -28658,7 +28658,7 @@ Arr. by lemontart</credit-words>
         <beam number="1">continue</beam>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">-1</fingering>
+            <fingering alternate="no" substitution="no">-2</fingering>
           </technical>
         </notations>
       </note>
@@ -28699,9 +28699,6 @@ Arr. by lemontart</credit-words>
         <notations>
           <fermata type="upright" />
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="12.5" default-y="-15">
@@ -28719,9 +28716,6 @@ Arr. by lemontart</credit-words>
         <staff>1</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="72.6" default-y="-45">
@@ -28801,7 +28795,7 @@ Arr. by lemontart</credit-words>
           <tied type="start" />
           <arpeggiate number="1" />
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -28822,9 +28816,6 @@ Arr. by lemontart</credit-words>
         <staff>2</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">-1</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="72.6" default-y="-160">
@@ -28899,9 +28890,6 @@ Arr. by lemontart</credit-words>
         <staff>1</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="12.5" default-y="-35">
@@ -28918,9 +28906,6 @@ Arr. by lemontart</credit-words>
         <staff>1</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="12.5" default-y="-25">
@@ -28936,9 +28921,6 @@ Arr. by lemontart</credit-words>
         <staff>1</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="12.5" default-y="-10">
@@ -28954,9 +28936,6 @@ Arr. by lemontart</credit-words>
         <staff>1</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
-          </technical>
         </notations>
       </note>
       <backup>
@@ -28974,9 +28953,6 @@ Arr. by lemontart</credit-words>
         <staff>2</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">-5</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="12.5" default-y="-140">
@@ -28992,9 +28968,6 @@ Arr. by lemontart</credit-words>
         <staff>2</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">-2</fingering>
-          </technical>
         </notations>
       </note>
       <note default-x="12.5" default-y="-115">
@@ -29011,9 +28984,6 @@ Arr. by lemontart</credit-words>
         <staff>2</staff>
         <notations>
           <tied type="stop" />
-          <technical>
-            <fingering alternate="no" substitution="no">-1</fingering>
-          </technical>
         </notations>
       </note>
       <barline location="right">
