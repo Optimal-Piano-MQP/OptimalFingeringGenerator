@@ -101,7 +101,6 @@ def ParnPosChange(isLeftHand, noteInterval, firstNote, firstNoteFingering, secon
 def ParnWeakFinger(thirdNoteFingering):
 	if [4] == thirdNoteFingering or [5] == thirdNoteFingering:
 		return 1
-
 	return 0
 
 
@@ -234,6 +233,11 @@ def ParnThumbPassing(isLeftHand, noteInterval, secondNote, secondNoteFingering, 
 			output += 3
 
 	return output
+
+def RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering):
+	if noteInterval != 0 and firstNoteFingering[0] == secondNoteFingering[0]:
+		return 2
+	return 0
 
 def getFingering(note, keepSign = False):
 	fingering = []
@@ -376,13 +380,13 @@ def getParncuttRuleScore(inputStream):
 
 		isLeftHand = not isLeftHand
 		#first note in sequence
-		firstNote = None
+		firstEvent = None
 		firstEventAllFingerings = [0]
 		#middle note in sequence
 		secondEvent = None
 		secondEventAllFingerings = [0]
 		#third note in sequence
-		thirdNote = None
+		thirdEvent = None
 		thirdEventAllFingerings = [0]
 
 		events = []
@@ -406,6 +410,7 @@ def getParncuttRuleScore(inputStream):
 
 			#calculate internal scores for the chord
 			internalScore = getInternalScore(thirdEvent, thirdEventAllFingerings, isLeftHand)
+			#print(internalScore, thirdEvent)
 			scoreCount = np.array(scoreCount)
 			scoreCount += internalScore
 
@@ -433,11 +438,13 @@ def getParncuttRuleScore(inputStream):
 													   None, None, 
 													   thirdNote, thirdNoteFingering))
 			
-			for score in unnaggregatedScore:
-				# print(score)
-				scoreCount += score
+			#for score in unnaggregatedScore:
+				#print(score)
+			#	scoreCount += score
 
-			# scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
+			aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
+
+			scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
 			firstEvent = secondEvent
 			firstEventAllFingerings = secondEventAllFingerings
@@ -453,8 +460,8 @@ def getParncuttRuleScore(inputStream):
 				secondNoteFingering = secondEventAllFingerings[i]
 				if firstEvent is not None:
 					for j in range(len(firstEvent)):
-						firstNote = secondEvent[j] # Why second event here??
-						# firstNote = firstEvent[j]
+						#firstNote = secondEvent[j] # Why second event here??
+						firstNote = firstEvent[j]
 						unnaggregatedScore.append([0, 0, 0, 0, 0, 0, 0, 0, 0, Parn1OnBlack(firstNote, secondNote, [secondNoteFingering], None), 
 								Parn5OnBlack(firstNote, secondNote, [secondNoteFingering], None), 0])
 				else:
@@ -462,6 +469,9 @@ def getParncuttRuleScore(inputStream):
 								Parn5OnBlack(None, secondNote, [secondNoteFingering], None), 0])
 			
 		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
+		#for score in unnaggregatedScore:
+		#	scoreCount += score
+		#print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
 
 		scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
@@ -503,6 +513,8 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	thirdNoteFingering = normalize_fingering(thirdNoteFingering)
 
 	if secondNote is None:
+		scoreCount[5] += ParnWeakFinger(thirdNoteFingering)
+		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 		return scoreCount
 
 	if thirdNote is not None:
@@ -598,9 +610,10 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
   
 	return scoreCount
 
-# Notes should be the pure object, not in []. Fingerings should be in [] like [1], [1, 3, 5], etc
-def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering):
-	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, \
+	secondNoteFingering, thirdNote, thirdNoteFingering, doDP13 = False):
+	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 	firstNoteFingering = normalize_fingering(firstNoteFingering)
 	secondNoteFingering = normalize_fingering(secondNoteFingering)
@@ -701,6 +714,9 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, firstNote, firstNoteFingering, secondNote, secondNoteFingering)
   
+	if doDP13:
+		scoreCount[12] += RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering)
+
 	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 
 	return scoreCount
