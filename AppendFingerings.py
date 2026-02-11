@@ -23,3 +23,22 @@ def addFingeringToPart(part, fingering):
                 cur_note.articulations.append(articulations.Fingering(fingering[i][0]))
                 i -= 1
             j += 1
+
+def addFingeringToPartTest(part, fingering):
+    notes = part.recurse().notes
+    num_notes = len(notes)
+    j = 0
+    i = 0
+
+    for i in range(num_notes):
+        note = notes[i]
+        if note.tie and note.tie.type in ('continue', 'stop'):
+            j += 1
+            continue
+
+        if note.isNote:
+            note.articulations.append(articulations.Fingering(fingering[i-j][0]))
+
+        elif note.isChord:
+            for k in range (0, len(note.pitches)):
+                note.articulations.append(articulations.Fingering(fingering[i-j][k]))

@@ -21,8 +21,15 @@ class Entry:
             return NotImplemented
         return self.score < other.score
 
+    def __eq__(self, other):
+        if not isinstance(other, Entry):
+            return NotImplemented
+        return self.score == other.score
+
     def __str__(self):
-        note_strings = [n.nameWithOctave for n in self.notes]
+        note_strings = []
+        for note in self.notes:
+            note_strings += [[n.nameWithOctave for n in note]]
         return str(f"{self.fingerings}\n{note_strings}\n{self.score}")
 
 # notes: List of note pitches    Example: ['C4', 'D4', 'E4']
@@ -359,4 +366,135 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
                 entry.notes[prev_note_length + i + idx_in_chord][0], entry.fingerings[prev_note_length + i + idx_in_chord] # prev prev notes
             ))
     
+    return total
+
+
+def dpTest(part, is_left_hand):
+    notes = part.flatten().notes
+
+    # Setup trivial case: [[1,1],[1,2],[1,3]...],[[2,1],[2,2]...]...
+    # entry_list = setupTrivialNotes(notes, is_left_hand)
+    entry_list = np.empty((5, 5), dtype=object)
+    entry_list[0, 0] = Entry([], [], 0)
+
+    for n in range(len(notes) - 1, -1, -1):
+        note_to_add = notes[n]
+
+        if note_to_add.tie and note_to_add.tie.type in ('continue', 'stop'):
+            continue
+
+        if note_to_add.isChord:
+            curr_notes = list(note_to_add.notes)  # [<note1>, <note2>, etc]
+        else:
+            curr_notes = [note_to_add]  # [<note_obj>]
+
+        # All possible fingerings for note / chord.
+        candidates = generateCandidates(note_to_add, is_left_hand)
+        new_entry_list = np.empty((len(candidates), entry_list.shape[0]), dtype=object)
+
+        # Iterate through all possible fingerings for the note
+        for c in range(len(candidates)):  # candidate could be [1] or [1, 3, 5]
+            candidate = candidates[c]
+
+            # Iterate through all previous optimal fingerings
+            for i in range(entry_list.shape[0]):
+                e = []
+
+                # Calculate new entry with new note and fingering added
+                for j in range(entry_list.shape[1]):
+                    if entry_list[i, j] is None:
+                        continue
+
+                    # Chord
+                    if len(curr_notes) > 1:
+                        internal = sum(getInternalScore(curr_notes, candidate, is_left_hand))
+                        # Extended rules beyond parncutt. Comment out for pure parncutt
+                        # internal += outer_fingers_penalty(candidate)
+                        # internal += spacing_penalty(candidate)
+
+                    e.append(Entry(
+                        [candidate] + entry_list[i, j].fingerings,
+                        [curr_notes] + entry_list[i, j].notes,
+                        calculateScoreTest(is_left_hand, candidate, curr_notes, entry_list[i, j]) + entry_list[i,j].score
+                    ))
+
+                if not e:
+                    continue
+
+                # Take the minimum of calculated scores for new optimal entry
+                best_candidate = min(e)
+                existing = new_entry_list[c, i]
+                # print(best_candidate.score)
+
+                if existing is None or best_candidate < existing:
+                    new_entry_list[c, i] = best_candidate
+
+        entry_list = new_entry_list
+
+        # Iterate through resulting array of entries to find optimal fingering
+    best = None
+    for entry in entry_list.flat:
+        if (entry != None):
+            if best == None or entry < best[0]:
+                best = [entry]
+            elif entry == best[0]:
+                best.append(entry)
+
+    if is_left_hand:
+        for entry in best:
+            entry.fingerings = [
+                [f * -1 for f in fingering]
+                for fingering in entry.fingerings
+            ]
+    return best
+
+
+def calculateScoreTest(is_left_hand, curr_fingerings, curr_notes, entry):
+
+    total = 0
+    if len(entry.notes) == 0:
+        prev_note_length = 0
+    else:
+        prev_notes = entry.notes[0]
+        prev_fingerings = entry.fingerings[0]
+        prev_note_length = len(prev_notes)
+
+    if len(entry.notes) <= 1:
+        prev_prev_note_length = 0
+    else:
+        prev_prev_notes = entry.notes[1]
+        prev_prev_fingerings = entry.fingerings[1]
+        prev_prev_note_length = len(prev_prev_notes)
+
+    for i in range(len(curr_notes)):
+        curr_note = curr_notes[i]
+        curr_fingering = curr_fingerings[i]
+
+        if prev_note_length != 0:
+            for j in range(prev_note_length):
+                prev_note = prev_notes[j]
+                prev_fingering = prev_fingerings[j]
+
+                if prev_prev_note_length != 0:
+                    for k in range(prev_prev_note_length):
+                        prev_prev_note = prev_prev_notes[k]
+                        prev_prev_fingering = prev_prev_fingerings[k]
+
+                        total += sum(getParncuttGivenNotesDP(
+                            is_left_hand, curr_note, [curr_fingering],
+                            prev_note, [prev_fingering],  # prev notes
+                            prev_prev_note, [prev_prev_fingering]  # prev prev notes
+                    ))
+                else:
+                    total += sum(getParncuttGivenNotesDP(
+                        is_left_hand, curr_note, [curr_fingering],
+                        prev_note, [prev_fingering],  # prev notes
+                        None, None  # prev prev notes
+                    ))
+        else:
+            total += sum(getParncuttGivenNotesDP(
+                is_left_hand, curr_note, [curr_fingering],
+                None, None,  # prev notes
+                None, None))  # prev prev notes
+
     return total
