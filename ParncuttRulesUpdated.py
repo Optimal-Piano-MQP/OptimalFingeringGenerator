@@ -386,13 +386,13 @@ def getParncuttRuleScore(inputStream):
 
 		isLeftHand = not isLeftHand
 		#first note in sequence
-		firstNote = None
+		firstEvent = None
 		firstEventAllFingerings = [0]
 		#middle note in sequence
 		secondEvent = None
 		secondEventAllFingerings = [0]
 		#third note in sequence
-		thirdNote = None
+		thirdEvent = None
 		thirdEventAllFingerings = [0]
 
 		for thirdEvent in part.recurse().notes:
@@ -435,11 +435,13 @@ def getParncuttRuleScore(inputStream):
 													   None, None, 
 													   thirdNote, thirdNoteFingering))
 			
-			for score in unnaggregatedScore:
-				print(score)
-				scoreCount += score
+			#for score in unnaggregatedScore:
+				#print(score)
+			#	scoreCount += score
 
-			# scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
+			aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
+			#print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
+			scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
 			firstEvent = secondEvent
 			firstEventAllFingerings = secondEventAllFingerings
@@ -463,6 +465,8 @@ def getParncuttRuleScore(inputStream):
 								Parn5OnBlack(None, secondNote, secondNoteFingering, None), 0])
 			
 		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
+		#for score in unnaggregatedScore:
+		#	scoreCount += score
 
 		scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
 
@@ -606,6 +610,8 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	firstNoteFingering = normalize_fingering(firstNoteFingering)
 	secondNoteFingering = normalize_fingering(secondNoteFingering)
 	thirdNoteFingering = normalize_fingering(thirdNoteFingering)
+
+	print(firstNote, secondNote, thirdNote)
 
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)

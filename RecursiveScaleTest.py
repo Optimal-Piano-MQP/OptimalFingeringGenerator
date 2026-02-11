@@ -252,10 +252,13 @@ def dp(part, is_left_hand):
 
                     # Chord
                     if(len(curr_notes) > 1):
-                        internal = sum(getInternalScore(curr_notes, candidate, is_left_hand))
+                        internal = getInternalScore(curr_notes, candidate, is_left_hand)
+                        internal = sum(internal)
                         # Extended rules beyond parncutt. Comment out for pure parncutt
-                        internal += outer_fingers_penalty(candidate)
-                        internal += spacing_penalty(candidate)
+                        #internal += outer_fingers_penalty(candidate)
+                        #internal += spacing_penalty(candidate)
+
+                        #print(internal, curr_notes, candidate)
 
                         temp_entry = Entry(
                             base_entry.fingerings,
@@ -265,6 +268,8 @@ def dp(part, is_left_hand):
 
                         for f, (finger, note) in enumerate(zip(candidate, curr_notes)):
                             score = calculateScore(is_left_hand, [finger], [note], temp_entry, prev_note_length, prev_prev_note_length, f)
+
+                            #print(score, candidate, curr_notes)
 
                             temp_entry = Entry(
                                 [[finger]] + temp_entry.fingerings,
@@ -317,14 +322,20 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
     #    same_fingering_penalty = 2 #if you change this value, also change it for the calculations of the trivial cases
 
     total = entry.score + same_fingering_penalty
+    tempScore = []
 
     # Get score from every note of prev note/chord and prev prev note/chord
     for i in range(prev_prev_note_length):
         for j in range(prev_note_length):
-            total += sum(getParncuttGivenNotesDP(
+            output = getParncuttGivenNotesDP(
                 is_left_hand, curr_note[0], curr_fingering,
                 entry.notes[0 + j + idx_in_chord][0], entry.fingerings[0 + j + idx_in_chord],   # prev notes
                 entry.notes[prev_note_length + i + idx_in_chord][0], entry.fingerings[prev_note_length + i + idx_in_chord] # prev prev notes
-            ))
-    
+            )
+            #print(f"{output} \t {curr_note[0].pitch}\t {entry.notes[0 + j + idx_in_chord][0].pitch} \t {entry.notes[prev_note_length + i + idx_in_chord][0].pitch} \t {curr_fingering} \t {entry.fingerings}")
+            tempScore.append(output)
+            #total += sum(output)
+    #print()
+    maxScores = np.max(np.array(tempScore), axis=0)
+    total += sum(maxScores)
     return total
