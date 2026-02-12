@@ -402,7 +402,7 @@ def dpTest(part, is_left_hand):
 
     # Setup trivial case: [[1,1],[1,2],[1,3]...],[[2,1],[2,2]...]...
     # entry_list = setupTrivialNotes(notes, is_left_hand)
-    entry_list = np.empty((5, 5), dtype=object)
+    entry_list = np.empty((1, 1), dtype=object)
     entry_list[0, 0] = Entry([], [], 0)
 
     for n in range(len(notes) - 1, -1, -1):
@@ -479,7 +479,7 @@ def dpTest(part, is_left_hand):
 
 def calculateScoreTest(is_left_hand, curr_fingerings, curr_notes, entry):
 
-    total = 0
+    total = []
     if len(entry.notes) == 0:
         prev_note_length = 0
     else:
@@ -508,21 +508,24 @@ def calculateScoreTest(is_left_hand, curr_fingerings, curr_notes, entry):
                         prev_prev_note = prev_prev_notes[k]
                         prev_prev_fingering = prev_prev_fingerings[k]
 
-                        total += sum(getParncuttGivenNotesDP(
+                        total += [getParncuttGivenNotesDP(
                             is_left_hand, curr_note, [curr_fingering],
                             prev_note, [prev_fingering],  # prev notes
                             prev_prev_note, [prev_prev_fingering]  # prev prev notes
-                    ))
+                    )]
                 else:
-                    total += sum(getParncuttGivenNotesDP(
+                    total += [getParncuttGivenNotesDP(
                         is_left_hand, curr_note, [curr_fingering],
                         prev_note, [prev_fingering],  # prev notes
                         None, None  # prev prev notes
-                    ))
+                    )]
         else:
-            total += sum(getParncuttGivenNotesDP(
+            total += [getParncuttGivenNotesDP(
                 is_left_hand, curr_note, [curr_fingering],
                 None, None,  # prev notes
-                None, None))  # prev prev notes
+                None, None  # prev prev notes
+            )]
 
-    return total
+    total = np.max(np.array(total), axis=0)
+
+    return sum(total)
