@@ -1,7 +1,7 @@
 from Algorithm import dp
 from FileConversion import file2Stream
 from AppendFingerings import addFingeringToPart
-from ParncuttRulesUpdated import getParncuttRuleScore, getInternalScore
+from ParncuttRulesHandling import getParncuttRuleScore, getInternalScore
 import music21
 
 step_test = ['C4', 'E4', 'D4', 'F4', 'E4', 'G4', 'F4', 'A4'] #step test (expected 12132435 or 13132435, for left 53423131 or 53423121)
@@ -25,7 +25,7 @@ def chord_testing():
 
 # Canon in d
 def canon_test():
-    score = file2Stream("music/furelise.musicxml")
+    score = file2Stream("music/canon.musicxml")
     rh = score.parts[0]
     lh = score.parts[1]
 
@@ -130,7 +130,7 @@ def score_test(test, fingering):
 
 # chord_testing()
 #print("canon")
-canon_test()
+#canon_test()
 #canon_halves_test()
 
 

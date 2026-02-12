@@ -1,6 +1,6 @@
 import math
 from copy import deepcopy
-from ParncuttRulesUpdated import getParncuttGivenNotesDP, getParncuttRuleScore, getInternalScore
+from ParncuttRulesHandling import getParncuttGivenNotesDP, getParncuttRuleScore, getInternalScore
 import music21
 from itertools import combinations
 import numpy as np
@@ -271,6 +271,7 @@ def dp(part, is_left_hand, doDP13 = False):
                     if(len(curr_notes) > 1):
                         internal = getInternalScore(curr_notes, candidate, is_left_hand)
                         internal = sum(internal)
+                      
                         # Extended rules beyond parncutt. Comment out for pure parncutt
                         #internal += outer_fingers_penalty(candidate)
                         #internal += spacing_penalty(candidate)
@@ -358,6 +359,7 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
                                                               None, None,    # prev notes
                                                               None, None, doDP13)  # prev prev notes
             tempScore.append(output)
+            #total += sum(output)
         else:
             for j in range(prev_note_length):
                 output = getParncuttGivenNotesDP(
@@ -367,6 +369,7 @@ def calculateScore(is_left_hand, curr_fingering, curr_note, entry, prev_note_len
                     doDP13# prev prev notes
                 )
                 tempScore.append(output)
+                #total += sum(output)
                 # print(j)
 
     # Get score from every note of prev note/chord and prev prev note/chord

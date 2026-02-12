@@ -74,11 +74,11 @@ Arr. by lemontart</credit-words>
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
-      <score-instrument id="I80a77577bc3de58a1eb226d6b88c9190">
+      <score-instrument id="I86d8e0bfe26ac282be3b95fde6ccdd50">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I80a77577bc3de58a1eb226d6b88c9190">
+      <midi-instrument id="I86d8e0bfe26ac282be3b95fde6ccdd50">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
