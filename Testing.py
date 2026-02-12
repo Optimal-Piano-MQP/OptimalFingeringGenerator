@@ -25,7 +25,7 @@ def chord_testing():
 
 # Canon in d
 def canon_test():
-    score = file2Stream("music/canon.musicxml")
+    score = file2Stream("music/furelise.musicxml")
     rh = score.parts[0]
     lh = score.parts[1]
 
