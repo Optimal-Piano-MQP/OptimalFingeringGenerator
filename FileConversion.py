@@ -10,7 +10,7 @@ def file2Stream(fname):
 		return convertPIGtoMusic21(fname)
 		#return PIG2Stream(fname)
 
-	print("parsing using", file_extension)
+	#print("parsing using", file_extension)
 	return converter.parse(fname)
 
 def convertPIGtoMusic21(filePath):
