@@ -19,18 +19,31 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route("/download/xml")
 def download_xml():
+    original_filename = request.args.get('filename', 'score')
+    # Remove extension and add 'annotated'
+    name_without_ext = os.path.splitext(original_filename)[0]
+    download_name = f"{name_without_ext}_annotated.xml"
+
     return send_from_directory(
         app.config["UPLOAD_FOLDER"],
         "annotated.xml",
-        as_attachment=True
+        as_attachment=True,
+        download_name=download_name
     )
+
 
 @app.route("/download/pdf")
 def download_pdf():
+    original_filename = request.args.get('filename', 'score')
+    # Remove extension and add 'annotated'
+    name_without_ext = os.path.splitext(original_filename)[0]
+    download_name = f"{name_without_ext}_annotated.pdf"
+
     return send_from_directory(
         "static",
         "annotated.pdf",
-        as_attachment=True
+        as_attachment=True,
+        download_name=download_name
     )
 
 
@@ -71,10 +84,12 @@ def render_pdf(xml_path, pdf_path):
         check=True
     )
 
+
 def to_python_ints(x):
     if isinstance(x, list):
         return [to_python_ints(v) for v in x]
     return int(x)
+
 
 @app.route("/", methods=["GET"])
 def index():
@@ -111,6 +126,7 @@ def process_file():
     """Process the uploaded file and apply fingerings"""
     data = request.get_json()
     filename = data.get("filename")
+    doDP13 = data.get("doDP13", False)  # Get the toggle value, default False
 
     if not filename:
         return jsonify({"error": "No filename provided"}), 400
@@ -126,13 +142,15 @@ def process_file():
     results = {}
 
     if hands["right"]:
-        right_best = dp(hands["right"], is_left_hand=False)[0]
+        right_best = dp(hands["right"], is_left_hand=False, doDP13=doDP13)[0]
         addFingeringToPart(hands["right"], right_best.fingerings)
         results["right"] = right_best
 
     if hands["left"]:
-        left_best = dp(hands["left"], is_left_hand=True)[0]
-        addFingeringToPart(hands["left"], left_best.fingerings)
+        left_best = dp(hands["left"], is_left_hand=True, doDP13=doDP13)[0]
+        # Convert negative fingerings to positive for display
+        positive_fingerings = [[abs(f) for f in finger_list] for finger_list in left_best.fingerings]
+        addFingeringToPart(hands["left"], positive_fingerings)
         results["left"] = left_best
 
     annotated_xml = os.path.join(app.config["UPLOAD_FOLDER"], "annotated.xml")
@@ -143,8 +161,8 @@ def process_file():
 
     result = {
         "pdf_url": url_for("static", filename="annotated.pdf"),
-        "xml_url": url_for("download_xml"),
-        "pdf_download_url": url_for("download_pdf"),
+        "xml_url": url_for("download_xml", filename=filename),
+        "pdf_download_url": url_for("download_pdf", filename=filename),
         "hands": {}
     }
 

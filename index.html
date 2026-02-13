@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Optimal Piano Fingering Generator</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Optimal Piano Fingering Generator</h1>
+
+    <h2>Instructions:</h2>
+
+    <ol>
+        <li>Find an xml, mxl, or musicxml file of piano sheet music you would like to learn.
+            <b>Stuck?</b> Try searching <a href="https://musescore.com/">MUSESCORE</a> for one
+        </li>
+        <li>Upload & submit your file with the buttons below</li>
+        <li>View your generated fingering</li>
+    </ol>
+
+    <div class="button-container">
+        <form id="uploadForm" style="display: inline-block;">
+            <input class="upload" type="file" name="file" id="fileInput" required style="display: none;">
+            <button class="submit" type="button" id="selectFileBtn">Select & Upload File</button>
+            <button class="submit" type="submit" id="generateBtn" style="display: none;">Generate Fingerings</button>
+        </form>
+
+        <div id="downloadButtons" style="display: none; margin-left: 10px; color: blue">
+            <a href="#" id="downloadXml" download class="download-btn">Download XML</a>
+            <a href="#" id="downloadPdf" download class="download-btn">Download PDF</a>
+        </div>
+    </div>
+
+    <div id="optionsContainer" style="display: none; margin-top: 15px;">
+        <label class="toggle-container">
+            <input type="checkbox" id="doDP13Toggle">
+            <span class="toggle-label">Enable DP13 Mode</span>
+        </label>
+    </div>
+
+    <p id="fileName" style="margin-top: 10px; font-style: italic; color: #666;"></p>
+
+    <div id="loadingSpinner" style="display: none; text-align: center; margin: 30px 0;">
+        <div class="spinner"></div>
+        <p>Processing your score...</p>
+    </div>
+
+    <div id="pdfViewer" style="display: none; text-align: center; margin-top: 30px;">
+        <h2 id="viewerTitle"></h2>
+        <iframe id="pdfFrame" width="60%" height="600px" style="border:none;"></iframe>
+    </div>
+
+</div>
+
+<script>
+let uploadedFilename = null;
+let isProcessed = false;
+
+const fileInput = document.getElementById('fileInput');
+const selectFileBtn = document.getElementById('selectFileBtn');
+const generateBtn = document.getElementById('generateBtn');
+const loadingSpinner = document.getElementById('loadingSpinner');
+const pdfViewer = document.getElementById('pdfViewer');
+const viewerTitle = document.getElementById('viewerTitle');
+const pdfFrame = document.getElementById('pdfFrame');
+const downloadButtons = document.getElementById('downloadButtons');
+const fileName = document.getElementById('fileName');
+const optionsContainer = document.getElementById('optionsContainer');
+const doDP13Toggle = document.getElementById('doDP13Toggle');
+
+// Trigger file input when button is clicked
+selectFileBtn.addEventListener('click', function() {
+    fileInput.click();
+});
+
+// Auto-upload when file is selected
+fileInput.addEventListener('change', async function() {
+    if (!fileInput.files[0]) return;
+
+    uploadedFilename = null;
+    isProcessed = false;
+    fileName.textContent = 'Selected: ' + fileInput.files[0].name;
+    selectFileBtn.disabled = true;
+    loadingSpinner.style.display = 'block';
+    pdfViewer.style.display = 'none';
+    downloadButtons.style.display = 'none'; // Hide download buttons
+    generateBtn.style.display = 'none';
+    optionsContainer.style.display = 'none';
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            uploadedFilename = data.xml_path;
+
+            // Show original score
+            viewerTitle.textContent = 'Original Score';
+            pdfFrame.src = data.pdf_url + '?t=' + new Date().getTime();
+            pdfViewer.style.display = 'block';
+
+            // Show options and generate button
+            optionsContainer.style.display = 'block';
+            generateBtn.style.display = 'inline-block';
+            selectFileBtn.textContent = 'Upload New File';
+        } else {
+            alert('Error: ' + data.error);
+            fileName.textContent = '';
+        }
+    } catch (error) {
+        alert('Upload failed: ' + error.message);
+        fileName.textContent = '';
+    } finally {
+        selectFileBtn.disabled = false;
+        loadingSpinner.style.display = 'none';
+    }
+});
+
+// Handle fingering generation
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    if (!uploadedFilename || isProcessed) return;
+
+    generateBtn.disabled = true;
+    loadingSpinner.style.display = 'block';
+
+    try {
+        const response = await fetch('/process', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                filename: uploadedFilename,
+                doDP13: doDP13Toggle.checked
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.pdf_url) {
+            // Update to show annotated score
+            viewerTitle.textContent = 'Annotated Score with Fingerings';
+            pdfFrame.src = data.pdf_url + '?t=' + new Date().getTime();
+
+            // Set download links
+            document.getElementById('downloadXml').href = data.xml_url;
+            document.getElementById('downloadPdf').href = data.pdf_download_url;
+
+            // NOW show download buttons (only after annotation is complete)
+            downloadButtons.style.display = 'inline-block';
+
+            isProcessed = true;
+            generateBtn.style.display = 'none';
+            optionsContainer.style.display = 'none';
+        } else {
+            alert('Error: ' + (data.error || 'Processing failed'));
+        }
+    } catch (error) {
+        alert('Processing failed: ' + error.message);
+    } finally {
+        loadingSpinner.style.display = 'none';
+        generateBtn.disabled = false;
+    }
+});
+</script>
+
+</body>
+</html>
