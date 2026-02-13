@@ -39,6 +39,13 @@
         </div>
     </div>
 
+    <div id="optionsContainer" style="display: none; margin-top: 15px;">
+        <label class="toggle-container">
+            <input type="checkbox" id="doDP13Toggle">
+            <span class="toggle-label">Enable DP13 Mode</span>
+        </label>
+    </div>
+
     <p id="fileName" style="margin-top: 10px; font-style: italic; color: #666;"></p>
 
     <div id="loadingSpinner" style="display: none; text-align: center; margin: 30px 0;">
@@ -66,6 +73,8 @@ const viewerTitle = document.getElementById('viewerTitle');
 const pdfFrame = document.getElementById('pdfFrame');
 const downloadButtons = document.getElementById('downloadButtons');
 const fileName = document.getElementById('fileName');
+const optionsContainer = document.getElementById('optionsContainer');
+const doDP13Toggle = document.getElementById('doDP13Toggle');
 
 // Trigger file input when button is clicked
 selectFileBtn.addEventListener('click', function() {
@@ -84,6 +93,7 @@ fileInput.addEventListener('change', async function() {
     pdfViewer.style.display = 'none';
     downloadButtons.style.display = 'none'; // Hide download buttons
     generateBtn.style.display = 'none';
+    optionsContainer.style.display = 'none';
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
@@ -104,7 +114,8 @@ fileInput.addEventListener('change', async function() {
             pdfFrame.src = data.pdf_url + '?t=' + new Date().getTime();
             pdfViewer.style.display = 'block';
 
-            // Show generate button
+            // Show options and generate button
+            optionsContainer.style.display = 'block';
             generateBtn.style.display = 'inline-block';
             selectFileBtn.textContent = 'Upload New File';
         } else {
@@ -135,7 +146,10 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ filename: uploadedFilename })
+            body: JSON.stringify({
+                filename: uploadedFilename,
+                doDP13: doDP13Toggle.checked
+            })
         });
 
         const data = await response.json();
@@ -154,6 +168,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
 
             isProcessed = true;
             generateBtn.style.display = 'none';
+            optionsContainer.style.display = 'none';
         } else {
             alert('Error: ' + (data.error || 'Processing failed'));
         }
