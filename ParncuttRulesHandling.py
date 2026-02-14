@@ -57,9 +57,8 @@ def getParncuttRuleScore(inputStream):
 
 			#calculate internal scores for the chord
 			internalScore = getInternalScore(thirdEvent, thirdEventAllFingerings, isLeftHand)
-			#print(internalScore, thirdEvent)
 			scoreCount = np.array(scoreCount)
-			scoreCount += internalScore
+			scoreCount = scoreCount + np.array(internalScore)
 
 			unnaggregatedScore = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 			for i in range(len(thirdEvent)):
@@ -85,9 +84,6 @@ def getParncuttRuleScore(inputStream):
 													   None, None, 
 													   thirdNote, thirdNoteFingering))
 			
-			#for score in unnaggregatedScore:
-				#print(score)
-				#scoreCount = np.array(score) + np.array(scoreCount)
 
 			aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
 
@@ -115,12 +111,8 @@ def getParncuttRuleScore(inputStream):
 								Parn5OnBlack(None, secondNote, [secondNoteFingering], None), 0])
 			
 		aggregatedScore = np.max(np.array(unnaggregatedScore), axis=0)
-		#for score in unnaggregatedScore:
-			#scoreCount = np.array(score) + np.array(scoreCount)
-		#print(aggregatedScore, firstEvent, secondEvent, thirdEvent)
 
 		scoreCount = np.array(scoreCount) + np.array(aggregatedScore)
-
 
 	return scoreCount, totalNotes
 
@@ -133,7 +125,6 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(thirdNoteFingering)
-		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 		return scoreCount
 
 	if thirdNote is not None:
@@ -224,8 +215,6 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
 	# Rule 12: 1 passing rule: when the thumb passes over or under, 1 point if same level,
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering)
-
-	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
   
 	return scoreCount
 
@@ -240,7 +229,6 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 
 	if secondNote is None:
 		scoreCount[5] += ParnWeakFinger(firstNoteFingering)
-		#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
 		return scoreCount
 
 	if thirdNote is not None:
@@ -336,8 +324,6 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	if doDP13:
 		scoreCount[12] += RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering)
 
-	#print(firstNote, firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering, sum(scoreCount), scoreCount)
-
 	return scoreCount
 
 def generateRandomFingerings(score):
@@ -351,7 +337,6 @@ def generateRandomFingerings(score):
 
 			if isinstance(item, music21.harmony.Harmony):
 				continue
-				#print(item)
 			elif item.isNote and fingeringCount == 0:
 				item.articulations.append(articulations.Fingering(random.randint(1, 5)))
 			elif item.isChord and fingeringCount < len(item.notes):

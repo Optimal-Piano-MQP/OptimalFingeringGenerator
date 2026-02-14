@@ -87,7 +87,7 @@ def ParnPosChange(isLeftHand, noteInterval, firstNote, firstNoteFingering, secon
 
 	#PosChangeCount
 	if posChange:
-		if 1 in secondNoteFingering and (noteInterval * interval.Interval(firstNote.pitch, secondNote.pitch).semitones >= 0
+		if 1 in secondNoteFingering and (interval.Interval(secondNote.pitch, thirdNote.pitch).semitones * interval.Interval(firstNote.pitch, secondNote.pitch).semitones >= 0
 								   and (firstThirdInterval > firstThirdMaxPrac or firstThirdInterval < firstThirdMinPrac)):
 			output[0] += 2
 		else:
@@ -257,7 +257,6 @@ def getFingeringChord(chord, keepSign = False):
 	for a in chord.articulations:
 		if isinstance(a, articulations.Fingering):
 			allFingerings = str(a.fingerNumber).split('\n')
-			# allFingerings = allFingerings.split('\n')
 			for fingering in allFingerings:
 				fingering = int(fingering)
 				if not keepSign:

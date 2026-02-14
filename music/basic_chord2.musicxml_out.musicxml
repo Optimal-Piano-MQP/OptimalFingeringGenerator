@@ -4,13 +4,13 @@
   <work>
     <work-title>Untitled score</work-title>
   </work>
-  <movement-title>basic_chord.musicxml</movement-title>
+  <movement-title>basic_chord2.musicxml</movement-title>
   <identification>
     <creator type="composer">Composer / arranger</creator>
     <encoding>
       <encoding-date>2026-02-14</encoding-date>
       <software>music21 v.9.9.1</software>
-      <software>MuseScore Studio 4.6.4</software>
+      <software>MuseScore Studio 4.6.3</software>
       <supports attribute="new-system" element="print" type="yes" value="yes" />
       <supports attribute="new-page" element="print" type="yes" value="yes" />
     </encoding>
@@ -64,23 +64,23 @@
     <lyric-font font-family="Edwin" font-size="10" />
   </defaults>
   <credit page="1">
-    <credit-words default-x="616.935484" default-y="1511.049022" font-size="22" justify="center" valign="top">Untitled score</credit-words>
+    <credit-words default-x="616.935" default-y="1511.0448" font-size="22" justify="center" valign="top">Untitled score</credit-words>
   </credit>
   <credit page="1">
-    <credit-words default-x="616.935484" default-y="1453.898908" font-size="14" justify="center" valign="top">Subtitle</credit-words>
+    <credit-words default-x="616.935" default-y="1453.894677" font-size="14" justify="center" valign="top">Subtitle</credit-words>
   </credit>
   <credit page="1">
-    <credit-words default-x="1148.145796" default-y="1411.049022" justify="right" valign="bottom">Composer / arranger</credit-words>
+    <credit-words default-x="1148.1448" default-y="1406.044771" justify="right" valign="bottom">Composer / arranger</credit-words>
   </credit>
   <part-list>
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
-      <score-instrument id="Ie4115e6ffad30b8f3b9290c33ee89ac8">
+      <score-instrument id="Id01461a55ed2ff8b046c54d37be8460f">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Ie4115e6ffad30b8f3b9290c33ee89ac8">
+      <midi-instrument id="Id01461a55ed2ff8b046c54d37be8460f">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
@@ -96,7 +96,7 @@
             <left-margin>50</left-margin>
             <right-margin>0</right-margin>
           </system-margins>
-          <top-system-distance>170</top-system-distance>
+          <top-system-distance>175</top-system-distance>
         </system-layout>
       </print>
       <attributes>
@@ -118,7 +118,7 @@
           <line>4</line>
         </clef>
       </attributes>
-      <note default-x="82.98" default-y="-35">
+      <note default-x="82.97" default-y="-35">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -134,7 +134,7 @@
           </technical>
         </notations>
       </note>
-      <note default-x="82.98" default-y="-25">
+      <note default-x="82.97" default-y="-25">
         <chord />
         <pitch>
           <step>A</step>
@@ -151,7 +151,7 @@
           </technical>
         </notations>
       </note>
-      <note default-x="82.98" default-y="-15">
+      <note default-x="82.97" default-y="-15">
         <chord />
         <pitch>
           <step>C</step>
@@ -168,7 +168,7 @@
           </technical>
         </notations>
       </note>
-      <note default-x="82.98" default-y="-5">
+      <note default-x="82.97" default-y="-5">
         <chord />
         <pitch>
           <step>E</step>
@@ -185,7 +185,7 @@
           </technical>
         </notations>
       </note>
-      <note default-x="82.98" default-y="5">
+      <note default-x="82.97" default-y="5">
         <chord />
         <pitch>
           <step>G</step>
@@ -219,10 +219,102 @@
       <backup>
         <duration>40320</duration>
       </backup>
-      <note default-x="131.96" default-y="-115">
-        <rest measure="yes" />
-        <duration>40320</duration>
+      <note default-x="82.97" default-y="-140">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration>
         <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-5</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="82.97" default-y="-130">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-4</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="82.97" default-y="-120">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-3</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="82.97" default-y="-110">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-2</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="82.97" default-y="-100">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="120.39" default-y="-125">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <staff>2</staff>
+      </note>
+      <note default-x="157.81" default-y="-125">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
         <staff>2</staff>
       </note>
     </measure>
@@ -312,10 +404,85 @@
       <backup>
         <duration>40320</duration>
       </backup>
-      <note default-x="65.23" default-y="-115">
-        <rest measure="yes" />
-        <duration>40320</duration>
+      <note default-x="12.5" default-y="-130">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
         <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-5</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="12.5" default-y="-120">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-3</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="12.5" default-y="-110">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-2</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="12.5" default-y="-100">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="49.92" default-y="-125">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <staff>2</staff>
+      </note>
+      <note default-x="87.33" default-y="-125">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
         <staff>2</staff>
       </note>
     </measure>
@@ -388,10 +555,68 @@
       <backup>
         <duration>40320</duration>
       </backup>
-      <note default-x="65.23" default-y="-115">
-        <rest measure="yes" />
-        <duration>40320</duration>
+      <note default-x="12.5" default-y="-120">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
         <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-3</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="12.5" default-y="-110">
+        <chord />
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-2</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="12.5" default-y="-100">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="49.92" default-y="-125">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <staff>2</staff>
+      </note>
+      <note default-x="87.33" default-y="-125">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
         <staff>2</staff>
       </note>
     </measure>
@@ -447,10 +672,51 @@
       <backup>
         <duration>40320</duration>
       </backup>
-      <note default-x="65.23" default-y="-115">
-        <rest measure="yes" />
-        <duration>40320</duration>
+      <note default-x="12.5" default-y="-110">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
         <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-2</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="12.5" default-y="-100">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="49.92" default-y="-125">
+        <rest />
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <staff>2</staff>
+      </note>
+      <note default-x="87.33" default-y="-125">
+        <rest />
+        <duration>20160</duration>
+        <voice>2</voice>
+        <type>half</type>
         <staff>2</staff>
       </note>
     </measure>
@@ -523,11 +789,69 @@
       <backup>
         <duration>40320</duration>
       </backup>
-      <note default-x="74.58" default-y="-115">
-        <rest measure="yes" />
-        <duration>40320</duration>
+      <note default-x="12.5" default-y="-100">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
         <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
         <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="49.92" default-y="-100">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="87.33" default-y="-100">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
+      </note>
+      <note default-x="124.75" default-y="-100">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration>
+        <voice>2</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">-1</fingering>
+          </technical>
+        </notations>
       </note>
     </measure>
     <!--========================= Measure 6 ==========================-->
@@ -574,7 +898,7 @@
             <left-margin>0</left-margin>
             <right-margin>0</right-margin>
           </system-margins>
-          <system-distance>201.77</system-distance>
+          <system-distance>200.11</system-distance>
         </system-layout>
       </print>
       <note default-x="85.41" default-y="-10">
@@ -766,7 +1090,7 @@
             <left-margin>0</left-margin>
             <right-margin>0</right-margin>
           </system-margins>
-          <system-distance>201.77</system-distance>
+          <system-distance>200.11</system-distance>
         </system-layout>
       </print>
       <note default-x="85.41" default-y="-10">
@@ -958,7 +1282,7 @@
             <left-margin>0</left-margin>
             <right-margin>0</right-margin>
           </system-margins>
-          <system-distance>201.77</system-distance>
+          <system-distance>200.11</system-distance>
         </system-layout>
       </print>
       <note default-x="135.2" default-y="-10">
