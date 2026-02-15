@@ -469,12 +469,12 @@ def dp(part, is_left_hand, doDP13 = False):
             elif entry == best[0]:
                 best.append(entry)
 
-    if is_left_hand:
-        for entry in best:
-            entry.fingerings = [
-                [f * -1 for f in fingering]
-                for fingering in entry.fingerings
-            ]
+    #if is_left_hand:
+     #   for entry in best:
+      #      entry.fingerings = [
+       #         [f * -1 for f in fingering]
+        #        for fingering in entry.fingerings
+         #   ]
     return best
 
 

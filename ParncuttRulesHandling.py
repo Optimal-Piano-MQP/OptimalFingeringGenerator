@@ -18,7 +18,7 @@ def getParncuttRuleScore(inputStream):
 	parts = score.recurse().parts
 	isLeftHand = False
 
-	normalizeScore(parts, isLeftHand)
+	#normalizeScore(parts, isLeftHand)
 
 	isLeftHand = True
 

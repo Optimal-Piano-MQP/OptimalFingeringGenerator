@@ -107,7 +107,7 @@ def score_test(test, fingering):
 
 # chord_testing()
 #print("canon")
-#canon_test()
+canon_test()
 #canon_test(doDP13=True) #WILL RESULT IS MISSMATCH SCORE OUTPUTS
 
 #finger_file("music/canon_firstPage_right.musicxml")
