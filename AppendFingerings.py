@@ -1,5 +1,6 @@
 from music21 import articulations
 
+#for fingerings in form [[1], [2], [3]]
 '''def addFingeringToPart(part, fingering):
     notes = part.recurse().notes
     num_notes = len(notes)
@@ -24,8 +25,9 @@ from music21 import articulations
                 i -= 1
             j += 1'''
 
+#for fingerings in form [[1, 3, 5], [1]]
 def addFingeringToPart(part, fingering):
-    notes = part.recurse().notes
+    notes = part.flatten().notes
     num_notes = len(notes)
     j = 0
 

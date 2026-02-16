@@ -65,20 +65,26 @@ def finger_file(filename, is_left_hand=False, doDP13=False):
 
 def finger_file_two_hands(filename):
     score = file2Stream(filename)
-    rh = score.parts[0]
-    lh = score.parts[1]
+    parts = score.recurse().parts
+    rh = parts[0].chordify()
+    lh = parts[1].chordify()
 
     optimal = dp(rh, False)[0]
     optimal_lh = dp(lh, True)[0]
     #print(optimal.fingerings)
     print(optimal.score, optimal_lh.score, optimal.score + optimal_lh.score)
+    print(optimal.scoreArray + optimal_lh.scoreArray)
     fingering = optimal.fingerings
     fingering_lh = optimal_lh.fingerings
-   #print(fingering, fingering_lh)
+    print(fingering, fingering_lh)
     addFingeringToPart(rh, fingering)
     addFingeringToPart(lh, fingering_lh)
 
-    score.write("musicxml", f"{filename}_out.musicxml")
+    newScore = music21.stream.Score()
+    newScore.append(rh)
+    newScore.append(lh)
+
+    newScore.write("musicxml", f"{filename}_out.musicxml")
 
 def run_test(test, is_left_hand=False):
     part = music21.stream.Part()
@@ -107,7 +113,7 @@ def score_test(test, fingering):
 
 # chord_testing()
 #print("canon")
-canon_test()
+#canon_test()
 #canon_test(doDP13=True) #WILL RESULT IS MISSMATCH SCORE OUTPUTS
 
 #finger_file("music/canon_firstPage_right.musicxml")
@@ -124,9 +130,13 @@ canon_test()
 #print("basic chord")
 #finger_file("music/basic_chord.musicxml")
 #test_file("music/basic_chord.musicxml_out.musicxml")
+# finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
+#test_file("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl_out.musicxml")
 
-#finger_file_two_hands("music/furelise.musicxml")
-#test_file("music/furelise.musicxml_out.musicxml")
+#finger_file_two_hands("music/voicesTesting.musicxml") #no voices
+#test_file("music/voicesTesting.musicxml_out.musicxml") 
+#finger_file_two_hands("music/voicesTesting2.musicxml") #voices
+#test_file("music/voicesTesting2.musicxml_out.musicxml")
 
 #print("three chord")
 #finger_file("music/three_chord.musicxml")

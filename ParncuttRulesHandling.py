@@ -23,7 +23,8 @@ def getParncuttRuleScore(inputStream):
 	isLeftHand = True
 
 	for part in parts:
-		totalNotes += len(part.recurse().notes)
+		notes = part.flatten().notes
+		totalNotes += len(notes)
 
 		isLeftHand = not isLeftHand
 		#first note in sequence
@@ -39,7 +40,7 @@ def getParncuttRuleScore(inputStream):
 		events = []
 
 		# remove non-scored notes like ends of ties
-		for n in part.recurse().notes:
+		for n in notes:
 			if isinstance(n, music21.harmony.Harmony):
 				continue
 			if n.tie and n.tie.type in ('continue', 'stop'):

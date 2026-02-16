@@ -8,7 +8,7 @@
   <identification>
     <creator type="composer">Johann Pachelbel</creator>
     <encoding>
-      <encoding-date>2026-02-14</encoding-date>
+      <encoding-date>2026-02-15</encoding-date>
       <software>music21 v.9.9.1</software>
       <software>MuseScore Studio 4.6.4</software>
       <supports attribute="new-system" element="print" type="yes" value="yes" />
@@ -74,11 +74,11 @@ Arr. by lemontart</credit-words>
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
-      <score-instrument id="I39f6af12dc7140eec3af4a0eacfc2add">
+      <score-instrument id="Id80fcd16509fa2877a2d6be71f60e311">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I39f6af12dc7140eec3af4a0eacfc2add">
+      <midi-instrument id="Id80fcd16509fa2877a2d6be71f60e311">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
