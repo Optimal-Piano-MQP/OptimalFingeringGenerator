@@ -130,12 +130,12 @@ def score_test(test, fingering):
 #print("basic chord")
 #finger_file("music/basic_chord.musicxml")
 #test_file("music/basic_chord.musicxml_out.musicxml")
-# finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
+finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
 #test_file("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl_out.musicxml")
 
 #finger_file_two_hands("music/voicesTesting.musicxml") #no voices
 #test_file("music/voicesTesting.musicxml_out.musicxml") 
-#finger_file_two_hands("music/voicesTesting2.musicxml") #voices
+finger_file_two_hands("music/voicesTesting2.musicxml") #voices
 #test_file("music/voicesTesting2.musicxml_out.musicxml")
 
 #print("three chord")

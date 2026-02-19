@@ -42,7 +42,7 @@ def split_hands(score):
     parts = score.parts
 
     if len(parts) == 1:
-        part = parts[0]
+        part = parts[0].chordify()
         right_notes = []
         left_notes = []
 
@@ -60,8 +60,8 @@ def split_hands(score):
         }
 
     return {
-        "right": parts[0],
-        "left": parts[1] if len(parts) > 1 else None
+        "right": parts[0].chordify(),
+        "left": parts[1].chordify() if len(parts) > 1 else None
     }
 
 
@@ -137,8 +137,12 @@ def process_file():
 
     annotated_xml = os.path.join(app.config["UPLOAD_FOLDER"], "annotated.xml")
     annotated_pdf = os.path.join("static", "annotated.pdf")
+     
+    newScore = music21.stream.Score()
+    newScore.append(hands["right"])
+    newScore.append(hands["left"])
 
-    score.write("musicxml", annotated_xml)
+    newScore.write("musicxml", annotated_xml)
     render_pdf(annotated_xml, annotated_pdf)
 
     result = {
