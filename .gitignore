@@ -181,3 +181,4 @@ pyrightconfig.json
 /.vs/VSWorkspaceState.json
 /uploads
 /scaleTest.musicxml
+/AccuracyComparison.py
