@@ -40,11 +40,21 @@ def getParncuttRuleScore(inputStream):
 		events = []
 
 		# remove non-scored notes like ends of ties
+		previous_tied_note_pitches = None
 		for n in notes:
 			if isinstance(n, music21.harmony.Harmony):
 				continue
+
+			if n.tie and n.tie.type in ('start'):
+				previous_tied_note_pitches = n.pitches
 			if n.tie and n.tie.type in ('continue', 'stop'):
-				continue
+				if n.pitches == previous_tied_note_pitches:
+					continue
+				elif n.tie.type in ('continue'):
+					previous_tied_note_pitches = n.pitches
+				elif n.tie.type in ('stop'):
+					previous_tied_note_pitches = None
+					
 			events.append(n)
 
 		for thirdEvent in events:

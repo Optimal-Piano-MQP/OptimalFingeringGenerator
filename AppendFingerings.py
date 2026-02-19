@@ -34,8 +34,9 @@ def addFingeringToPart(part, fingering):
     for i in range(num_notes):
         note = notes[i]
         if note.tie and note.tie.type in ('continue', 'stop'):
-            j += 1
-            continue
+            if note.pitches == notes[i - 1].pitches:
+                j += 1
+                continue
 
         if note.isNote:
             note.articulations.append(articulations.Fingering(fingering[i - j][0]))

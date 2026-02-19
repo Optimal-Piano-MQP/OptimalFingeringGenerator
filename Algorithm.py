@@ -399,17 +399,25 @@ def dp(part, is_left_hand, doDP13 = False):
     # entry_list = setupTrivialNotes(notes, is_left_hand)
     entry_list = np.empty((5, 5), dtype=object)
     entry_list[0, 0] = Entry([], [], 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    is_tied_note_pitches = None
 
     for n in range(len(notes) - 1, -1, -1):
         note_to_add = notes[n]
-
-        if note_to_add.tie and note_to_add.tie.type in ('continue', 'stop'):
-            continue
 
         if note_to_add.isChord:
             curr_notes = list(note_to_add.notes)  # [<note1>, <note2>, etc]
         else:
             curr_notes = [note_to_add]  # [<note_obj>]
+
+        if note_to_add.tie:
+            if note_to_add.tie.type in ('continue', 'start'):
+                if note_to_add.pitches == is_tied_note_pitches:
+                    continue
+                else:
+                    is_tied_note_pitches = note_to_add.pitches
+                    
+            elif note_to_add.tie.type in ('stop'):
+                is_tied_note_pitches = note_to_add.pitches
 
         # All possible fingerings for note / chord.
         candidates = generateCandidates(note_to_add, is_left_hand)

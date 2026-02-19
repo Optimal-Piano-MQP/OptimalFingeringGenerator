@@ -19,11 +19,11 @@
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno</part-abbreviation>
-      <score-instrument id="I4fd8e0bd4d63455a99f768f60e50c7db">
+      <score-instrument id="Icd45f3f259e394ea2219ec6d55b94c14">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I4fd8e0bd4d63455a99f768f60e50c7db">
+      <midi-instrument id="Icd45f3f259e394ea2219ec6d55b94c14">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
@@ -31,11 +31,11 @@
     <score-part id="P2">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno</part-abbreviation>
-      <score-instrument id="Ia5c6e1235ae6a49162097b950393a89b">
+      <score-instrument id="I288dbefe7abff9ea6195a546c9728525">
         <instrument-name>Piano</instrument-name>
         <instrument-abbreviation>Pno</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Ia5c6e1235ae6a49162097b950393a89b">
+      <midi-instrument id="I288dbefe7abff9ea6195a546c9728525">
         <midi-channel>2</midi-channel>
         <midi-program>1</midi-program>
       </midi-instrument>
@@ -131,7 +131,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -147,6 +147,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="34.45" default-y="-15">
@@ -157,6 +160,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">5</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="58.91" default-y="-50">
         <pitch>
@@ -183,7 +191,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -230,6 +238,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="107.81" default-y="-45">
@@ -240,6 +251,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">2</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="132.27" default-y="-45">
         <pitch>
@@ -302,6 +318,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="34.45" default-y="-15">
@@ -312,6 +331,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">5</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="58.91" default-y="-50">
         <pitch>
@@ -338,7 +362,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -385,6 +409,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="107.81" default-y="-45">
@@ -395,6 +422,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">2</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="132.27" default-y="-45">
         <pitch>
@@ -699,7 +731,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -715,6 +747,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="34.45" default-y="-15">
@@ -725,6 +760,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">5</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="58.91" default-y="-50">
         <pitch>
@@ -751,7 +791,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -798,6 +838,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="107.81" default-y="-45">
@@ -808,6 +851,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">2</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="132.27" default-y="-45">
         <pitch>
@@ -870,6 +918,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="34.45" default-y="-15">
@@ -880,6 +931,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">5</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="58.91" default-y="-50">
         <pitch>
@@ -906,7 +962,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -953,6 +1009,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="107.81" default-y="-45">
@@ -963,6 +1022,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">2</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="132.27" default-y="-45">
         <pitch>
@@ -1034,6 +1098,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">2</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="102.76" default-y="-35">
@@ -1045,6 +1112,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">4</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="124.31" default-y="-45">
         <pitch>
@@ -1118,6 +1190,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="171.14" default-y="-25">
@@ -1128,6 +1203,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">4</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="192.69" default-y="-40">
         <pitch>
@@ -1188,7 +1268,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">5</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -1204,6 +1284,9 @@
         <beam number="1">continue</beam>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="29.16" default-y="-15">
@@ -1214,6 +1297,11 @@
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">5</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="48.33" default-y="-50">
         <pitch>
@@ -1240,7 +1328,7 @@
         <type>eighth</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">3</fingering>
           </technical>
         </notations>
       </note>
@@ -2813,7 +2901,7 @@
         <type>quarter</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -2844,7 +2932,7 @@
         <dot />
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">2</fingering>
+            <fingering alternate="no" substitution="no">3</fingering>
           </technical>
         </notations>
       </note>
@@ -2872,6 +2960,11 @@
         </pitch>
         <duration>10080</duration>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">2</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="93.85" default-y="-110">
         <chord />
@@ -2884,6 +2977,9 @@
         <type>quarter</type>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note>
@@ -2905,7 +3001,7 @@
         <dot />
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">3</fingering>
+            <fingering alternate="no" substitution="no">4</fingering>
           </technical>
         </notations>
       </note>
@@ -2933,6 +3029,11 @@
         </pitch>
         <duration>10080</duration>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">4</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="97.65" default-y="-90">
         <chord />
@@ -2945,6 +3046,9 @@
         <type>quarter</type>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note>
@@ -2964,7 +3068,7 @@
         <type>quarter</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">1</fingering>
+            <fingering alternate="no" substitution="no">2</fingering>
           </technical>
         </notations>
       </note>
@@ -3039,7 +3143,7 @@
         <type>quarter</type>
         <notations>
           <technical>
-            <fingering alternate="no" substitution="no">4</fingering>
+            <fingering alternate="no" substitution="no">5</fingering>
           </technical>
         </notations>
       </note>
@@ -3068,6 +3172,11 @@
         <duration>5040</duration>
         <type>eighth</type>
         <accidental>sharp</accidental>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">4</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="52.65" default-y="-105">
         <chord />
@@ -3082,6 +3191,9 @@
         <notations>
           <tied type="stop" />
           <tied type="start" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="81.47" default-y="-125">
@@ -3091,6 +3203,11 @@
         </pitch>
         <duration>10080</duration>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">3</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="81.47" default-y="-105">
         <chord />
@@ -3103,6 +3220,9 @@
         <type>quarter</type>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
         </notations>
       </note>
       <note>
@@ -3163,6 +3283,9 @@
         <dot />
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">5</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="221.06" default-y="-115">
@@ -3175,6 +3298,11 @@
         <duration>15120</duration>
         <type>quarter</type>
         <dot />
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
+        </notations>
       </note>
     </measure>
     <!--========================= Measure 16 =========================-->
@@ -3222,6 +3350,9 @@
         <type>quarter</type>
         <notations>
           <tied type="stop" />
+          <technical>
+            <fingering alternate="no" substitution="no">5</fingering>
+          </technical>
         </notations>
       </note>
       <note default-x="138.51" default-y="-120">
@@ -3232,6 +3363,11 @@
         </pitch>
         <duration>10080</duration>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <fingering alternate="no" substitution="no">1</fingering>
+          </technical>
+        </notations>
       </note>
       <note default-x="215.39" default-y="-130">
         <pitch>

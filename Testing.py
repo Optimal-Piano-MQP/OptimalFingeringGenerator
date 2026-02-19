@@ -63,20 +63,20 @@ def finger_file(filename, is_left_hand=False, doDP13=False):
 
     score.write("musicxml", f"{filename}_out.musicxml")
 
-def finger_file_two_hands(filename):
+def finger_file_two_hands(filename, output_path = None, doDP13 = False):
     score = file2Stream(filename)
     parts = score.recurse().parts
     rh = parts[0].chordify()
     lh = parts[1].chordify()
 
-    optimal = dp(rh, False)[0]
-    optimal_lh = dp(lh, True)[0]
+    optimal = dp(rh, False, doDP13)[0]
+    optimal_lh = dp(lh, True, doDP13)[0]
     #print(optimal.fingerings)
     print(optimal.score, optimal_lh.score, optimal.score + optimal_lh.score)
     print(optimal.scoreArray + optimal_lh.scoreArray)
     fingering = optimal.fingerings
     fingering_lh = optimal_lh.fingerings
-    print(fingering, fingering_lh)
+    #print(fingering, fingering_lh)
     addFingeringToPart(rh, fingering)
     addFingeringToPart(lh, fingering_lh)
 
@@ -84,7 +84,10 @@ def finger_file_two_hands(filename):
     newScore.append(rh)
     newScore.append(lh)
 
-    newScore.write("musicxml", f"{filename}_out.musicxml")
+    if output_path is None:
+        newScore.write("musicxml", f"{filename}_out.musicxml")
+    else:
+        newScore.write("musicxml", output_path)
 
 def run_test(test, is_left_hand=False):
     part = music21.stream.Part()
@@ -131,11 +134,13 @@ def score_test(test, fingering):
 #finger_file("music/basic_chord.musicxml")
 #test_file("music/basic_chord.musicxml_out.musicxml")
 finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
-#test_file("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl_out.musicxml")
+finger_file_two_hands("music/canon.musicxml")
+test_file("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl_out.musicxml")
+test_file("music/canon.musicxml_out.musicxml")
 
 #finger_file_two_hands("music/voicesTesting.musicxml") #no voices
 #test_file("music/voicesTesting.musicxml_out.musicxml") 
-finger_file_two_hands("music/voicesTesting2.musicxml") #voices
+#finger_file_two_hands("music/voicesTesting2.musicxml") #voices
 #test_file("music/voicesTesting2.musicxml_out.musicxml")
 
 #print("three chord")
@@ -154,3 +159,34 @@ finger_file_two_hands("music/voicesTesting2.musicxml") #voices
 # run_test(fscale)
 # score_test(fscale, [[1], [2], [3], [3], [1], [2], [3], [4]])
 # score_test(fscale, [[1], [1], [2], [2], [3], [4], [5], [5]])
+
+import os
+
+def fingerFullDirectory(input_dir, output_dir, output_dir_dp13):
+    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(output_dir_dp13, exist_ok=True),
+
+    count = 0
+    errors = 0
+    total = sum([len(files) for r, d, files in os.walk(input_dir)])
+
+    for root, dirs, files in os.walk(input_dir):
+        for filename in files:
+            input_path = os.path.join(root, filename)
+            output_path = os.path.join(output_dir, f"{os.path.splitext(filename)[0]}_output")
+            output_path_dp13 = os.path.join(output_dir_dp13, f"{os.path.splitext(filename)[0]}_output_dp13")
+            
+            try:
+                print(f"{count / total:.2%} Processing: ", filename)
+                print("\tProcessing DP")
+                finger_file_two_hands(input_path, output_path)
+                print("\tProcessing DP13")
+                finger_file_two_hands(input_path, output_path_dp13, True)
+                count += 1
+                #print(output_path)
+            except:
+                errors += 1
+
+    print(f"Total file: {total}\nTotal run: {count}\nTotal errors: {errors}")
+
+#fingerFullDirectory("C:/Users/Kanix/Downloads/PDMXInput", "C:/Users/Kanix/Downloads/PDMXOutput", "C:/Users/Kanix/Downloads/PDMXOutputDP13")
