@@ -72,8 +72,8 @@ def finger_file_two_hands(filename, output_path = None, doDP13 = False):
     optimal = dp(rh, False, doDP13)[0]
     optimal_lh = dp(lh, True, doDP13)[0]
     #print(optimal.fingerings)
-    print(optimal.score, optimal_lh.score, optimal.score + optimal_lh.score)
-    print(optimal.scoreArray + optimal_lh.scoreArray)
+    #print(optimal.score, optimal_lh.score, optimal.score + optimal_lh.score)
+    #print(optimal.scoreArray + optimal_lh.scoreArray)
     fingering = optimal.fingerings
     fingering_lh = optimal_lh.fingerings
     #print(fingering, fingering_lh)
@@ -133,10 +133,10 @@ def score_test(test, fingering):
 #print("basic chord")
 #finger_file("music/basic_chord.musicxml")
 #test_file("music/basic_chord.musicxml_out.musicxml")
-finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
-finger_file_two_hands("music/canon.musicxml")
-test_file("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl_out.musicxml")
-test_file("music/canon.musicxml_out.musicxml")
+#finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
+#finger_file_two_hands("music/canon.musicxml")
+#test_file("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl_out.musicxml")
+#test_file("music/canon.musicxml_out.musicxml")
 
 #finger_file_two_hands("music/voicesTesting.musicxml") #no voices
 #test_file("music/voicesTesting.musicxml_out.musicxml") 
@@ -180,13 +180,11 @@ def fingerFullDirectory(input_dir, output_dir, output_dir_dp13):
                 print(f"{count / total:.2%} Processing: ", filename)
                 print("\tProcessing DP")
                 finger_file_two_hands(input_path, output_path)
-                print("\tProcessing DP13")
-                finger_file_two_hands(input_path, output_path_dp13, True)
+                #print("\tProcessing DP13")
+                #finger_file_two_hands(input_path, output_path_dp13, True)
                 count += 1
                 #print(output_path)
             except:
                 errors += 1
 
     print(f"Total file: {total}\nTotal run: {count}\nTotal errors: {errors}")
-
-#fingerFullDirectory("C:/Users/Kanix/Downloads/PDMXInput", "C:/Users/Kanix/Downloads/PDMXOutput", "C:/Users/Kanix/Downloads/PDMXOutputDP13")
