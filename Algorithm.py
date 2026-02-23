@@ -173,11 +173,14 @@ def generateCandidates(notes, is_left_hand):
         return [[f] for f in range(1, 6)]
     
     chordSize = len(notes)
+    candidates = []
 
     if is_left_hand:
-        return [[f for f in comb] for comb in combinations([5,4,3,2,1], chordSize)]
+        candidates = [[f for f in comb] for comb in combinations([5,4,3,2,1], chordSize)]
     else:
-        return [[f for f in comb] for comb in combinations([1,2,3,4,5], chordSize)]
+        candidates = [[f for f in comb] for comb in combinations([1,2,3,4,5], chordSize)]
+
+    return candidates
 
 def setupTrivialNotes(notes, is_left_hand, doDP13):
     trivial_notes = [notes[-2], notes[-1]]
@@ -409,12 +412,14 @@ def dp(part, is_left_hand, doDP13 = False):
         else:
             curr_notes = [note_to_add]  # [<note_obj>]
 
+        isTied = False
         if note_to_add.tie:
             if note_to_add.tie.type in ('continue', 'start'):
                 if note_to_add.pitches == is_tied_note_pitches:
                     continue
                 else:
                     is_tied_note_pitches = note_to_add.pitches
+                    isTied = True
                     
             elif note_to_add.tie.type in ('stop'):
                 is_tied_note_pitches = note_to_add.pitches
@@ -430,11 +435,33 @@ def dp(part, is_left_hand, doDP13 = False):
             # Iterate through all previous optimal fingerings
             for i in range(entry_list.shape[0]):
                 e = []
+                
 
                 # Calculate new entry with new note and fingering added
                 for j in range(entry_list.shape[1]):
                     if entry_list[i, j] is None:
                         continue
+
+                    if isTied:
+                        previousPitches = [note.pitch for note in entry_list[i, j].notes[0]]
+                        currentPitches = [note.pitch for note in curr_notes]
+                        sharedPitches = [pitch for pitch in currentPitches if pitch in previousPitches]
+                        currPitchIndex = []
+                        prevPitchIndex = []
+                        for pitch in sharedPitches:
+                            currPitchIndex.append(currentPitches.index(pitch))
+                            prevPitchIndex.append(previousPitches.index(pitch))
+
+                        forcedFingerings = []
+                        currentFingeringsAtForced = []
+                        for fingeringIndex in currPitchIndex:
+                            currentFingeringsAtForced.append(candidate[fingeringIndex])
+                        for fingeringIndex in prevPitchIndex:
+                            forcedFingerings.append(entry_list[i, j].fingerings[0][fingeringIndex])
+                        
+                        if forcedFingerings != currentFingeringsAtForced:
+                            continue
+                        
 
                     internal = 0
                     internalArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

@@ -42,5 +42,6 @@ def addFingeringToPart(part, fingering):
             note.articulations.append(articulations.Fingering(fingering[i - j][0]))
 
         elif note.isChord:
+
             for k in range(0, len(note.pitches)):
                 note.articulations.append(articulations.Fingering(fingering[i - j][k]))

@@ -71,7 +71,7 @@ def finger_file_two_hands(filename, output_path = None, doDP13 = False):
 
     optimal = dp(rh, False, doDP13)[0]
     optimal_lh = dp(lh, True, doDP13)[0]
-    #print(optimal.fingerings)
+    print(optimal.fingerings)
     #print(optimal.score, optimal_lh.score, optimal.score + optimal_lh.score)
     #print(optimal.scoreArray + optimal_lh.scoreArray)
     fingering = optimal.fingerings
@@ -133,7 +133,7 @@ def score_test(test, fingering):
 #print("basic chord")
 #finger_file("music/basic_chord.musicxml")
 #test_file("music/basic_chord.musicxml_out.musicxml")
-#finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
+finger_file_two_hands("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl")
 #finger_file_two_hands("music/canon.musicxml")
 #test_file("music/QmaVcZykfUKBTQc9CsJk7ywKbq24nkYvLm65X7enktzgzv.mxl_out.musicxml")
 #test_file("music/canon.musicxml_out.musicxml")
