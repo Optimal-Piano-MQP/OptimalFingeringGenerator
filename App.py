@@ -60,8 +60,8 @@ def split_hands(score):
         }
 
     return {
-        "right": parts[0].chordify(),
-        "left": parts[1].chordify() if len(parts) > 1 else None
+        "right": parts[0],
+        "left": parts[1] if len(parts) > 1 else None
     }
 
 
@@ -126,12 +126,12 @@ def process_file():
     results = {}
 
     if hands["right"]:
-        right_best = dp(hands["right"], is_left_hand=False)[0]
+        right_best = dp(hands["right"].chordify(), is_left_hand=False)[0]
         addFingeringToPart(hands["right"], right_best.fingerings)
         results["right"] = right_best
 
     if hands["left"]:
-        left_best = dp(hands["left"], is_left_hand=True)[0]
+        left_best = dp(hands["left"].chordify(), is_left_hand=True)[0]
         addFingeringToPart(hands["left"], left_best.fingerings)
         results["left"] = left_best
 

@@ -337,12 +337,14 @@ def next_valid_note(notes, start):
             elif entry.score == best[0].score:
                 best.append(entry)
 
+
     if is_left_hand:
         for entry in best:
             entry.fingerings = [
                 [f * -1 for f in fingering]
                 for fingering in entry.fingerings
             ]
+
     return best
 
 # Expects curr_fingering to be [1]. curr_note should be [<note_obj>]
