@@ -52,6 +52,15 @@ def addFingeringToPart(part, fingering):
 
         if len(note.pitches) != len(chord.pitches):
             indexes = []
+            tiedPitches = []
+            for k in range(0, len(chord.pitches)):
+                chordNote = chord.notes[k]
+                if chordNote.tie and chordNote.tie.type in ('continue', 'stop'):
+                    tiedPitches.append(chordNote.pitch)
+                    continue
+
+                indexes.append(k)
+
             for k in range(0, len(chord.pitches)):
                 checkNote = notes[i+n+k]
                 if len(checkNote.pitches) + k > len(chord.pitches):
@@ -59,20 +68,29 @@ def addFingeringToPart(part, fingering):
 
                 if checkNote.isChord:
                     for l in range(0, len(checkNote.pitches)):
-                        if checkNote.pitches[l] in chord.pitches:
-                            indexes.append(chord.pitches.index(checkNote.pitches[l]))
+                        if checkNote.notes[l].tie and checkNote.notes[l].tie.type in ('continue', 'stop'):
+                            if checkNote.pitches[l] in tiedPitches:
+                                indexes.append(chord.pitches.index(checkNote.pitches[l]))
                     k += len(checkNote.pitches) - 1
 
                 else:
-                    if checkNote.pitches[0] in chord.pitches:
-                        indexes.append(chord.pitches.index(checkNote.pitches[0]))
+                    if checkNote.tie and checkNote.tie.type in ('continue', 'stop'):
+                        if checkNote.pitches[0] in tiedPitches:
+                            indexes.append(chord.pitches.index(checkNote.pitches[0]))
+            indexes = list(set(indexes))
+            indexes.sort()
             f = [f[index] for index in indexes]
 
+        f.reverse()
         count = 0
+        chordFingering = []
         for k in range(0, len(f)):
             if note.isChord:
+                if len(chordFingering) == 0:
+                    chordFingering = f[k:k + len(note.pitches)]
+                    chordFingering.reverse()
 
-                note.articulations.append(articulations.Fingering(f[k]))
+                note.articulations.append(articulations.Fingering(chordFingering[count]))
                 count += 1
                 if count == len(note.pitches):
                     count = 0
