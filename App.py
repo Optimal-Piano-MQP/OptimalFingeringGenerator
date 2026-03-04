@@ -153,16 +153,18 @@ def process_file():
     }
 
     if "right" in results:
+        right_notes = results["right"].notes
         result["hands"]["right"] = {
             "fingers": to_python_ints(results["right"].fingerings),
-            "notes": [n.nameWithOctave for n in results["right"].notes[0]],
+            "notes": [n.nameWithOctave for n in right_notes[0]] if right_notes else [],
             "score": int(results["right"].score)
         }
 
     if "left" in results:
+        left_notes = results["left"].notes
         result["hands"]["left"] = {
             "fingers": to_python_ints(results["left"].fingerings),
-            "notes": [n.nameWithOctave for n in results["left"].notes[0]],
+            "notes": [n.nameWithOctave for n in left_notes[0]] if left_notes else [],
             "score": int(results["left"].score)
         }
 

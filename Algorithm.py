@@ -175,6 +175,9 @@ def generateCandidates(notes, is_left_hand):
     chordSize = len(notes)
     candidates = []
 
+    if chordSize > 5:
+        return [[0] * chordSize]
+
     if is_left_hand:
         candidates = [[f for f in comb] for comb in combinations([5,4,3,2,1], chordSize)]
     else:
