@@ -55,7 +55,7 @@ def split_hands(score):
     parts = score.parts
 
     if len(parts) == 1:
-        part = parts[0]
+        part = parts[0].chordify()
         right_notes = []
         left_notes = []
 
@@ -142,21 +142,23 @@ def process_file():
     results = {}
 
     if hands["right"]:
-        right_best = dp(hands["right"], is_left_hand=False, doDP13=doDP13)[0]
+        right_best = dp(hands["right"].chordify(), is_left_hand=False)[0]
         addFingeringToPart(hands["right"], right_best.fingerings)
         results["right"] = right_best
 
     if hands["left"]:
-        left_best = dp(hands["left"], is_left_hand=True, doDP13=doDP13)[0]
-        # Convert negative fingerings to positive for display
-        positive_fingerings = [[abs(f) for f in finger_list] for finger_list in left_best.fingerings]
-        addFingeringToPart(hands["left"], positive_fingerings)
+        left_best = dp(hands["left"].chordify(), is_left_hand=True)[0]
+        addFingeringToPart(hands["left"], left_best.fingerings)
         results["left"] = left_best
 
     annotated_xml = os.path.join(app.config["UPLOAD_FOLDER"], "annotated.xml")
     annotated_pdf = os.path.join("static", "annotated.pdf")
+     
+    newScore = music21.stream.Score()
+    newScore.append(hands["right"])
+    newScore.append(hands["left"])
 
-    score.write("musicxml", annotated_xml)
+    newScore.write("musicxml", annotated_xml)
     render_pdf(annotated_xml, annotated_pdf)
 
     result = {
@@ -167,16 +169,18 @@ def process_file():
     }
 
     if "right" in results:
+        right_notes = results["right"].notes
         result["hands"]["right"] = {
             "fingers": to_python_ints(results["right"].fingerings),
-            "notes": [n.nameWithOctave for n in results["right"].notes[0]],
+            "notes": [n.nameWithOctave for n in right_notes[0]] if right_notes else [],
             "score": int(results["right"].score)
         }
 
     if "left" in results:
+        left_notes = results["left"].notes
         result["hands"]["left"] = {
             "fingers": to_python_ints(results["left"].fingerings),
-            "notes": [n.nameWithOctave for n in results["left"].notes[0]],
+            "notes": [n.nameWithOctave for n in left_notes[0]] if left_notes else [],
             "score": int(results["left"].score)
         }
 
