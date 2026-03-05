@@ -19,16 +19,17 @@
     <h2>Instructions:</h2>
 
     <ol>
-        <li>Find an xml, mxl, or musicxml file of piano sheet music you would like to learn.
+        <li>Find a xml, mxl, or musicxml file of piano sheet music you would like to learn.
             <b>Stuck?</b> Try searching <a href="https://musescore.com/">MUSESCORE</a> for one
         </li>
+        <li>If you have a PDF or image file, you can convert it to a MusicXML file <a href="https://acestudio.ai/pdf-to-musicxml/?step=1">HERE</a></li>
         <li>Upload & submit your file with the buttons below</li>
         <li>View your generated fingering</li>
     </ol>
 
     <div class="button-container">
         <form id="uploadForm" style="display: inline-block;">
-            <input class="upload" type="file" name="file" id="fileInput" required style="display: none;">
+            <input class="upload" type="file" name="file" id="fileInput" accept=".xml,.musicxml,.mxl" required style="display: none;">
             <button class="submit" type="button" id="selectFileBtn">Select & Upload File</button>
             <button class="submit" type="submit" id="generateBtn" style="display: none;">Generate Fingerings</button>
         </form>
@@ -39,14 +40,12 @@
         </div>
     </div>
 
-    <div id="optionsContainer" style="display: none; margin-top: 15px;">
-        <label class="toggle-container">
-            <input type="checkbox" id="doDP13Toggle">
-            <span class="toggle-label">Enable DP13 Mode</span>
-        </label>
-    </div>
-
     <p id="fileName" style="margin-top: 10px; font-style: italic; color: #666;"></p>
+
+    <!-- Error message banner -->
+    <div id="errorBanner" style="display: none; background-color: #fdecea; border: 1px solid #f5c6cb; border-radius: 6px; padding: 12px 16px; margin-top: 14px; color: #842029; font-size: 0.95rem;">
+        <strong>⚠ Error:</strong> <span id="errorText"></span>
+    </div>
 
     <div id="loadingSpinner" style="display: none; text-align: center; margin: 30px 0;">
         <div class="spinner"></div>
@@ -57,6 +56,9 @@
         <h2 id="viewerTitle"></h2>
         <iframe id="pdfFrame" width="60%" height="600px" style="border:none;"></iframe>
     </div>
+
+    <!-- Extra space below PDF viewer for comfortable scrolling -->
+    <div style="height: 80px;"></div>
 
 </div>
 
@@ -73,8 +75,37 @@ const viewerTitle = document.getElementById('viewerTitle');
 const pdfFrame = document.getElementById('pdfFrame');
 const downloadButtons = document.getElementById('downloadButtons');
 const fileName = document.getElementById('fileName');
-const optionsContainer = document.getElementById('optionsContainer');
-const doDP13Toggle = document.getElementById('doDP13Toggle');
+const errorBanner = document.getElementById('errorBanner');
+const errorText = document.getElementById('errorText');
+
+function showError(message) {
+    errorText.textContent = message;
+    errorBanner.style.display = 'block';
+    // Scroll to error so user sees it
+    errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function clearError() {
+    errorBanner.style.display = 'none';
+    errorText.textContent = '';
+}
+
+// Validate file client-side before uploading
+function validateFile(file) {
+    if (!file) return "No file selected. Please choose a .xml, .musicxml, or .mxl file.";
+    const allowed = ['xml', 'musicxml', 'mxl'];
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!allowed.includes(ext)) {
+        return `"${file.name}" is not a supported format. Please upload a file with extension .xml, .musicxml, or .mxl.`;
+    }
+    if (file.size === 0) {
+        return "The selected file appears to be empty. Please choose a valid score file.";
+    }
+    if (file.size > 20 * 1024 * 1024) {
+        return "The selected file is too large (max 20 MB). Please try a smaller file.";
+    }
+    return null;
+}
 
 // Trigger file input when button is clicked
 selectFileBtn.addEventListener('click', function() {
@@ -85,15 +116,24 @@ selectFileBtn.addEventListener('click', function() {
 fileInput.addEventListener('change', async function() {
     if (!fileInput.files[0]) return;
 
+    clearError();
+
+    // Client-side validation
+    const validationError = validateFile(fileInput.files[0]);
+    if (validationError) {
+        showError(validationError);
+        fileInput.value = '';
+        return;
+    }
+
     uploadedFilename = null;
     isProcessed = false;
     fileName.textContent = 'Selected: ' + fileInput.files[0].name;
     selectFileBtn.disabled = true;
     loadingSpinner.style.display = 'block';
     pdfViewer.style.display = 'none';
-    downloadButtons.style.display = 'none'; // Hide download buttons
+    downloadButtons.style.display = 'none';
     generateBtn.style.display = 'none';
-    optionsContainer.style.display = 'none';
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
@@ -114,17 +154,18 @@ fileInput.addEventListener('change', async function() {
             pdfFrame.src = data.pdf_url + '?t=' + new Date().getTime();
             pdfViewer.style.display = 'block';
 
-            // Show options and generate button
-            optionsContainer.style.display = 'block';
+            // Show generate button
             generateBtn.style.display = 'inline-block';
             selectFileBtn.textContent = 'Upload New File';
         } else {
-            alert('Error: ' + data.error);
+            showError(data.error || 'Upload failed. Please ensure you are uploading a valid .xml, .musicxml, or .mxl piano score.');
             fileName.textContent = '';
+            fileInput.value = '';
         }
     } catch (error) {
-        alert('Upload failed: ' + error.message);
+        showError('Could not connect to the server. Please check your connection and try again.');
         fileName.textContent = '';
+        fileInput.value = '';
     } finally {
         selectFileBtn.disabled = false;
         loadingSpinner.style.display = 'none';
@@ -137,6 +178,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
 
     if (!uploadedFilename || isProcessed) return;
 
+    clearError();
     generateBtn.disabled = true;
     loadingSpinner.style.display = 'block';
 
@@ -146,10 +188,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                filename: uploadedFilename,
-                doDP13: doDP13Toggle.checked
-            })
+            body: JSON.stringify({ filename: uploadedFilename })
         });
 
         const data = await response.json();
@@ -163,17 +202,16 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
             document.getElementById('downloadXml').href = data.xml_url;
             document.getElementById('downloadPdf').href = data.pdf_download_url;
 
-            // NOW show download buttons (only after annotation is complete)
+            // Show download buttons only after annotation is complete
             downloadButtons.style.display = 'inline-block';
 
             isProcessed = true;
             generateBtn.style.display = 'none';
-            optionsContainer.style.display = 'none';
         } else {
-            alert('Error: ' + (data.error || 'Processing failed'));
+            showError(data.error || 'Processing failed. Please ensure your file is a valid piano score in .xml, .musicxml, or .mxl format and try again.');
         }
     } catch (error) {
-        alert('Processing failed: ' + error.message);
+        showError('Processing failed due to a connection error. Please try again.');
     } finally {
         loadingSpinner.style.display = 'none';
         generateBtn.disabled = false;
