@@ -1,14 +1,12 @@
 import os
 import shutil
-from music21 import converter, instrument, stream, midi
+from music21 import converter, stream
 import hashlib
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SOURCE_DIR = r"DIRECTORY"
+SOURCE_DIR = r"DIRECTORY" # Change to your directory
 DEST_DIR = os.path.join(BASE_DIR, "PianoSetMXL")
 PIANO_NAMES = {"piano", "pno", "pianoforte", "klavier", "grand piano", "upright piano", "pipe organ"}
-
-# Should be ~254077 pieces total, returned x pieces
 
 def is_solo_piano(score: stream.Score):
     parts = score.parts
@@ -32,7 +30,6 @@ def is_solo_piano(score: stream.Score):
     return True
 
 def destination_subfolder(filename, base_folder):
-    # Stable hash, first two hex digits -> 256 subfolders
     h = hashlib.sha1(filename.encode()).hexdigest()[:2]
     sub = os.path.join(base_folder, h)
     os.makedirs(sub, exist_ok=True)

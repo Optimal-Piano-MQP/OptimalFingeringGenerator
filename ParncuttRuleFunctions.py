@@ -1,10 +1,6 @@
 from music21 import *
-from music21 import note
-import music21
 import numpy as np
 from itertools import combinations
-from FileConversion import file2Stream
-import copy
 
 def getParncuttDistances(firstFingering, secondFingering):
 	firstFingering = abs(firstFingering)
@@ -302,73 +298,6 @@ def getInternalScore(event, fingerings, isLeftHand):
 		internalScore = np.array(internalScore) + np.array([ParnStretch(noteInterval, minComf, maxComf), span[0], span[1], 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
 	return internalScore
-
-def normalizeScore(parts, isLeftHand):
-	# Normalize piece by moving notes to the correct hand
-	for part in parts:
-		measureCounter = 1
-		iterating = True
-		while(iterating):
-			nextMeasure = part.measure(measureCounter)
-			if(nextMeasure is not None):
-				for element in nextMeasure:
-					if isinstance(element, music21.note.Note):
-						if element.tie and element.tie.type in ('continue', 'stop'):
-							continue
-						fingering = getFingering(element, True)
-						if not fingering:
-							continue
-						if(not isLeftHand and fingering[0] < 0 or isLeftHand and fingering[0] > 0):
-							parent_stream = element.activeSite
-							offset = element.offset
-							parent_stream.remove(element)
-							measureToAddTo = None
-							if(isLeftHand):
-								measureToAddTo = parts[0].measure(measureCounter)
-							else:
-								measureToAddTo = parts[1].measure(measureCounter)
-							existingItems = measureToAddTo.getElementsByOffset(offset)
-							for item in existingItems:
-								itemToReplaceFound = False
-								if isinstance(item, note.Rest):
-									measureToAddTo.remove(item)
-									measureToAddTo.insert(offset, element)
-									itemToReplaceFound = True
-								elif isinstance(item, note.Note):
-									measureToAddTo.remove(item)
-									existingNoteFingering = getFingering(item)
-									elementFingering = getFingering(element)
-									newChord = chord.Chord([item.pitch, element.pitch])
-									newChord.articulations.append(articulations.Fingering(existingNoteFingering[0]))
-									newChord.articulations.append(articulations.Fingering(elementFingering[0]))
-									measureToAddTo.insert(offset, newChord)
-									itemToReplaceFound = True
-								elif isinstance(item, chord.Chord):
-									measureToAddTo.remove(item)
-									elementFingering = getFingering(element)
-									item.add(element.pitch)
-									item.articulations.append(articulations.Fingering(elementFingering[0]))
-									measureToAddTo.insert(offset, item)
-									itemToReplaceFound = True
-							
-							if itemToReplaceFound == False:
-								measureToAddTo.insert(offset, element)
-
-				measureCounter += 1
-			else:
-				iterating = False
-				isLeftHand = not isLeftHand
-
-
-def chord_to_first_note(n):
-    if n is None:
-        return None
-    if n.isChord:
-        new_note = note.Note(n.pitches[0])
-        new_note.duration = n.duration
-        return new_note
-	
-    return n
 
 def normalize_fingering(f):
     if f is None:

@@ -3,7 +3,7 @@ import warnings
 from music21 import converter, articulations
 from music21.musicxml.xmlToM21 import MusicXMLWarning
 
-SOURCE_DIR = r"C:\Users\sklac\Desktop\PianoSetMXL"
+SOURCE_DIR = r"DIRECTORY" # Change to your directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEST_DIR = os.path.join(BASE_DIR, "PianoSetMXL")
 

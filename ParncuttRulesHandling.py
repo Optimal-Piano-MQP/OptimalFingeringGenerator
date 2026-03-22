@@ -1,13 +1,9 @@
 from music21 import *
-from music21 import note
 import music21
 import numpy as np
-from itertools import combinations
 from FileConversion import file2Stream
 import copy
 from ParncuttRuleFunctions import *
-
-"""Parncutt Functions:"""
 
 def getParncuttRuleScore(inputStream):
 
@@ -16,9 +12,9 @@ def getParncuttRuleScore(inputStream):
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	totalNotes = 0
 	parts = score.recurse().parts
-	isLeftHand = False
+	# isLeftHand = False
 
-	#normalizeScore(parts, isLeftHand)
+	# #normalizeScore(parts, isLeftHand)
 
 	isLeftHand = True
 
@@ -229,7 +225,6 @@ def getParncuttGivenNotes(isLeftHand, firstNote, firstNoteFingering, secondNote,
   
 	return scoreCount
 
-
 def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNote, \
 	secondNoteFingering, thirdNote, thirdNoteFingering, doDP13 = False):
 	scoreCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -254,7 +249,6 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 		if len(firstNoteFingering) == 0:
 			return scoreCount
 
-
 	FingeringPairTableLine = getParncuttDistances(firstNoteFingering[-1], secondNoteFingering[0])
 
 	#convert the parncutt distances for lefthand and descending steps
@@ -264,7 +258,6 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	if tableFlipped:
 		FingeringPairTableLine = [-item for item in FingeringPairTableLine]
 		FingeringPairTableLine.reverse()
-
 
 	noteInterval = interval.Interval(firstNote.pitch, secondNote.pitch).semitones
 	minPrac = FingeringPairTableLine[0]
@@ -302,7 +295,6 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 			firstNoteFingering, secondNote, secondNoteFingering, thirdNote, thirdNoteFingering)
 		scoreCount[3] += posChangeCount[0]
 		scoreCount[4] += posChangeCount[1]
-  
 
 	# Rule 6: Weak-finger rule: 1 point for using 4 or 5
 	scoreCount[5] += ParnWeakFinger(firstNoteFingering)
@@ -310,7 +302,6 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	# Rule 7: 3-4-5 rule: 1 point if three notes all use 3,4, or 5
 	if thirdNote is not None:
 		scoreCount[6] += Parn345(firstNoteFingering, secondNoteFingering, thirdNoteFingering)
-	
 
 	# Rule 8: 3-4 rule: 1 point if 3 is followed by 4
 	scoreCount[7] += Parn34(firstNoteFingering, secondNoteFingering)
@@ -327,7 +318,6 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 	# if following note is white 2 points
 	scoreCount[10] += Parn5OnBlack(firstNote, secondNote, secondNoteFingering, thirdNote)
 
-
 	# Rule 12: 1 passing rule: when the thumb passes over or under, 1 point if same level,
 	#  3 if lower note is not thumb and on white and the upper note is on black and thumb
 	scoreCount[11] += ParnThumbPassing(isLeftHand, noteInterval, firstNote, firstNoteFingering, secondNote, secondNoteFingering)
@@ -336,6 +326,10 @@ def getParncuttGivenNotesDP(isLeftHand, firstNote, firstNoteFingering, secondNot
 		scoreCount[12] += RepeatFingering(noteInterval, firstNoteFingering, secondNoteFingering)
 
 	return scoreCount
+
+
+
+# Functions not used in main fingering algorithm:
 
 def generateRandomFingerings(score):
 	import random
