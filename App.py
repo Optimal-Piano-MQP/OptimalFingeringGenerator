@@ -130,18 +130,6 @@ def _extract_raw_metadata(filepath):
 
 
 def _patch_metadata(xml_path, meta):
-    """
-    Post-process the music21-written XML to restore original:
-      1. <work-title>
-      2. <defaults>  (page size / scaling — required for credit coordinates)
-      3. <identification>
-      4. <credit> blocks (title, subtitle, composer, etc.)
-
-    Music21 drops <credit> elements entirely and rewrites <defaults> with its
-    own page dimensions, which breaks the absolute-coordinate centering used by
-    <credit-words default-x="...">. Restoring the original <defaults> alongside
-    the original <credit> blocks fixes both centering and all header text.
-    """
     import re
 
     with open(xml_path, "r", encoding="utf-8") as f:
@@ -157,7 +145,7 @@ def _patch_metadata(xml_path, meta):
         escaped = work_title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         content = re.sub(
             r"<work-title>.*?</work-title>",
-            f"<work-title>{escaped}</work-title>",
+            lambda m: f"<work-title>{escaped}</work-title>",
             content,
             flags=re.DOTALL
         )
@@ -166,7 +154,7 @@ def _patch_metadata(xml_path, meta):
     if defaults_raw:
         content = re.sub(
             r"<defaults\b.*?</defaults>",
-            defaults_raw,
+            lambda m: defaults_raw,
             content,
             flags=re.DOTALL
         )
@@ -175,7 +163,7 @@ def _patch_metadata(xml_path, meta):
     if ident_raw:
         content = re.sub(
             r"<identification\b.*?</identification>",
-            ident_raw,
+            lambda m: ident_raw,
             content,
             flags=re.DOTALL
         )
@@ -190,7 +178,6 @@ def _patch_metadata(xml_path, meta):
 
     with open(xml_path, "w", encoding="utf-8") as f:
         f.write(content)
-
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
